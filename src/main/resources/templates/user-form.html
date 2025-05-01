@@ -1,0 +1,75 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Form</title>
+</head>
+<body>
+<h2>Welcome, <span th:text="${firstName}">User</span> 👋</h2>
+
+<h2>Fill out your details</h2>
+
+<form action="#" th:action="@{/saveUser}" th:object="${user}" method="post">
+
+    <!-- Success Message -->
+    <div th:if="${param.success}" style="color:green;">
+        Your details have been saved successfully!
+    </div>
+
+    <!-- Hidden email field -->
+    <input type="hidden" th:field="*{email}" />
+
+    <!-- Show email (read-only just for display, optional) -->
+    <!-- <p><strong>Email:</strong> <span th:text="*{email}"></span></p>-->
+
+    <label for="name">Name: </label>
+    <input type="text" id="name" th:field="*{firstName}" placeholder="Enter your name" required/>
+    <br/>
+
+<!--    <label for="email">Email: </label>-->
+<!--    <input type="email" id="email" th:field="*{email}" placeholder="Enter your email" required/>-->
+<!--    <br/>-->
+
+<!--    <label for="branch">Branch: </label>-->
+<!--    <input type="text" id="branch" th:field="*{branch}" placeholder="Enter your branch" required/>-->
+<!--    <br/>-->
+
+    <label for="department">Department:</label>
+    <select id="department" th:field="*{department}">
+        <option value="CS">Computer Science</option>
+        <option value="CSE">Computer Science Engineering</option>
+        <option value="EXTC">EXTC</option>
+        <option value="AIML">AI/ML</option>
+    </select>
+    <br/>
+
+    <label for="year">Academic Year:</label>
+    <select id="year" th:field="*{academicYear}">
+        <option value="First Year">First Year</option>
+        <option value="Second Year">Second Year</option>
+        <option value="Third Year">Third Year</option>
+        <option value="Final Year">Final Year</option>
+    </select>
+    <br/>
+
+    <label for="degree">Degree:</label>
+    <select id="degree" th:field="*{degree}">
+
+        <option value="BTech">B.Tech</option>
+        <option value="BE">B.E.</option>
+        <option value="MCA">MCA</option>
+        <option value="MTech">M.Tech</option>
+    </select>
+    <br/>
+
+    <label for="passoutYear">Passout Year:</label>
+    <select id="passoutYear" th:field="*{passoutYear}">
+        <option th:each="year : ${#numbers.sequence(2000, 2050)}"
+                th:value="${year}"
+                th:text="${year}">
+        </option>
+    </select>
+    <br/>
+
+    <button type="submit">Submit</button>
+</form>
+</body>
+</html>
