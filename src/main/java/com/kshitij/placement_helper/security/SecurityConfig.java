@@ -19,7 +19,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/login", "/userForm").permitAll()  // Allow access to login page without authentication
+                        .requestMatchers("/", "/login").permitAll()  // Allow access to login page without authentication
                         .anyRequest().authenticated()              // Require authentication for other pages
                 )
                 .oauth2Login(oauth -> oauth

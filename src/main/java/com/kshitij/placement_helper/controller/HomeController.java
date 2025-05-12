@@ -13,7 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Optional;
 import java.security.Principal;
 
 @Controller
@@ -62,11 +64,15 @@ public class HomeController {
         String firstNameRaw = email.split("[.@]")[0]; // "kshitij"
         String firstName = firstNameRaw.substring(0, 1).toUpperCase() + firstNameRaw.substring(1).toLowerCase();
 
-
-        User user = new User();
-        user.setEmail(email); // Now this is the correct email
-        user.setFirstName(firstName);
-        user.setDegree("MCA");
+        // Try to find the user in the DB
+        User user = userRepository.findByEmail(email).orElseGet(() -> {
+            // If not found, create a new user with defaults
+            User newUser = new User();
+            newUser.setEmail(email);
+            newUser.setFirstName(firstName);
+            newUser.setDegree("MCA");
+            return newUser;
+        });
 
         model.addAttribute("user", user);
         model.addAttribute("firstName", firstName); // Pass to view
@@ -76,10 +82,30 @@ public class HomeController {
     }
 
 
-    // Handle form submission
     @PostMapping("/saveUser")
-    public String saveUser(User user) {
-        userRepository.save(user);  // Save the user details in the database
-        return "redirect:/userForm?success";  // Redirect to the form page with success message
+    public String saveUser(User user, RedirectAttributes redirectAttributes) {
+        // Check if user with same email exists
+        Optional<User> existingUserOpt = userRepository.findByEmail(user.getEmail());
+
+        if (existingUserOpt.isPresent()) {
+            User existingUser = existingUserOpt.get();
+
+            // update
+            existingUser.setFirstName(user.getFirstName());
+            existingUser.setDegree(user.getDegree());
+            existingUser.setAcademicYear(user.getAcademicYear());
+            existingUser.setDepartment(user.getDepartment());
+            existingUser.setPassoutYear(user.getPassoutYear());
+
+            userRepository.save(existingUser);
+        } else {
+            // if not found save as new
+            userRepository.save(user);
+        }
+
+        redirectAttributes.addFlashAttribute("successMessage", "Your details have been saved successfully!");
+
+        return "redirect:/dashboard";
     }
+
 }

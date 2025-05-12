@@ -1,10 +1,23 @@
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <body>
 <h1>Dashboard</h1>
 <p>Welcome, you're logged in!</p>
+<div id="success-message" th:if="${successMessage}" style="color: green;">
+    <p th:text="${successMessage}"></p>
+</div>
+
 <a href="/logout">Logout</a>
 <br/>
 <a href="/userForm">Edit information</a>
 
 </body>
+<script>
+    setTimeout(function() {
+        const msg = document.getElementById("success-message");
+        if (msg) {
+            msg.style.display = "none";
+        }
+    }, 3000);
+</script>
+
 </html>

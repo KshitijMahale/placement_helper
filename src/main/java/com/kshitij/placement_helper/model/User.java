@@ -1,27 +1,26 @@
 package com.kshitij.placement_helper.model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 
 @Entity
 @Data
+@Table(name = "user_details")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+//    private String name;
+    @Column(unique = true)
     private String email;
+
     private String degree;
     private String academicYear;
     private String department;
     private String passoutYear;
-
-    private String firstName; // extra
+    private String firstName;
 
 }
