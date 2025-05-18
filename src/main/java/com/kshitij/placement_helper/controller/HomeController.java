@@ -108,4 +108,8 @@ public class HomeController {
         return "redirect:/dashboard";
     }
 
+    @GetMapping("/exp-form")
+    public String exp() {
+        return "exp-form";
+    }
 }

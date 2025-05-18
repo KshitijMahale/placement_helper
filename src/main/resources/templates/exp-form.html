@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Internship Details Submission</title>
+  <style>
+    .round-section {
+        margin-bottom: 20px;
+        padding: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    .round-header {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    .remove-round {
+        color: red;
+        cursor: pointer;
+    }
+    .question-section {
+        margin-top: 10px;
+    }
+    .add-question {
+        margin-top: 10px;
+        cursor: pointer;
+        color: green;
+    }
+    .input-box {
+        margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Internship Details Submission</h1>
+
+<form id="internshipForm" action="/submit-experience" method="post" th:action="@{/submit-experience}">
+
+  <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+  <h2>Personal Information</h2>
+  <label for="fullName">Full Name:</label><br>
+  <input type="text" id="fullName" name="fullName" placeholder="FirstName Surname" required><br><br>
+
+  <label for="course">Course/Branch:</label><br>
+  <select id="course" name="course" required>
+    <option value="CS">Btech Computer Science</option>
+    <option value="CSE">Btech Computer Science Engineering</option>
+    <option value="EXTC">Btech EXTC</option>
+    <option value="MCA">MCA</option>
+    <option value="Mtech">Mtech</option>
+  </select>
+  <br/>
+
+  <h2>Company & Job Details</h2>
+  <label for="company">Company Name:</label><br>
+  <select id="company" name="company" onchange="toggleCompanyInput()" required>
+    <option value="MSCI">MSCI</option>
+    <option value="PhonePe">PhonePe</option>
+    <option value="JPMC">JPMC</option>
+    <option value="Colgate">Colgate</option>
+    <option value="ICICI">ICICI Lombard</option>
+    <option value="Deloitte">Deloitte</option>
+    <option value="Wissen">Wissen</option>
+    <option value="Revvity">Revvity</option>
+    <option value="KPMG">KPMG</option>
+    <option value="Accolite">Accolite</option>
+    <option value="Barclays">Barclays</option>
+    <option value="BarclaysHOH">Barclays(Hack-I-Hire)</option>
+    <option value="Quantiphi">Quantiphi</option>
+    <option value="OracleAS">Oracle Associate Consultant</option>
+    <option value="OMP">OMP</option>
+    <option value="IDFY">IDFY</option>
+    <option value="ISS">ISS</option>
+    <option value="Nomura">Nomura</option>
+    <option value="IDFC">IDFC</option>
+    <option value="UBS">UBS</option>
+    <option value="PhonePe">PhonePe</option>
+    <option value="WorkIndia">WorkIndia</option>
+
+    <option value="Other">Other</option>
+  </select><br><br>
+
+  <div id="companyInputDiv" class="input-box" style="display: none;">
+    <label for="otherCompany">Please specify the company name:</label><br>
+    <input type="text" id="otherCompany" name="otherCompany" placeholder="Enter company name"><br><br>
+  </div>
+
+  <label for="jobProfile">Job Profile:</label><br>
+  <select id="jobProfile" name="jobProfile" onchange="toggleJobProfileInput()" required>
+    <option value="SDE">SDE</option>
+    <option value="Business Analyst">Business Analyst</option>
+    <option value="Other">Other</option>
+  </select><br><br>
+
+  <div id="jobProfileInputDiv" class="input-box" style="display: none;">
+    <label for="otherJobProfile">Please specify the job profile:</label><br>
+    <input type="text" id="otherJobProfile" name="otherJobProfile" placeholder="Enter job profile"><br><br>
+  </div>
+
+  <label for="offerType">Offer Type:</label><br>
+  <select id="offerType" name="offerType" onchange="toggleOfferFields()" required>
+    <option value="Internship(performance-based offer)">Internship (performance-based offer)</option>
+    <option value="InternshipOnly">Internship only</option>
+    <option value="PlacementOnly">Placement only</option>
+    <option value="InternshipPlacement">Internship + Placement </option>
+
+  </select><br><br>
+
+  <div id="stipendDiv">
+    <label for="internshipStipend">Internship Stipend:</label><br>
+    <input type="text" id="internshipStipend" name="internshipStipend" placeholder="20000"><br><br>
+  </div>
+
+<!--  <label for="internshipStipend">Internship Stipend:</label><br>-->
+<!--  <input type="text" id="internshipStipend" name="internshipStipend" required><br><br>-->
+
+  <div id="ctcDiv">
+    <label for="ctc">CTC (in LPA):</label><br>
+    <input type="text" id="ctc" name="ctc" placeholder="For 8LPA -> 800000"><br>
+  </div>
+  <br><br>
+
+<!--  <label for="ctc">CTC (in LPA):</label><br>-->
+<!--  <input type="text" id="ctc" name="ctc"><br><br>-->
+
+
+  <label for="location">Location:</label><br>
+  <select id="location" name="location" required>
+    <option value="" disabled selected>Select a location</option>
+    <option value="Thane">Thane</option>
+    <option value="Pune">Pune</option>
+    <option value="Bengaluru">Bengaluru</option>
+  </select><br><br>
+
+  <!--  <label for="location">Location:</label><br>-->
+<!--  <input type="text" id="location" name="location" required><br><br>-->
+
+  <label for="processDate">Process Date:</label><br>
+  <input type="date" id="processDate" name="processDate" required><br><br>
+
+  <h2>Placement Process</h2>
+  <div id="roundsContainer">
+    <div class="round-section" id="round1">
+      <div class="round-header">Round 1</div>
+
+      <label for="roundType1">Round Type:</label><br>
+      <select id="roundType1" name="roundType1" onchange="toggleRoundTypeInput(1)" required>
+        <option value="Online Assessment">Online Assessment</option>
+        <option value="Technical">Technical</option>
+        <option value="HR">HR</option>
+        <option value="Other">Other</option>
+      </select><br><br>
+
+      <div id="roundTypeInputDiv1" class="input-box" style="display: none;">
+        <label for="otherRoundType1">Please specify the round type:</label><br>
+        <input type="text" id="otherRoundType1" name="otherRoundType1" placeholder="Enter round type"><br><br>
+      </div>
+
+      <div class="question-section" id="questions1">
+        <label>Questions:</label><br>
+        <div class="question">
+          <label for="q1_1">Question 1:</label><br>
+          <textarea id="q1_1" name="q1_1" rows="4" cols="50" placeholder="Describe the question and your approach." required></textarea><br><br>
+        </div>
+      </div>
+      <span class="add-question" onclick="addQuestion(1)">+ Add Question</span><br>
+      <span class="remove-round" onclick="removeRound(1)">Remove Round</span><br><br>
+    </div>
+  </div>
+
+  <button type="button" onclick="addRound()">+ Add New Round</button><br><br>
+
+  <h2>Additional Information</h2>
+  <label for="linkedin">LinkedIn Profile (optional):</label><br>
+  <input type="url" id="linkedin" name="linkedin"><br><br>
+
+  <label for="comments">Additional Comments or Advice:</label><br>
+  <textarea id="comments" name="comments" rows="6" cols="50"></textarea><br><br>
+
+  <input type="submit" value="Submit">
+</form>
+
+<script>
+  let roundCount = 1;
+
+  function toggleCompanyInput() {
+    const companySelect = document.getElementById('company');
+    const companyInputDiv = document.getElementById('companyInputDiv');
+    companyInputDiv.style.display = companySelect.value === 'Other' ? 'block' : 'none';
+  }
+
+  function toggleJobProfileInput() {
+    const jobProfileSelect = document.getElementById('jobProfile');
+    const jobProfileInputDiv = document.getElementById('jobProfileInputDiv');
+    jobProfileInputDiv.style.display = jobProfileSelect.value === 'Other' ? 'block' : 'none';
+  }
+
+  function toggleOfferFields() {
+    const offerType = document.getElementById('offerType').value;
+    const stipendDiv = document.getElementById('stipendDiv');
+    const ctcDiv = document.getElementById('ctcDiv');
+
+    if (offerType === 'InternshipOnly') {
+      stipendDiv.style.display = 'block';
+      ctcDiv.style.display = 'none';
+    } else if (offerType === 'PlacementOnly') {
+      stipendDiv.style.display = 'none';
+      ctcDiv.style.display = 'block';
+    } else {
+      stipendDiv.style.display = 'block';
+      ctcDiv.style.display = 'block';
+    }
+  }
+
+  function toggleRoundTypeInput(roundNumber) {
+    const roundTypeSelect = document.getElementById(`roundType${roundNumber}`);
+    const roundTypeInputDiv = document.getElementById(`roundTypeInputDiv${roundNumber}`);
+    roundTypeInputDiv.style.display = roundTypeSelect.value === 'Other' ? 'block' : 'none';
+  }
+
+  function addRound() {
+    roundCount++;
+    const newRound = document.createElement('div');
+    newRound.classList.add('round-section');
+    newRound.id = `round${roundCount}`;
+    newRound.innerHTML = `
+      <div class="round-header">Round ${roundCount}</div>
+
+      <label for="roundType${roundCount}">Round Type:</label><br>
+      <select id="roundType${roundCount}" name="roundType${roundCount}" onchange="toggleRoundTypeInput(${roundCount})" required>
+          <option value="Online Assessment">Online Assessment</option>
+          <option value="Technical">Technical</option>
+          <option value="HR">HR</option>
+          <option value="Other">Other</option>
+      </select><br><br>
+
+      <div id="roundTypeInputDiv${roundCount}" class="input-box" style="display: none;">
+          <label for="otherRoundType${roundCount}">Please specify the round type:</label><br>
+          <input type="text" id="otherRoundType${roundCount}" name="otherRoundType${roundCount}" placeholder="Enter round type"><br><br>
+      </div>
+
+      <div class="question-section" id="questions${roundCount}">
+          <label>Questions:</label><br>
+          <div class="question">
+              <label for="q${roundCount}_1">Question 1:</label><br>
+              <textarea id="q${roundCount}_1" name="q${roundCount}_1" rows="4" cols="50" placeholder="Describe the question and your approach." required></textarea><br><br>
+          </div>
+      </div>
+      <span class="add-question" onclick="addQuestion(${roundCount})">+ Add Question</span><br>
+      <span class="remove-round" onclick="removeRound(${roundCount})">Remove Round</span><br><br>
+    `;
+    document.getElementById('roundsContainer').appendChild(newRound);
+  }
+
+  function addQuestion(roundNumber) {
+    const questionCount = document.getElementById(`questions${roundNumber}`).getElementsByClassName('question').length + 1;
+    const newQuestion = document.createElement('div');
+    newQuestion.classList.add('question');
+    newQuestion.innerHTML = `
+      <label for="q${roundNumber}_${questionCount}">Question ${questionCount}:</label><br>
+      <textarea id="q${roundNumber}_${questionCount}" name="q${roundNumber}_${questionCount}" rows="4" cols="50" placeholder="Describe the question and your approach." required></textarea><br><br>
+    `;
+    document.getElementById(`questions${roundNumber}`).appendChild(newQuestion);
+  }
+
+  function removeRound(roundNumber) {
+    const round = document.getElementById(`round${roundNumber}`);
+    round.remove();
+
+    const rounds = document.querySelectorAll('.round-section');
+    roundCount = rounds.length;
+
+    rounds.forEach((round, index) => {
+      const newIndex = index + 1;
+      round.querySelector('.round-header').textContent = `Round ${newIndex}`;
+      round.id = `round${newIndex}`;
+
+      const select = round.querySelector('select');
+      select.id = `roundType${newIndex}`;
+      select.name = `roundType${newIndex}`;
+      select.setAttribute('onchange', `toggleRoundTypeInput(${newIndex})`);
+
+      const roundTypeDiv = round.querySelector('.input-box');
+      roundTypeDiv.id = `roundTypeInputDiv${newIndex}`;
+      const input = roundTypeDiv.querySelector('input');
+      input.id = `otherRoundType${newIndex}`;
+      input.name = `otherRoundType${newIndex}`;
+
+      const questionSection = round.querySelector('.question-section');
+      questionSection.id = `questions${newIndex}`;
+      const questions = questionSection.querySelectorAll('.question');
+
+      questions.forEach((q, qIndex) => {
+        const textarea = q.querySelector('textarea');
+        textarea.id = `q${newIndex}_${qIndex + 1}`;
+        textarea.name = `q${newIndex}_${qIndex + 1}`;
+      });
+
+      round.querySelector('.add-question').setAttribute('onclick', `addQuestion(${newIndex})`);
+      round.querySelector('.remove-round').setAttribute('onclick', `removeRound(${newIndex})`);
+    });
+  }
+
+  // Call initial toggles when page loads
+  window.onload = function () {
+    toggleCompanyInput();
+    toggleJobProfileInput();
+    toggleOfferFields();
+  };
+</script>
+
+
+</body>
+</html>
