@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Internship Experiences</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #eee;
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background-color: #1e1e1e;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .sidebar h2 {
+            margin-top: 0;
+            color: #fff;
+        }
+
+        .filter-form input[type="text"],
+        .filter-form button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            background-color: #2a2a2a;
+            border: none;
+            border-radius: 4px;
+            color: #eee;
+            font-size: 14px;
+        }
+
+        .filter-form button {
+            background-color: #3a7bd5;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .filter-form button:hover {
+            background-color: #305ea8;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .experience-list {
+            width: 40%;
+            overflow-y: auto;
+        }
+
+        .experience-item {
+            padding: 15px;
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .experience-item:hover {
+            background-color: #2a2a2a;
+        }
+
+        .details-panel {
+            flex: 1;
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid #333;
+        }
+
+        .details-panel h3 {
+            margin-top: 0;
+            color: #fff;
+        }
+
+        .details-panel p {
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+<div class="sidebar">
+    <h2>Filter</h2>
+    <form class="filter-form" method="get" action="/experience-browser">
+        <input type="text" name="company" placeholder="Company Name" />
+        <input type="text" name="course" placeholder="Course" />
+        <input type="text" name="job" placeholder="Job Profile" />
+        <button type="submit">Filter</button>
+    </form>
+</div>
+
+<div class="main-content">
+    <div class="experience-list">
+        <h2>Experiences</h2>
+        <div th:each="experience : ${experiences}"
+             class="experience-item"
+             th:attr="data-id=${experience.id}"
+             onclick="loadExperienceDetails(this)">
+            <strong th:text="${experience.company}">Company</strong><br>
+            <span th:text="${experience.course}">Course</span> -
+            <span th:text="${experience.jobProfile}">Job</span>
+        </div>
+    </div>
+
+    <div class="details-panel" id="details-panel">
+        <h3>Experience Details</h3>
+        <p>Select an experience to see details.</p>
+    </div>
+</div>
+
+<script>
+    function generateRoundsHTML(roundsRaw) {
+        if (!roundsRaw) return "<p>No rounds data.</p>";
+        let rounds;
+        try {
+            rounds = typeof roundsRaw === 'string' ? JSON.parse(roundsRaw) : roundsRaw;
+        } catch (e) {
+            console.error("Invalid rounds JSON:", e);
+            return "<p>Failed to parse rounds data.</p>";
+        }
+        if (!Array.isArray(rounds) || rounds.length === 0) return "<p>No rounds data.</p>";
+        return rounds.map((round, i) => `
+            <div>
+                <strong>Round ${i + 1} (${round.roundType || "N/A"}):</strong>
+                <ul>
+                    ${(round.questions || []).map(q => `<li>${q}</li>`).join('')}
+                </ul>
+            </div>
+        `).join('');
+    }
+
+    function loadExperienceDetails(element) {
+        const id = element.getAttribute("data-id");
+        fetch(`/api/experience-browser/${id}`)
+            .then(response => response.json())
+            .then(data => {
+                const panel = document.getElementById("details-panel");
+
+                let rounds = "";
+                if (data.rounds && Array.isArray(data.rounds)) {
+                    rounds = data.rounds.map((round, index) => `
+                        <div>
+                            <strong>Round ${index + 1} (${round.roundType}):</strong>
+                            <ul>
+                                ${round.questions.map(q => `<li>${q}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `).join('');
+                }
+
+                panel.innerHTML = `
+                    <h3>${data.company || "N/A"} – ${data.jobProfile || "N/A"}</h3>
+
+                    <p><strong>Name:</strong> ${data.fullName || "N/A"}</p>
+                    <p><strong>Course:</strong> ${data.course || "N/A"}</p>
+
+                    <p><strong>CTC:</strong> ₹${data.ctc || "N/A"}</p>
+                    <p><strong>Internship Stipend:</strong> ₹${data.internshipStipend || "N/A"}</p>
+
+                    <p><strong>Location:</strong> ${data.location || "N/A"}</p>
+                    <p><strong>Offer Type:</strong> ${data.offerType || "N/A"}</p>
+
+                    <p><strong>Other Company:</strong> ${data.otherCompany || "N/A"}</p>
+                    <p><strong>Other Job Profile:</strong> ${data.otherJobProfile || "N/A"}</p>
+
+                    <p><strong>LinkedIn:</strong> ${data.linkedin ? `<a href="${data.linkedin}" target="_blank">${data.linkedin}</a>` : "N/A"}</p>
+
+                    <p><strong>Process Date:</strong> ${data.processDate || "N/A"}</p>
+                    <p><strong>Submitted On:</strong> ${data.submissionTime || "N/A"}</p>
+
+                    <p><strong>Comments:</strong><br>${(data.comments || "No comments")
+                        .replace(/\r?\n/g, '<br>')
+                        .replace(/\+/g, '')}</p>
+
+                    <div>
+                        <h4>Interview Rounds</h4>
+                        ${generateRoundsHTML(data.rounds)}
+                    </div>
+                `;
+
+            })
+            .catch(error => {
+                console.error("Error fetching details:", error);
+            });
+    }
+</script>
+
+</body>
+</html>

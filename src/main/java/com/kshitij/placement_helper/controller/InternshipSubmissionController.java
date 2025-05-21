@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class InternshipSubmissionController {
@@ -22,9 +19,7 @@ public class InternshipSubmissionController {
     private InternshipExperienceRepository experienceRepository;
 
     @PostMapping("/submit-experience")
-    public String handleInternshipSubmission(
-            @RequestParam Map<String, String> requestParams
-    ) {
+    public String handleInternshipSubmission(@RequestParam Map<String, String> requestParams) {
         InternshipExperience experience = new InternshipExperience();
 
         experience.setFullName(requestParams.get("fullName"));
@@ -44,11 +39,15 @@ public class InternshipSubmissionController {
             experience.setCtc(Integer.valueOf(ctc));
 
         experience.setLocation(requestParams.get("location"));
-        experience.setProcessDate(LocalDate.parse(requestParams.get("processDate")));
+
+        String processDate = requestParams.get("processDate");
+        if (processDate != null && !processDate.isBlank()) {
+            experience.setProcessDate(LocalDate.parse(processDate));
+        }
+
         experience.setLinkedin(requestParams.get("linkedin"));
         experience.setComments(requestParams.get("comments"));
 
-        // Extract rounds from dynamic fields
         String roundsJson = extractRoundsJson(requestParams);
         experience.setRounds(roundsJson);
 
@@ -70,25 +69,24 @@ public class InternshipSubmissionController {
                 round.put("otherRoundType", params.get(otherTypeKey));
             }
 
-            // Collect questions
             List<String> questions = new ArrayList<>();
             int questionIndex = 1;
             while (params.containsKey("q" + roundIndex + "_" + questionIndex)) {
                 questions.add(params.get("q" + roundIndex + "_" + questionIndex));
                 questionIndex++;
             }
+
             round.put("questions", questions);
             rounds.add(round);
             roundIndex++;
         }
 
-        // Convert to JSON
         try {
             ObjectMapper mapper = new ObjectMapper();
             return mapper.writeValueAsString(rounds);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            return "[]"; // fallback
+            return "[]";
         }
     }
-} 
+}

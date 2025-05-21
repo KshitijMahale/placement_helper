@@ -37,6 +37,13 @@ public class InternshipExperience {
     @Column(columnDefinition = "jsonb")
     private String rounds;
 
-    private LocalDateTime submissionTime = LocalDateTime.now();
+    private LocalDateTime submissionTime;
+
+    @PrePersist
+    protected void onCreate() {
+        if (submissionTime == null) {
+            submissionTime = LocalDateTime.now();
+        }
+    }
 
 }
