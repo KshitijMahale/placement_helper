@@ -89,17 +89,130 @@
         .details-panel p {
             color: #ccc;
         }
+
+
+<!--        filter form css-->
+        .filter-form {
+        max-width: 500px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        font-family: Arial, sans-serif;
+    }
+
+    .filter-form h3 {
+        text-align: center;
+        color: #343a40;
+    }
+
+    .filter-form label {
+        display: block;
+        margin-top: 15px;
+        font-weight: bold;
+        color: #495057;
+    }
+
+    .filter-form input[type="text"],
+    .filter-form input[type="number"],
+    .filter-form select {
+        width: 100%;
+        padding: 8px 10px;
+        margin-top: 5px;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    .filter-form input[type="checkbox"],
+    .filter-form input[type="radio"] {
+        margin-right: 8px;
+    }
+
+    #btns{
+        display: flex;
+    }
+    .filter-form button {
+        padding: 10px 20px;
+        margin: 10px 5px 0 0;
+        font-size: 14px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .filter-form button[type="submit"] {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .filter-form button[type="reset"] {
+        background-color: #6c757d;
+        color: white;
+    }
     </style>
 </head>
 <body>
 <div class="sidebar">
     <h2>Filter</h2>
     <form class="filter-form" method="get" action="/experience-browser">
-        <input type="text" name="company" placeholder="Company Name" />
-        <input type="text" name="course" placeholder="Course" />
-        <input type="text" name="job" placeholder="Job Profile" />
-        <button type="submit">Filter</button>
+        <label for="name">Search by Student Name:</label>
+        <input type="text" id="name" name="name" placeholder="Enter student name">
+
+        <label for="company">Company:</label>
+        <select id="company" name="company">
+            <option value="">-- Select Company --</option>
+            <option value="MSCI">MSCI</option>
+            <option value="PhonePe">PhonePe</option>
+            <option value="JPMC">JPMC</option>
+            <option value="Colgate">Colgate</option>
+            <option value="ICICI">ICICI Lombard</option>
+            <option value="Deloitte">Deloitte</option>
+            <option value="Wissen">Wissen</option>
+            <option value="Revvity">Revvity</option>
+            <option value="KPMG">KPMG</option>
+            <option value="Accolite">Accolite</option>
+            <option value="Barclays">Barclays</option>
+            <option value="Quantiphi">Quantiphi</option>
+            <option value="OracleAS">Oracle</option>
+            <option value="OMP">OMP</option>
+            <option value="IDFY">IDFY</option>
+            <option value="ISS">ISS</option>
+            <option value="Nomura">Nomura</option>
+            <option value="IDFC">IDFC</option>
+            <option value="UBS">UBS</option>
+            <option value="WorkIndia">WorkIndia</option>
+        </select>
+
+        <label>Role:</label>
+        <input type="checkbox" name="role" value="SDE"> SDE<br>
+        <input type="checkbox" name="role" value="Analyst"> Analyst<br>
+        <input type="checkbox" name="role" value="Manager"> Manager
+
+        <label>Offer Type:</label>
+        <input type="radio" name="type" value="Intern"> Internship Only<br>
+        <input type="radio" name="type" value="PIntern"> Pre-Internship Only<br>
+        <input type="radio" name="type" value="InternshipPlacement"> Internship + Placement<br>
+        <input type="radio" name="type" value="PlacementOnly"> Placement Only
+
+        <label>CTC Range (₹):</label>
+        <input type="number" name="ctcMin" placeholder="Min">
+        <input type="number" name="ctcMax" placeholder="Max">
+        <br>
+
+        <label>Stipend Range (₹):</label>
+        <input type="number" name="stipendMin" placeholder="Min">
+        <input type="number" name="stipendMax" placeholder="Max">
+        <br><br>
+
+        <div id="btns">
+            <button type="reset">Reset</button>
+            <button type="submit">Apply</button>
+        </div>
+
     </form>
+
 </div>
 
 <div class="main-content">
@@ -109,8 +222,9 @@
              class="experience-item"
              th:attr="data-id=${experience.id}"
              onclick="loadExperienceDetails(this)">
-            <strong th:text="${experience.company}">Company</strong><br>
+            <strong th:text="${experience.fullName}">Name</strong><br>
             <span th:text="${experience.course}">Course</span> -
+            <span th:text="${experience.company}">Company</span> -
             <span th:text="${experience.jobProfile}">Job</span>
         </div>
     </div>
@@ -166,29 +280,28 @@
 
                     <p><strong>Name:</strong> ${data.fullName || "N/A"}</p>
                     <p><strong>Course:</strong> ${data.course || "N/A"}</p>
+                    <p><strong>Company:</strong> ${data.company || "N/A"}</p>
+                    ${data.otherCompany && data.otherCompany.trim() !== "" ? `<p><strong>Other Company:</strong> ${data.otherCompany}</p>` : ""}
 
+                    <p><strong>JobProfile:</strong> ${data.jobProfile || "N/A"}</p>
+                    ${data.otherJobProfile && data.otherJobProfile.trim() !== "" ? `<p><strong>Other Job Profile:</strong> ${data.otherJobProfile}</p>` : ""}
+
+                    <p><strong>Offer Type:</strong> ${data.offerType || "N/A"}</p>
                     <p><strong>CTC:</strong> ₹${data.ctc || "N/A"}</p>
                     <p><strong>Internship Stipend:</strong> ₹${data.internshipStipend || "N/A"}</p>
-
                     <p><strong>Location:</strong> ${data.location || "N/A"}</p>
-                    <p><strong>Offer Type:</strong> ${data.offerType || "N/A"}</p>
-
-                    <p><strong>Other Company:</strong> ${data.otherCompany || "N/A"}</p>
-                    <p><strong>Other Job Profile:</strong> ${data.otherJobProfile || "N/A"}</p>
-
-                    <p><strong>LinkedIn:</strong> ${data.linkedin ? `<a href="${data.linkedin}" target="_blank">${data.linkedin}</a>` : "N/A"}</p>
-
                     <p><strong>Process Date:</strong> ${data.processDate || "N/A"}</p>
-                    <p><strong>Submitted On:</strong> ${data.submissionTime || "N/A"}</p>
 
-                    <p><strong>Comments:</strong><br>${(data.comments || "No comments")
-                        .replace(/\r?\n/g, '<br>')
-                        .replace(/\+/g, '')}</p>
-
+<!--                    <p><strong>Submitted On:</strong> ${data.submissionTime || "N/A"}</p>-->
                     <div>
                         <h4>Interview Rounds</h4>
                         ${generateRoundsHTML(data.rounds)}
                     </div>
+                    <p><strong>Comments:</strong><br>${(data.comments || "No comments")
+                        .replace(/\r?\n/g, '<br>')
+                        .replace(/\+/g, '')}</p>
+                    <p><strong>LinkedIn:</strong> ${data.linkedin ? `<a href="${data.linkedin}" target="_blank">${data.linkedin}</a>` : "N/A"}</p>
+
                 `;
 
             })
