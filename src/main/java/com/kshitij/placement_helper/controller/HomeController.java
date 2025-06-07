@@ -26,7 +26,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String home() {
-        return "index";
+        return "login";
     }
 
     @GetMapping("/login")
