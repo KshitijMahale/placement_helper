@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.Year;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 public class ExperiencePageController {
@@ -30,6 +32,7 @@ public class ExperiencePageController {
 
     @GetMapping("/experience-browser")
     public String showExperiencePage(
+            @RequestParam(required = false) Integer year,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) List<String> company,
             @RequestParam(required = false) List<String> role,
@@ -40,14 +43,18 @@ public class ExperiencePageController {
             @RequestParam(required = false) Integer stipendMax,
             Model model) {
 
+        // Set curr year as default if not provided
+        if (year == null) {
+            year = Year.now().getValue();
+        }
+
+        final int selectedYear = year;
+
         List<InternshipExperience> experiences = experienceRepository.findAll().stream()
+                .filter(exp -> exp.getProcessDate() != null && exp.getProcessDate().getYear() == selectedYear)
+
                 .filter(exp -> (name == null || name.isEmpty() ||
                         (exp.getFullName() != null && exp.getFullName().toLowerCase().contains(name.toLowerCase()))))
-
-//                .filter(exp -> (company == null || company.isEmpty() ||
-//                        (exp.getCompany() != null && company.stream()
-//                                .anyMatch(c -> exp.getCompany().getName().equalsIgnoreCase(c))))
-//                )
 
                 .filter(exp -> {
                     if (company == null || company.isEmpty()) return true;
@@ -82,12 +89,14 @@ public class ExperiencePageController {
                 .collect(Collectors.toList());
 
         model.addAttribute("experiences", experiences);
-        List<Company> companies = companyRepo.findAll();
-        List<Location> locations = locationRepo.findAll();
-        model.addAttribute("companies", companies);
-        model.addAttribute("locations", locations);
+        model.addAttribute("companies", companyRepo.findAll());
+        model.addAttribute("locations", locationRepo.findAll());
 
-        // Add filters back to model
+        List<Integer> years = IntStream.rangeClosed(2020, 2030).boxed().collect(Collectors.toList());
+        model.addAttribute("years", years);
+
+        // Pass filters back
+        model.addAttribute("selectedYear", year);
         model.addAttribute("selectedName", name);
         model.addAttribute("selectedCompany", company);
         model.addAttribute("selectedRole", role);

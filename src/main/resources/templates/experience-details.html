@@ -156,7 +156,12 @@
 <body>
 <div class="sidebar">
     <h2>Filter</h2>
-    <form class="filter-form" method="get" action="/experience-browser">
+    <form class="filter-form" id="filterForm" method="get" action="/experience-browser">
+        <label for="year">Select Year <span style="color:red">*</span>:</label>
+        <select id="year" name="year" required>
+            <option th:each="yr : ${years}" th:value="${yr}" th:text="${yr}" th:selected="${selectedYear == null ? yr == 2025 : selectedYear == yr}"></option>
+        </select>
+
         <label for="name">Search by Student Name:</label>
         <input type="text" id="name" name="name" placeholder="Enter student name" th:value="${selectedName}">
 
@@ -165,31 +170,6 @@
             <option value="">-- Select Company --</option>
             <option th:each="company : ${companies}" th:value="${company.name}" th:text="${company.name}" th:selected="${selectedCompany != null and selectedCompany.contains(company.name)}">Company Name</option>
         </select>
-
-<!--        <label for="company">Company:</label>-->
-<!--        <select id="company" name="company">-->
-<!--            <option value="">&#45;&#45; Select Company &#45;&#45;</option>-->
-<!--            <option value="MSCI">MSCI</option>-->
-<!--            <option value="PhonePe">PhonePe</option>-->
-<!--            <option value="JPMC">JPMC</option>-->
-<!--            <option value="Colgate">Colgate</option>-->
-<!--            <option value="ICICI">ICICI Lombard</option>-->
-<!--            <option value="Deloitte">Deloitte</option>-->
-<!--            <option value="Wissen">Wissen</option>-->
-<!--            <option value="Revvity">Revvity</option>-->
-<!--            <option value="KPMG">KPMG</option>-->
-<!--            <option value="Accolite">Accolite</option>-->
-<!--            <option value="Barclays">Barclays</option>-->
-<!--            <option value="Quantiphi">Quantiphi</option>-->
-<!--            <option value="OracleAS">Oracle</option>-->
-<!--            <option value="OMP">OMP</option>-->
-<!--            <option value="IDFY">IDFY</option>-->
-<!--            <option value="ISS">ISS</option>-->
-<!--            <option value="Nomura">Nomura</option>-->
-<!--            <option value="IDFC">IDFC</option>-->
-<!--            <option value="UBS">UBS</option>-->
-<!--            <option value="WorkIndia">WorkIndia</option>-->
-<!--        </select>-->
 
         <label>Role:</label>
         <input type="checkbox" name="role" value="SDE" th:checked="${selectedRole != null and selectedRole.contains('SDE')}" > SDE<br>
@@ -242,6 +222,27 @@
 </div>
 
 <script>
+    const form = document.getElementById('filterForm');
+
+    // Auto-submit
+    form.querySelectorAll('select, input[type=radio], input[type=checkbox]').forEach(element => {
+        element.addEventListener('change', () => {
+            form.submit();
+        });
+    });
+    const debounce = (fn, delay) => {
+      let timer;
+      return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), delay);
+      };
+    };
+    form.querySelectorAll('input[type=text], input[type=number]').forEach(el => {
+      el.addEventListener('input', debounce(() => {
+        form.submit();
+      }, 600));
+    });
+
     function generateRoundsHTML(roundsRaw) {
         if (!roundsRaw) return "<p>No rounds data.</p>";
         let rounds;
