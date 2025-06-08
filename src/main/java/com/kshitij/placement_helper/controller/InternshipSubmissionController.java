@@ -2,8 +2,12 @@ package com.kshitij.placement_helper.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kshitij.placement_helper.model.Company;
 import com.kshitij.placement_helper.model.InternshipExperience;
+import com.kshitij.placement_helper.model.Location;
+import com.kshitij.placement_helper.repository.CompanyRepository;
 import com.kshitij.placement_helper.repository.InternshipExperienceRepository;
+import com.kshitij.placement_helper.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,13 +22,28 @@ public class InternshipSubmissionController {
     @Autowired
     private InternshipExperienceRepository experienceRepository;
 
+    @Autowired
+    private CompanyRepository companyRepo;
+
+    @Autowired
+    private LocationRepository locationRepo;
+
     @PostMapping("/submit-experience")
     public String handleInternshipSubmission(@RequestParam Map<String, String> requestParams) {
         InternshipExperience experience = new InternshipExperience();
 
         experience.setFullName(requestParams.get("fullName"));
         experience.setCourse(requestParams.get("course"));
-        experience.setCompany(requestParams.get("company"));
+//        experience.setCompany(requestParams.get("company"));
+        String companyName = requestParams.get("company");
+        Company company = companyRepo.findByName(companyName);
+        if (company == null) {
+            company = new Company();
+            company.setName(companyName);
+            company = companyRepo.save(company);
+        }
+        experience.setCompany(company);
+
         experience.setOtherCompany(requestParams.get("otherCompany"));
         experience.setJobProfile(requestParams.get("jobProfile"));
         experience.setOtherJobProfile(requestParams.get("otherJobProfile"));
@@ -38,7 +57,16 @@ public class InternshipSubmissionController {
         if (ctc != null && !ctc.isEmpty())
             experience.setCtc(Integer.valueOf(ctc));
 
-        experience.setLocation(requestParams.get("location"));
+//        experience.setLocation(requestParams.get("location"));
+        String locationName = requestParams.get("location");
+        Location location = locationRepo.findByName(locationName);
+        if (location == null) {
+            // create the location if it doesn't exist
+            location = new Location();
+            location.setName(locationName);
+            location = locationRepo.save(location);
+        }
+        experience.setLocation(location);
 
         String processDate = requestParams.get("processDate");
         if (processDate != null && !processDate.isBlank()) {

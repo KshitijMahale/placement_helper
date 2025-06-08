@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -55,33 +55,40 @@
   <br/>
 
   <h2>Company & Job Details</h2>
-  <label for="company">Company Name:</label><br>
+  <label for="company">Company:</label><br>
   <select id="company" name="company" onchange="toggleCompanyInput()" required>
-    <option value="MSCI">MSCI</option>
-    <option value="PhonePe">PhonePe</option>
-    <option value="JPMC">JPMC</option>
-    <option value="Colgate">Colgate</option>
-    <option value="ICICI">ICICI Lombard</option>
-    <option value="Deloitte">Deloitte</option>
-    <option value="Wissen">Wissen</option>
-    <option value="Revvity">Revvity</option>
-    <option value="KPMG">KPMG</option>
-    <option value="Accolite">Accolite</option>
-    <option value="Barclays">Barclays</option>
-    <option value="BarclaysHOH">Barclays(Hack-I-Hire)</option>
-    <option value="Quantiphi">Quantiphi</option>
-    <option value="OracleAS">Oracle Associate Consultant</option>
-    <option value="OMP">OMP</option>
-    <option value="IDFY">IDFY</option>
-    <option value="ISS">ISS</option>
-    <option value="Nomura">Nomura</option>
-    <option value="IDFC">IDFC</option>
-    <option value="UBS">UBS</option>
-    <option value="PhonePe">PhonePe</option>
-    <option value="WorkIndia">WorkIndia</option>
-
+<!--    <option value="" disabled selected>Select a company</option>-->
+    <option th:each="company : ${companies}" th:value="${company.name}" th:text="${company.name}"></option>
     <option value="Other">Other</option>
   </select><br><br>
+
+  <!--  <label for="company">Company Name:</label><br>-->
+<!--  <select id="company" name="company" onchange="toggleCompanyInput()" required>-->
+<!--    <option value="MSCI">MSCI</option>-->
+<!--    <option value="PhonePe">PhonePe</option>-->
+<!--    <option value="JPMC">JPMC</option>-->
+<!--    <option value="Colgate">Colgate</option>-->
+<!--    <option value="ICICI">ICICI Lombard</option>-->
+<!--    <option value="Deloitte">Deloitte</option>-->
+<!--    <option value="Wissen">Wissen</option>-->
+<!--    <option value="Revvity">Revvity</option>-->
+<!--    <option value="KPMG">KPMG</option>-->
+<!--    <option value="Accolite">Accolite</option>-->
+<!--    <option value="Barclays">Barclays</option>-->
+<!--    <option value="BarclaysHOH">Barclays(Hack-I-Hire)</option>-->
+<!--    <option value="Quantiphi">Quantiphi</option>-->
+<!--    <option value="OracleAS">Oracle Associate Consultant</option>-->
+<!--    <option value="OMP">OMP</option>-->
+<!--    <option value="IDFY">IDFY</option>-->
+<!--    <option value="ISS">ISS</option>-->
+<!--    <option value="Nomura">Nomura</option>-->
+<!--    <option value="IDFC">IDFC</option>-->
+<!--    <option value="UBS">UBS</option>-->
+<!--    <option value="PhonePe">PhonePe</option>-->
+<!--    <option value="WorkIndia">WorkIndia</option>-->
+
+<!--    <option value="Other">Other</option>-->
+<!--  </select><br><br>-->
 
   <div id="companyInputDiv" class="input-box" style="display: none;">
     <label for="otherCompany">Please specify the company name:</label><br>
@@ -119,21 +126,26 @@
 
   <div id="ctcDiv">
     <label for="ctc">CTC (in LPA):</label><br>
-    <input type="text" id="ctc" name="ctc" placeholder="For 8LPA -> 800000"><br>
+    <input type="text" id="ctc" name="ctc" placeholder="For 8LPA -> 800000">
   </div>
-  <br><br>
+  <br>
 
 <!--  <label for="ctc">CTC (in LPA):</label><br>-->
 <!--  <input type="text" id="ctc" name="ctc"><br><br>-->
 
-
   <label for="location">Location:</label><br>
   <select id="location" name="location" required>
     <option value="" disabled selected>Select a location</option>
-    <option value="Thane">Thane</option>
-    <option value="Pune">Pune</option>
-    <option value="Bengaluru">Bengaluru</option>
+    <option th:each="loc : ${locations}" th:value="${loc.name}" th:text="${loc.name}"></option>
   </select><br><br>
+
+<!--  <label for="location">Location:</label><br>-->
+<!--  <select id="location" name="location" required>-->
+<!--    <option value="" disabled selected>Select a location</option>-->
+<!--    <option value="Thane">Thane</option>-->
+<!--    <option value="Pune">Pune</option>-->
+<!--    <option value="Bengaluru">Bengaluru</option>-->
+<!--  </select><br><br>-->
 
   <!--  <label for="location">Location:</label><br>-->
 <!--  <input type="text" id="location" name="location" required><br><br>-->

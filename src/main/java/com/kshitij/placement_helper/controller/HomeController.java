@@ -1,6 +1,10 @@
 package com.kshitij.placement_helper.controller;
 
+import com.kshitij.placement_helper.model.Company;
+import com.kshitij.placement_helper.model.Location;
 import com.kshitij.placement_helper.model.User;
+import com.kshitij.placement_helper.repository.CompanyRepository;
+import com.kshitij.placement_helper.repository.LocationRepository;
 import com.kshitij.placement_helper.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 import java.util.Optional;
 import java.security.Principal;
 
@@ -23,6 +28,12 @@ public class HomeController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CompanyRepository companyRepo;
+
+    @Autowired
+    private LocationRepository locationRepo;
 
     @GetMapping("/")
     public String home() {
@@ -109,7 +120,12 @@ public class HomeController {
     }
 
     @GetMapping("/exp-form")
-    public String exp() {
+    public String exp(Model model) {
+        List<Company> companies = companyRepo.findAll();
+        model.addAttribute("companies", companies);
+
+        List<Location> locations = locationRepo.findAll();
+        model.addAttribute("locations", locations);
         return "exp-form";
     }
 }

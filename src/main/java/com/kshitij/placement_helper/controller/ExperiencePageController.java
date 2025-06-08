@@ -1,7 +1,11 @@
 package com.kshitij.placement_helper.controller;
 
+import com.kshitij.placement_helper.model.Company;
 import com.kshitij.placement_helper.model.InternshipExperience;
+import com.kshitij.placement_helper.model.Location;
+import com.kshitij.placement_helper.repository.CompanyRepository;
 import com.kshitij.placement_helper.repository.InternshipExperienceRepository;
+import com.kshitij.placement_helper.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +21,12 @@ public class ExperiencePageController {
 
     @Autowired
     private InternshipExperienceRepository experienceRepository;
+
+    @Autowired
+    private CompanyRepository companyRepo;
+
+    @Autowired
+    private LocationRepository locationRepo;
 
     @GetMapping("/experience-browser")
     public String showExperiencePage(
@@ -34,9 +44,18 @@ public class ExperiencePageController {
                 .filter(exp -> (name == null || name.isEmpty() ||
                         (exp.getFullName() != null && exp.getFullName().toLowerCase().contains(name.toLowerCase()))))
 
-                .filter(exp -> (company == null || company.isEmpty() ||
-                        (exp.getCompany() != null && company.stream()
-                                .anyMatch(c -> exp.getCompany().equalsIgnoreCase(c)))))
+//                .filter(exp -> (company == null || company.isEmpty() ||
+//                        (exp.getCompany() != null && company.stream()
+//                                .anyMatch(c -> exp.getCompany().getName().equalsIgnoreCase(c))))
+//                )
+
+                .filter(exp -> {
+                    if (company == null || company.isEmpty()) return true;
+                    if (exp.getCompany() == null || exp.getCompany().getName() == null) return false;
+                    return company.stream()
+                            .map(String::toLowerCase)
+                            .anyMatch(c -> exp.getCompany().getName().toLowerCase().contains(c));
+                })
 
                 .filter(exp -> (role == null || role.isEmpty() ||
                         (exp.getJobProfile() != null && role.stream()
@@ -63,6 +82,20 @@ public class ExperiencePageController {
                 .collect(Collectors.toList());
 
         model.addAttribute("experiences", experiences);
+        List<Company> companies = companyRepo.findAll();
+        List<Location> locations = locationRepo.findAll();
+        model.addAttribute("companies", companies);
+        model.addAttribute("locations", locations);
+
+        // Add filters back to model
+        model.addAttribute("selectedName", name);
+        model.addAttribute("selectedCompany", company);
+        model.addAttribute("selectedRole", role);
+        model.addAttribute("selectedType", type);
+        model.addAttribute("selectedCtcMin", ctcMin);
+        model.addAttribute("selectedCtcMax", ctcMax);
+        model.addAttribute("selectedStipendMin", stipendMin);
+        model.addAttribute("selectedStipendMax", stipendMax);
         return "experience-details";
     }
 

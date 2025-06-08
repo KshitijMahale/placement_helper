@@ -19,14 +19,22 @@ public class InternshipExperience {
 
     private String fullName;
     private String course;
-    private String company;
+
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
+
     private String otherCompany;
     private String jobProfile;
     private String otherJobProfile;
     private String offerType;
     private Integer internshipStipend;
     private Integer ctc;
-    private String location;
+
+    @ManyToOne
+    @JoinColumn(name = "location_id")
+    private Location location;
+
     private LocalDate processDate;
     private String linkedin;
 

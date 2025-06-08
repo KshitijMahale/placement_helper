@@ -26,7 +26,7 @@ public class ExperienceApiController {
     ) {
         return experienceRepository.findAll().stream()
                 .filter(exp -> (company == null || company.isEmpty() ||
-                        (exp.getCompany() != null && exp.getCompany().toLowerCase().contains(company.toLowerCase()))))
+                        (exp.getCompany() != null && exp.getCompany().getName().toLowerCase().contains(company.toLowerCase()))))
                 .filter(exp -> (course == null || course.isEmpty() ||
                         (exp.getCourse() != null && exp.getCourse().toLowerCase().contains(course.toLowerCase()))))
                 .filter(exp -> (job == null || job.isEmpty() ||

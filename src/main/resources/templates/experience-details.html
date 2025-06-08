@@ -158,56 +158,62 @@
     <h2>Filter</h2>
     <form class="filter-form" method="get" action="/experience-browser">
         <label for="name">Search by Student Name:</label>
-        <input type="text" id="name" name="name" placeholder="Enter student name">
+        <input type="text" id="name" name="name" placeholder="Enter student name" th:value="${selectedName}">
 
         <label for="company">Company:</label>
         <select id="company" name="company">
             <option value="">-- Select Company --</option>
-            <option value="MSCI">MSCI</option>
-            <option value="PhonePe">PhonePe</option>
-            <option value="JPMC">JPMC</option>
-            <option value="Colgate">Colgate</option>
-            <option value="ICICI">ICICI Lombard</option>
-            <option value="Deloitte">Deloitte</option>
-            <option value="Wissen">Wissen</option>
-            <option value="Revvity">Revvity</option>
-            <option value="KPMG">KPMG</option>
-            <option value="Accolite">Accolite</option>
-            <option value="Barclays">Barclays</option>
-            <option value="Quantiphi">Quantiphi</option>
-            <option value="OracleAS">Oracle</option>
-            <option value="OMP">OMP</option>
-            <option value="IDFY">IDFY</option>
-            <option value="ISS">ISS</option>
-            <option value="Nomura">Nomura</option>
-            <option value="IDFC">IDFC</option>
-            <option value="UBS">UBS</option>
-            <option value="WorkIndia">WorkIndia</option>
+            <option th:each="company : ${companies}" th:value="${company.name}" th:text="${company.name}" th:selected="${selectedCompany != null and selectedCompany.contains(company.name)}">Company Name</option>
         </select>
 
+<!--        <label for="company">Company:</label>-->
+<!--        <select id="company" name="company">-->
+<!--            <option value="">&#45;&#45; Select Company &#45;&#45;</option>-->
+<!--            <option value="MSCI">MSCI</option>-->
+<!--            <option value="PhonePe">PhonePe</option>-->
+<!--            <option value="JPMC">JPMC</option>-->
+<!--            <option value="Colgate">Colgate</option>-->
+<!--            <option value="ICICI">ICICI Lombard</option>-->
+<!--            <option value="Deloitte">Deloitte</option>-->
+<!--            <option value="Wissen">Wissen</option>-->
+<!--            <option value="Revvity">Revvity</option>-->
+<!--            <option value="KPMG">KPMG</option>-->
+<!--            <option value="Accolite">Accolite</option>-->
+<!--            <option value="Barclays">Barclays</option>-->
+<!--            <option value="Quantiphi">Quantiphi</option>-->
+<!--            <option value="OracleAS">Oracle</option>-->
+<!--            <option value="OMP">OMP</option>-->
+<!--            <option value="IDFY">IDFY</option>-->
+<!--            <option value="ISS">ISS</option>-->
+<!--            <option value="Nomura">Nomura</option>-->
+<!--            <option value="IDFC">IDFC</option>-->
+<!--            <option value="UBS">UBS</option>-->
+<!--            <option value="WorkIndia">WorkIndia</option>-->
+<!--        </select>-->
+
         <label>Role:</label>
-        <input type="checkbox" name="role" value="SDE"> SDE<br>
-        <input type="checkbox" name="role" value="Analyst"> Analyst<br>
-        <input type="checkbox" name="role" value="Manager"> Manager
+        <input type="checkbox" name="role" value="SDE" th:checked="${selectedRole != null and selectedRole.contains('SDE')}" > SDE<br>
+        <input type="checkbox" name="role" value="Analyst" th:checked="${selectedRole != null and selectedRole.contains('Analyst')}" > Analyst<br>
+        <input type="checkbox" name="role" value="Manager" th:checked="${selectedRole != null and selectedRole.contains('Manager')}"> Manager
 
         <label>Offer Type:</label>
-        <input type="radio" name="type" value="Intern"> Internship Only<br>
-        <input type="radio" name="type" value="PIntern"> Pre-Internship Only<br>
-        <input type="radio" name="type" value="InternshipPlacement"> Internship + Placement<br>
-        <input type="radio" name="type" value="PlacementOnly"> Placement Only
+        <input type="radio" name="type" value="InternshipOnly" th:checked="${selectedType == 'InternshipOnly'}"> Internship Only<br>
+        <input type="radio" name="type" value="Internship(performance-based offer)" th:checked="${selectedType == 'Internship(performance-based offer)'}"> Internship (performance-based offer) <br>
+        <input type="radio" name="type" value="InternshipPlacement" th:checked="${selectedType == 'InternshipPlacement'}"> Internship + Placement<br>
+        <input type="radio" name="type" value="PlacementOnly" th:checked="${selectedType == 'PlacementOnly'}"> Placement Only
 
         <label>CTC Range (₹):</label>
-        <input type="number" name="ctcMin" placeholder="Min">
-        <input type="number" name="ctcMax" placeholder="Max">
+        <input type="number" name="ctcMin" placeholder="Min"  th:value="${selectedCtcMin}">
+        <input type="number" name="ctcMax" placeholder="Max" th:value="${selectedCtcMax}">
         <br>
 
         <label>Stipend Range (₹):</label>
-        <input type="number" name="stipendMin" placeholder="Min">
-        <input type="number" name="stipendMax" placeholder="Max">
+        <input type="number" name="stipendMin" placeholder="Min" th:value="${selectedStipendMin}">
+        <input type="number" name="stipendMax" placeholder="Max" th:value="${selectedStipendMax}">
         <br><br>
 
         <div id="btns">
-            <button type="reset">Reset</button>
+            <button type="button" onclick="window.location.href='/experience-browser'">Reset</button> <!--  to clear retained values   -->
             <button type="submit">Apply</button>
         </div>
 
@@ -224,7 +230,7 @@
              onclick="loadExperienceDetails(this)">
             <strong th:text="${experience.fullName}">Name</strong><br>
             <span th:text="${experience.course}">Course</span> -
-            <span th:text="${experience.company}">Company</span> -
+            <span th:text="${experience.company != null ? experience.company.name : 'N/A'}">Company</span> -
             <span th:text="${experience.jobProfile}">Job</span>
         </div>
     </div>
@@ -258,7 +264,7 @@
 
     function loadExperienceDetails(element) {
         const id = element.getAttribute("data-id");
-        fetch(`/api/experience-browser/${id}`)
+        fetch(`api/experience-browser/${id}`)
             .then(response => response.json())
             .then(data => {
                 const panel = document.getElementById("details-panel");
@@ -276,11 +282,11 @@
                 }
 
                 panel.innerHTML = `
-                    <h3>${data.company || "N/A"} – ${data.jobProfile || "N/A"}</h3>
+                    <h3>${data.company?.name || "N/A"} – ${data.jobProfile || "N/A"}</h3>
 
                     <p><strong>Name:</strong> ${data.fullName || "N/A"}</p>
                     <p><strong>Course:</strong> ${data.course || "N/A"}</p>
-                    <p><strong>Company:</strong> ${data.company || "N/A"}</p>
+                    <p><strong>Company:</strong> ${data.company?.name || "N/A"}</p>
                     ${data.otherCompany && data.otherCompany.trim() !== "" ? `<p><strong>Other Company:</strong> ${data.otherCompany}</p>` : ""}
 
                     <p><strong>JobProfile:</strong> ${data.jobProfile || "N/A"}</p>
@@ -289,7 +295,7 @@
                     <p><strong>Offer Type:</strong> ${data.offerType || "N/A"}</p>
                     <p><strong>CTC:</strong> ₹${data.ctc || "N/A"}</p>
                     <p><strong>Internship Stipend:</strong> ₹${data.internshipStipend || "N/A"}</p>
-                    <p><strong>Location:</strong> ${data.location || "N/A"}</p>
+                    <p><strong>Location:</strong> ${data.location?.name || "N/A"}</p>
                     <p><strong>Process Date:</strong> ${data.processDate || "N/A"}</p>
 
 <!--                    <p><strong>Submitted On:</strong> ${data.submissionTime || "N/A"}</p>-->
