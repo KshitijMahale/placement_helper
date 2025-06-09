@@ -173,7 +173,7 @@
 
         <label>Role:</label>
         <input type="checkbox" name="role" value="SDE" th:checked="${selectedRole != null and selectedRole.contains('SDE')}" > SDE<br>
-        <input type="checkbox" name="role" value="Analyst" th:checked="${selectedRole != null and selectedRole.contains('Analyst')}" > Analyst<br>
+        <input type="checkbox" name="role" value="Business Analyst" th:checked="${selectedRole != null and selectedRole.contains('Business Analyst')}" > Business Analyst<br>
         <input type="checkbox" name="role" value="Manager" th:checked="${selectedRole != null and selectedRole.contains('Manager')}"> Manager
 
         <label>Offer Type:</label>
@@ -222,6 +222,18 @@
 </div>
 
 <script>
+    let activeInputId = null;
+    let caretPosition = null;
+
+    function storeCaretPosition(el) {
+        if (el && el.id) {
+            activeInputId = el.id;
+            caretPosition = el.selectionStart;
+            localStorage.setItem("activeInputId", activeInputId);
+            localStorage.setItem("caretPosition", caretPosition);
+        }
+    }
+
     const form = document.getElementById('filterForm');
 
     // Auto-submit
@@ -239,6 +251,7 @@
     };
     form.querySelectorAll('input[type=text], input[type=number]').forEach(el => {
       el.addEventListener('input', debounce(() => {
+        storeCaretPosition(el);
         form.submit();
       }, 600));
     });
@@ -316,6 +329,23 @@
                 console.error("Error fetching details:", error);
             });
     }
+
+    window.addEventListener("DOMContentLoaded", () => {
+        const savedId = localStorage.getItem("activeInputId");
+        const savedCaret = parseInt(localStorage.getItem("caretPosition"), 10);
+
+        if (savedId && !isNaN(savedCaret)) {
+            const input = document.getElementById(savedId);
+            if (input) {
+                input.focus();
+                input.setSelectionRange(savedCaret, savedCaret);
+            }
+        }
+
+        // cleanup
+        localStorage.removeItem("activeInputId");
+        localStorage.removeItem("caretPosition");
+    });
 </script>
 
 </body>
