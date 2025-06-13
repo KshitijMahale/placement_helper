@@ -1,6 +1,7 @@
 package com.kshitij.placement_helper.model;
 
 
+import com.kshitij.placement_helper.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -23,4 +24,7 @@ public class User {
     private String passoutYear;
     private String firstName;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "user_role")
+    private UserRole userRole = UserRole.STUDENT;
 }

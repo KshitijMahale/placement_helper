@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Pending Interview Experiences</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #eee;
+      display: flex;
+      height: 100vh;
+    }
+    .sidebar {
+      width: 280px;
+      background-color: #1e1e1e;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .sidebar h2 { color: #fff; }
+    .experience-list {
+      overflow-y: auto;
+      max-height: 90vh;
+    }
+    .experience-item {
+      padding: 12px;
+      background: #1e1e1e;
+      border: 1px solid #333;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .experience-item:hover { background: #2a2a2a; }
+    .main-content {
+      flex: 1;
+      padding: 20px;
+      display: flex;
+    }
+    .details-panel {
+      flex: 1;
+      background: #1e1e1e;
+      padding: 20px;
+      border: 1px solid #333;
+      border-radius: 6px;
+      display: none;
+      overflow-y: auto;
+    }
+    .details-panel h3 { color: #fff; margin-top: 0; }
+    .details-panel p { color: #ccc; margin: 8px 0; }
+    .btn {
+      padding: 10px 16px;
+      margin-right: 8px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn-success { background: #28a745; color: #fff; }
+    .btn-danger  { background: #dc3545; color: #fff; }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h2>Pending Experiences</h2>
+  <div class="experience-list">
+    <div th:each="exp : ${pendingExps}"
+         class="experience-item"
+         th:text="${exp.fullName + ' – ' + exp.course}"
+         th:attr="data-id=${exp.id}"
+         onclick="loadDetails(this)">
+    </div>
+  </div>
+</div>
+
+<div class="main-content">
+  <div class="details-panel" id="details-panel">
+    <h3>Experience Details</h3>
+    <p><strong>Name:</strong> <span id="name"></span></p>
+    <p><strong>Course:</strong> <span id="course"></span></p>
+    <p><strong>Company:</strong> <span id="company"></span></p>
+    <p><strong>Other Company:</strong> <span id="otherCompany"></span></p>
+    <p><strong>Job Profile:</strong> <span id="jobProfile"></span></p>
+    <p><strong>Other Profile:</strong> <span id="otherJobProfile"></span></p>
+    <p><strong>Offer Type:</strong> <span id="offerType"></span></p>
+    <p><strong>CTC:</strong> ₹<span id="ctc"></span></p>
+    <p><strong>Stipend:</strong> ₹<span id="stipend"></span></p>
+    <p><strong>Location:</strong> <span id="location"></span></p>
+    <p><strong>Process Date:</strong> <span id="processDate"></span></p>
+    <p><strong>LinkedIn:</strong> <span id="linkedin"></span></p>
+    <div>
+      <h4>Interview Rounds</h4>
+      <div id="rounds"></div>
+    </div>
+    <p><strong>Comments:</strong><br/><span id="comments"></span></p>
+
+    <input type="hidden" id="csrfTokenField" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+    <form method="post" id="approveForm" style="display:inline;">
+      <button type="submit" class="btn btn-success">Approve</button>
+    </form>
+    <form method="post" id="deleteForm" style="display:inline;">
+      <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  function mapData(data) {
+    const roundsHTML = (JSON.parse(data.rounds || '[]') || [])
+      .map((r,i) => `<p><strong>Round ${i+1} (${r.roundType}):</strong><br>${(r.questions || []).map(q => `• ${q}`).join('<br>')}</p>`)
+      .join('');
+
+    return {
+      name: data.fullName,
+      course: data.course,
+      company: data.company?.name || data.otherCompany || 'N/A',
+      otherCompany: data.otherCompany || 'N/A',
+      jobProfile: data.jobProfile,
+      otherJobProfile: data.otherJobProfile || 'N/A',
+      offerType: data.offerType,
+      ctc: data.ctc || 'N/A',
+      stipend: data.internshipStipend || 'N/A',
+      location: data.location?.name || 'N/A',
+      processDate: data.processDate,
+      linkedin: data.linkedin ? `<a href="${data.linkedin}" target="_blank">${data.linkedin}</a>` : 'N/A',
+      rounds: roundsHTML || '<em>No rounds details.</em>',
+      comments: data.comments?.replace(/\n/g, '<br>') || 'N/A'
+    };
+  }
+
+  function loadDetails(elem) {
+    const id = elem.getAttribute('data-id');
+
+    fetch(`/admin/experiences/${id}`)
+      .then(res => res.json())
+      .then(data => {
+        const mapped = mapData(data);
+        Object.keys(mapped).forEach(key => {
+          const el = document.getElementById(key);
+          if (el) el.innerHTML = mapped[key];
+        });
+
+        // Set form actions
+        const approveForm = document.getElementById('approveForm');
+        const deleteForm = document.getElementById('deleteForm');
+        approveForm.action = `/admin/experiences/${id}/approve`;
+        deleteForm.action = `/admin/experiences/${id}/delete`;
+
+        // Remove existing CSRF hidden inputs
+        approveForm.querySelectorAll('input[name="_csrf"]').forEach(e => e.remove());
+        deleteForm.querySelectorAll('input[name="_csrf"]').forEach(e => e.remove());
+
+        // Clone CSRF token input and insert into each form
+        const csrfField = document.getElementById('csrfTokenField');
+        if (csrfField) {
+          const csrfName = csrfField.getAttribute('name');
+          const csrfValue = csrfField.getAttribute('value');
+
+          const input1 = document.createElement('input');
+          input1.type = 'hidden';
+          input1.name = csrfName;
+          input1.value = csrfValue;
+          approveForm.appendChild(input1);
+
+          const input2 = document.createElement('input');
+          input2.type = 'hidden';
+          input2.name = csrfName;
+          input2.value = csrfValue;
+          deleteForm.appendChild(input2);
+        }
+
+        document.getElementById('details-panel').style.display = 'block';
+      })
+      .catch(console.error);
+  }
+</script>
+</body>
+</html>

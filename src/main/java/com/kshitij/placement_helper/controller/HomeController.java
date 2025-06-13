@@ -1,5 +1,6 @@
 package com.kshitij.placement_helper.controller;
 
+import com.kshitij.placement_helper.enums.UserRole;
 import com.kshitij.placement_helper.model.Company;
 import com.kshitij.placement_helper.model.Location;
 import com.kshitij.placement_helper.model.User;
@@ -111,6 +112,7 @@ public class HomeController {
             userRepository.save(existingUser);
         } else {
             // if not found save as new
+            user.setUserRole(UserRole.STUDENT);
             userRepository.save(user);
         }
 
