@@ -1,5 +1,6 @@
 package com.kshitij.placement_helper.controller;
 
+import com.kshitij.placement_helper.enums.ExperienceStatus;
 import com.kshitij.placement_helper.model.Company;
 import com.kshitij.placement_helper.model.InternshipExperience;
 import com.kshitij.placement_helper.model.Location;
@@ -36,7 +37,7 @@ public class ExperiencePageController {
             @RequestParam(required = false) String name,
             @RequestParam(required = false) List<String> company,
             @RequestParam(required = false) List<String> role,
-            @RequestParam(required = false) String type,
+            @RequestParam(required = false) List<String> type,
             @RequestParam(required = false) Integer ctcMin,
             @RequestParam(required = false) Integer ctcMax,
             @RequestParam(required = false) Integer stipendMin,
@@ -51,6 +52,8 @@ public class ExperiencePageController {
         final int selectedYear = year;
 
         List<InternshipExperience> experiences = experienceRepository.findAll().stream()
+                .filter(exp -> exp.getStatus() == ExperienceStatus.APPROVED) // display approved experiences only
+
                 .filter(exp -> exp.getProcessDate() != null && exp.getProcessDate().getYear() == selectedYear)
 
                 .filter(exp -> (name == null || name.isEmpty() ||
@@ -69,9 +72,11 @@ public class ExperiencePageController {
                                 .anyMatch(r -> exp.getJobProfile().equalsIgnoreCase(r)))))
 
                 .filter(exp -> (type == null || type.isEmpty() ||
-                        (exp.getOfferType() != null && exp.getOfferType().equalsIgnoreCase(type))))
+                        (exp.getOfferType() != null && type.stream()
+                                .anyMatch(t -> exp.getOfferType().equalsIgnoreCase(t)))))
 
                 .filter(exp -> {
+                    if (ctcMin == null && ctcMax == null) return true;
                     if (exp.getCtc() == null) return false;
                     if (ctcMin != null && exp.getCtc() < ctcMin) return false;
                     if (ctcMax != null && exp.getCtc() > ctcMax) return false;

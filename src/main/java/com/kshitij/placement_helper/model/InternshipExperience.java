@@ -1,5 +1,6 @@
 package com.kshitij.placement_helper.model;
 
+import com.kshitij.placement_helper.enums.ExperienceStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -46,6 +47,14 @@ public class InternshipExperience {
     private String rounds;
 
     private LocalDateTime submissionTime;
+
+    @ManyToOne
+    @JoinColumn(name = "submitted_by", nullable = false)
+    private User submittedBy;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ExperienceStatus status = ExperienceStatus.PENDING;
 
     @PrePersist
     protected void onCreate() {

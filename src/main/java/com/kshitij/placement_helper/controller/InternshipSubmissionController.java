@@ -2,17 +2,23 @@ package com.kshitij.placement_helper.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kshitij.placement_helper.enums.ExperienceStatus;
 import com.kshitij.placement_helper.model.Company;
 import com.kshitij.placement_helper.model.InternshipExperience;
 import com.kshitij.placement_helper.model.Location;
+import com.kshitij.placement_helper.model.User;
 import com.kshitij.placement_helper.repository.CompanyRepository;
 import com.kshitij.placement_helper.repository.InternshipExperienceRepository;
 import com.kshitij.placement_helper.repository.LocationRepository;
+import com.kshitij.placement_helper.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -28,9 +34,26 @@ public class InternshipSubmissionController {
     @Autowired
     private LocationRepository locationRepo;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @PostMapping("/submit-experience")
-    public String handleInternshipSubmission(@RequestParam Map<String, String> requestParams) {
+    public String handleInternshipSubmission(@RequestParam Map<String, String> requestParams, OAuth2AuthenticationToken authentication) {
         InternshipExperience experience = new InternshipExperience();
+
+        // Get logged-in user's email
+        OAuth2User oauth2User = authentication.getPrincipal();
+        String email = oauth2User.getAttribute("email");
+
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        if (optionalUser.isEmpty()) {
+            throw new RuntimeException("Logged-in user not found in database.");
+        }
+//        System.out.println("Logged-in email: " + email);
+
+        User user = optionalUser.get();
+        experience.setSubmittedBy(user);
+        experience.setStatus(ExperienceStatus.PENDING);
 
         experience.setFullName(requestParams.get("fullName"));
         experience.setCourse(requestParams.get("course"));

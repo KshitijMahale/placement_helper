@@ -177,10 +177,10 @@
         <input type="checkbox" name="role" value="Manager" th:checked="${selectedRole != null and selectedRole.contains('Manager')}"> Manager
 
         <label>Offer Type:</label>
-        <input type="radio" name="type" value="InternshipOnly" th:checked="${selectedType == 'InternshipOnly'}"> Internship Only<br>
-        <input type="radio" name="type" value="Internship(performance-based offer)" th:checked="${selectedType == 'Internship(performance-based offer)'}"> Internship (performance-based offer) <br>
-        <input type="radio" name="type" value="InternshipPlacement" th:checked="${selectedType == 'InternshipPlacement'}"> Internship + Placement<br>
-        <input type="radio" name="type" value="PlacementOnly" th:checked="${selectedType == 'PlacementOnly'}"> Placement Only
+        <input type="checkbox" name="type" value="InternshipOnly" th:checked="${selectedType != null and selectedType.contains('InternshipOnly')}"> Internship Only<br>
+        <input type="checkbox" name="type" value="Internship(performance-based offer)" th:checked="${selectedType != null and selectedType.contains('Internship(performance-based offer)')}"> Internship (performance-based offer) <br>
+        <input type="checkbox" name="type" value="InternshipPlacement" th:checked="${selectedType != null and selectedType.contains('InternshipPlacement')}"> Internship + Placement<br>
+        <input type="checkbox" name="type" value="PlacementOnly" th:checked="${selectedType != null and selectedType.contains('PlacementOnly')}"> Placement Only
 
         <label>CTC Range (₹):</label>
         <input type="number" name="ctcMin" placeholder="Min"  th:value="${selectedCtcMin}">
@@ -278,7 +278,7 @@
 
     function loadExperienceDetails(element) {
         const id = element.getAttribute("data-id");
-        fetch(`api/experience-browser/${id}`)
+        fetch(`experience-browser/${id}`)
             .then(response => response.json())
             .then(data => {
                 const panel = document.getElementById("details-panel");
