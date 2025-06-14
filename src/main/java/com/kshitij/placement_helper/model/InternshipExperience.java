@@ -8,6 +8,7 @@ import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -62,5 +63,7 @@ public class InternshipExperience {
             submissionTime = LocalDateTime.now();
         }
     }
+    @Transient
+    private List<Round> parsedRounds;
 
 }

@@ -1,12 +1,10 @@
 package com.kshitij.placement_helper.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kshitij.placement_helper.enums.UserRole;
-import com.kshitij.placement_helper.model.Company;
-import com.kshitij.placement_helper.model.InternshipExperience;
-import com.kshitij.placement_helper.model.Location;
-import com.kshitij.placement_helper.model.User;
+import com.kshitij.placement_helper.model.*;
 import com.kshitij.placement_helper.repository.CompanyRepository;
 import com.kshitij.placement_helper.repository.InternshipExperienceRepository;
 import com.kshitij.placement_helper.repository.LocationRepository;
@@ -127,15 +125,6 @@ public class HomeController {
         return "redirect:/dashboard";
     }
 
-//    @GetMapping("/exp-form")
-//    public String exp(Model model) {
-//        List<Company> companies = companyRepo.findAll();
-//        model.addAttribute("companies", companies);
-//
-//        List<Location> locations = locationRepo.findAll();
-//        model.addAttribute("locations", locations);
-//        return "exp-form";
-//    }
     @GetMapping("/exp-form")
     public String viewUserExperience(Model model, OAuth2AuthenticationToken auth) {
         String email = auth.getPrincipal().getAttribute("email");
@@ -152,6 +141,19 @@ public class HomeController {
         model.addAttribute("locations", locations);
 
         if (!experiences.isEmpty()) {
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            for (InternshipExperience experience : experiences) {
+                try {
+                    List<Round> parsedRounds = objectMapper.readValue(
+                            experience.getRounds(),
+                            new TypeReference<List<Round>>() {}
+                    );
+                    experience.setParsedRounds(parsedRounds);
+                } catch (Exception e) {
+                    e.printStackTrace(); // log the issue
+                }
+            }
             model.addAttribute("experiences", experiences);
         } else {
             model.addAttribute("noExperience", true);

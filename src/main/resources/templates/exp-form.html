@@ -161,17 +161,28 @@
   <div th:each="experience : ${experiences}">
     <hr/>
     <p><strong>Full Name:</strong> <span th:text="${experience.fullName}"></span></p>
-    <p><strong>Company:</strong> <span th:text="${experience.company.name}"></span></p>
-    <p><strong>Other Company:</strong> <span th:text="${experience.otherCompany}"></span></p>
-    <p><strong>Job Profile:</strong> <span th:text="${experience.jobProfile}"></span></p>
-    <p><strong>Other Job Profile:</strong> <span th:text="${experience.otherJobProfile}"></span></p>
+    <p><strong>Company:</strong>
+      <span th:text="${experience.company.name == 'Other' ? experience.otherCompany : experience.company.name}"></span>
+    </p>
+    <p><strong>Job Profile:</strong>
+      <span th:text="${experience.jobProfile == 'Other' ? experience.otherJobProfile : experience.jobProfile}"></span>
+    </p>
     <p><strong>Offer Type:</strong> <span th:text="${experience.offerType}"></span></p>
     <p><strong>Internship Stipend:</strong> <span th:text="${experience.internshipStipend}"></span></p>
     <p><strong>CTC:</strong> <span th:text="${experience.ctc}"></span></p>
     <p><strong>Location:</strong> <span th:text="${experience.location.name}"></span></p>
     <p><strong>Process Date:</strong> <span th:text="${experience.processDate}"></span></p>
-    <p><strong>Rounds (JSON):</strong><br/>
-      <textarea readonly rows="5" cols="50" th:text="${experience.rounds}"></textarea>
+    <div th:each="experience : ${experiences}">
+      <div th:each="round, iStat : ${experience.parsedRounds}">
+        <h4 th:text="'Round ' + ${iStat.index + 1} + ' - ' + ${round.roundType}"></h4>
+        <ul>
+          <li th:each="q : ${round.questions}" th:text="${q}"></li>
+        </ul>
+      </div>
+
+    </div>
+
+
     </p>
     <p><strong>Comments:</strong><br/><span th:text="${experience.comments}"></span></p>
     <p><strong>LinkedIn:</strong>
