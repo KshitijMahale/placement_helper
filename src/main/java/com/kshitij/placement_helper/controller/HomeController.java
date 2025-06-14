@@ -1,10 +1,14 @@
 package com.kshitij.placement_helper.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kshitij.placement_helper.enums.UserRole;
 import com.kshitij.placement_helper.model.Company;
+import com.kshitij.placement_helper.model.InternshipExperience;
 import com.kshitij.placement_helper.model.Location;
 import com.kshitij.placement_helper.model.User;
 import com.kshitij.placement_helper.repository.CompanyRepository;
+import com.kshitij.placement_helper.repository.InternshipExperienceRepository;
 import com.kshitij.placement_helper.repository.LocationRepository;
 import com.kshitij.placement_helper.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,8 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.security.Principal;
 
 @Controller
@@ -35,6 +38,9 @@ public class HomeController {
 
     @Autowired
     private LocationRepository locationRepo;
+
+    @Autowired
+    private InternshipExperienceRepository internshipExperienceRepository;
 
     @GetMapping("/")
     public String home() {
@@ -121,13 +127,38 @@ public class HomeController {
         return "redirect:/dashboard";
     }
 
+//    @GetMapping("/exp-form")
+//    public String exp(Model model) {
+//        List<Company> companies = companyRepo.findAll();
+//        model.addAttribute("companies", companies);
+//
+//        List<Location> locations = locationRepo.findAll();
+//        model.addAttribute("locations", locations);
+//        return "exp-form";
+//    }
     @GetMapping("/exp-form")
-    public String exp(Model model) {
+    public String viewUserExperience(Model model, OAuth2AuthenticationToken auth) {
+        String email = auth.getPrincipal().getAttribute("email");
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+//        List<InternshipExperience> experienceOpt = experienceRepository.findBySubmittedBy(user);
+        List<InternshipExperience> experiences = internshipExperienceRepository.findBySubmittedBy(user);
+
         List<Company> companies = companyRepo.findAll();
         model.addAttribute("companies", companies);
 
         List<Location> locations = locationRepo.findAll();
         model.addAttribute("locations", locations);
+
+        if (!experiences.isEmpty()) {
+            model.addAttribute("experiences", experiences);
+        } else {
+            model.addAttribute("noExperience", true);
+        }
+
         return "exp-form";
+
     }
+
 }

@@ -36,7 +36,8 @@
 
 <h1>Internship Details Submission</h1>
 
-<form id="internshipForm" action="/submit-experience" method="post" th:action="@{/submit-experience}">
+<div th:if="${noExperience}">
+  <form id="internshipForm" action="/submit-experience" method="post" th:action="@{/submit-experience}">
 
   <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
@@ -149,7 +150,35 @@
 
   <input type="submit" value="Submit">
 </form>
+</div>
 
+<div th:if="${experiences != null and !#lists.isEmpty(experiences)}">
+  <p>You have already submitted your experience. Thank you!</p>
+</div>
+<div th:if="${experiences != null}">
+  <h2>Your Submitted Experiences</h2>
+
+  <div th:each="experience : ${experiences}">
+    <hr/>
+    <p><strong>Full Name:</strong> <span th:text="${experience.fullName}"></span></p>
+    <p><strong>Company:</strong> <span th:text="${experience.company.name}"></span></p>
+    <p><strong>Other Company:</strong> <span th:text="${experience.otherCompany}"></span></p>
+    <p><strong>Job Profile:</strong> <span th:text="${experience.jobProfile}"></span></p>
+    <p><strong>Other Job Profile:</strong> <span th:text="${experience.otherJobProfile}"></span></p>
+    <p><strong>Offer Type:</strong> <span th:text="${experience.offerType}"></span></p>
+    <p><strong>Internship Stipend:</strong> <span th:text="${experience.internshipStipend}"></span></p>
+    <p><strong>CTC:</strong> <span th:text="${experience.ctc}"></span></p>
+    <p><strong>Location:</strong> <span th:text="${experience.location.name}"></span></p>
+    <p><strong>Process Date:</strong> <span th:text="${experience.processDate}"></span></p>
+    <p><strong>Rounds (JSON):</strong><br/>
+      <textarea readonly rows="5" cols="50" th:text="${experience.rounds}"></textarea>
+    </p>
+    <p><strong>Comments:</strong><br/><span th:text="${experience.comments}"></span></p>
+    <p><strong>LinkedIn:</strong>
+      <a th:href="${experience.linkedin}" target="_blank" th:text="${experience.linkedin}"></a>
+    </p>
+  </div>
+</div>
 <script>
   let roundCount = 1;
 
