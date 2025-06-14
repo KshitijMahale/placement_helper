@@ -32,7 +32,8 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/login").permitAll()  // Allow access to login page without authentication
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/**").hasAnyRole("ADMIN", "SUPERADMIN")
+                        .requestMatchers("/superadmin/**").hasRole("SUPERADMIN")
                         .anyRequest().authenticated()              // Require authentication for other pages
                 )
                 .oauth2Login(oauth -> oauth

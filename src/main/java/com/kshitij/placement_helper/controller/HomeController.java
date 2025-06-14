@@ -53,9 +53,33 @@ public class HomeController {
         return "login";
     }
 
+//    @GetMapping("/dashboard")
+//    public String dashboard() {
+//        return "dashboard";
+//    }
     @GetMapping("/dashboard")
-    public String dashboard() {
-        return "dashboard";
+    public String dashboard(Principal principal) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
+
+        String email = principal.getName(); // assuming email is username
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        switch (user.getUserRole()) {
+            case SUPERADMIN:
+                return "redirect:/superadmin/dashboard";
+            case ADMIN:
+                return "redirect:/admin/dashboard";
+            case STUDENT:
+            default:
+                return "dashboard";
+        }
     }
 
     @Controller
