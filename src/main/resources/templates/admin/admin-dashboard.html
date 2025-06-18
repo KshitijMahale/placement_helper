@@ -1,44 +1,67 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.w3.org/1999/xhtml" lang="en">
 <head>
-  <title>Admin Dashboard</title>
-  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard | IntervuLog</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap');
     body {
-        background-color: #f4f4f4;
-        font-family: Arial, sans-serif;
-        padding: 30px;
-    }
-
-    .container {
-        background: white;
-        padding: 30px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
-    h1 {
-        margin-bottom: 20px;
-    }
-
-    .btn {
-        margin-top: 15px;
+      font-family: 'DM Sans', sans-serif;
     }
   </style>
 </head>
-<body>
-<div class="container">
-  <h1>Admin Dashboard</h1>
-  <p>Welcome, Admin!</p>
+<body class="bg-slate-50 min-h-screen">
 
-  <hr>
-  <ul>
-    <li><a href="/admin/experiences/pending">Manage Pending Experiences</a></li>
-    <li><a href="/logout">Logout</a></li>
-    <li><a href="/userForm">Edit your information</a></li>
-    <li><a href="/exp-form">Exp-form</a></li>
-    <li><a href="/experience-browser">View Exp</a></li>
-  </ul>
-</div>
+<header class="bg-white shadow-sm py-4 px-6 flex justify-between items-center">
+  <a href="/dashboard" class="text-2xl font-bold text-indigo-700">🛠️ Admin Panel</a>
+  <a href="/logout" class="text-sm text-red-600 font-semibold hover:underline">Logout</a>
+</header>
+
+<main class="max-w-6xl mx-auto py-10 px-6">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-slate-800 mb-2">Welcome, Admin</h1>
+    <p class="text-gray-600 text-sm">Manage and monitor platform contributions effectively.</p>
+  </div>
+
+  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+    <a href="/admin/experiences/pending" class="group block bg-white border-l-4 border-red-500 shadow hover:shadow-lg transition rounded-xl p-5">
+      <h3 class="text-lg font-semibold text-red-600 mb-1 group-hover:underline">🕒 Pending Experiences</h3>
+      <p class="text-sm text-gray-600">Review and approve new submissions by users.</p>
+    </a>
+
+    <a href="#" class="group block bg-white border-l-4 border-green-500 shadow hover:shadow-lg transition rounded-xl p-5 opacity-50 cursor-not-allowed">
+      <h3 class="text-lg font-semibold text-green-700 mb-1 group-hover:underline">👥 Manage Users</h3>
+      <p class="text-sm text-gray-600">View and control user access, status, and roles.</p>
+    </a>
+
+    <a href="#" class="group block bg-white border-l-4 border-blue-500 shadow hover:shadow-lg transition rounded-xl p-5 opacity-50 cursor-not-allowed">
+      <h3 class="text-lg font-semibold text-blue-700 mb-1 group-hover:underline">📊 Platform Stats</h3>
+      <p class="text-sm text-gray-600">Get insights on engagement, growth, and usage.</p>
+    </a>
+
+    <a href="/userForm" class="group block bg-white border-l-4 border-yellow-400 shadow hover:shadow-lg transition rounded-xl p-5">
+      <h3 class="text-lg font-semibold text-indigo-700 mb-1 group-hover:underline">🧑‍💻 Edit Profile</h3>
+      <p class="text-sm text-gray-600">Update your account details as admin.</p>
+    </a>
+
+    <a href="/exp-form" class="group block bg-white border-l-4 border-yellow-400 shadow hover:shadow-lg transition rounded-xl p-5">
+      <h3 class="text-lg font-semibold text-indigo-700 mb-1 group-hover:underline">➕ Add Experience</h3>
+      <p class="text-sm text-gray-600">Post verified content directly to the platform.</p>
+    </a>
+
+    <a href="/experience-browser" class="group block bg-white border-l-4 border-yellow-400 shadow hover:shadow-lg transition rounded-xl p-5">
+      <h3 class="text-lg font-semibold text-indigo-700 mb-1 group-hover:underline">📖 Browse Experiences</h3>
+      <p class="text-sm text-gray-600">Explore submitted experiences for moderation.</p>
+    </a>
+
+  </div>
+
+  <footer class="mt-16 text-center text-xs text-gray-400">
+    Built by <span class="font-semibold text-slate-500">Kshitij Mahale</span> • Admin Dashboard for IntervuLog
+  </footer>
+</main>
+
 </body>
 </html>
