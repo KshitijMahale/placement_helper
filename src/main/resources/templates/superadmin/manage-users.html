@@ -3,132 +3,83 @@
 <head>
   <meta charset="UTF-8">
   <title>Manage Users</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      padding: 30px;
-      background-color: #f0f2f5;
-    }
-
-    h2 {
-      text-align: center;
-    }
-
-    #searchInput {
-      display: block;
-      margin: 20px auto;
-      padding: 10px;
-      width: 300px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-
-    table {
-      width: 90%;
-      margin: auto;
-      border-collapse: collapse;
-      background-color: white;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-
-    th, td {
-      padding: 12px 16px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
-
-    th {
-      background-color: #007bff;
-      color: white;
-    }
-
-    tr.hidden {
-      display: none;
-    }
-
-    select, button {
-      padding: 6px 10px;
-      margin-left: 6px;
-    }
-
-    button:disabled {
-      background-color: #ccc;
-      cursor: not-allowed;
-    }
-
-    .badge {
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 0.85em;
-      color: #fff;
-    }
-
-    .STUDENT { background-color: #17a2b8; }
-    .ADMIN { background-color: #ffc107; color: #212529; }
-    .SUPERADMIN { background-color: #dc3545; }
-  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-100 text-gray-800 font-sans min-h-screen">
 
-<h2>Manage Users</h2>
+<header class="bg-white shadow-md px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+  <a href="/dashboard" class="text-2xl font-bold text-indigo-700 flex items-center gap-2">🗂️ <span>IntervuLog – Super Admin</span></a>
+  <a href="/logout" class="text-sm text-red-600 font-semibold hover:underline">Logout</a>
+</header>
 
-<input type="text" id="searchInput" placeholder="Search by email or name...">
+<main class="p-6 max-w-6xl mx-auto">
+  <h2 class="text-2xl font-semibold text-indigo-700 mb-6">Manage Users</h2>
 
-<table>
-  <thead>
-  <tr>
-    <th>Email</th>
-    <th>Name</th>
-    <th>Current Role</th>
-    <th>Change Role</th>
-  </tr>
-  </thead>
-  <tbody id="userTableBody">
-  <tr th:each="user : ${users}">
-    <td th:text="${user.email}"></td>
-    <td th:text="${user.firstName}"></td>
-    <td>
-      <span class="badge" th:text="${user.userRole}" th:classappend="${user.userRole}"></span>
-    </td>
-    <td>
-      <form th:action="@{/superadmin/users/update-role}" method="post" oninput="checkChange(this)">
-        <input type="hidden" name="userId" th:value="${user.id}" />
-        <select name="newRole" class="roleSelect" th:data-current="${user.userRole}">
-          <option value="STUDENT" th:selected="${user.userRole.name() == 'STUDENT'}">Student</option>
-          <option value="ADMIN" th:selected="${user.userRole.name() == 'ADMIN'}">Admin</option>
-          <option value="SUPERADMIN" th:selected="${user.userRole.name() == 'SUPERADMIN'}">Super Admin</option>
-        </select>
-        <button type="submit" disabled>Update</button>
-      </form>
-    </td>
-  </tr>
-  </tbody>
-</table>
+  <input type="text" id="searchInput" placeholder="Search by email or name..." class="mb-4 w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
 
+  <div class="overflow-x-auto bg-white rounded-xl shadow">
+    <table class="min-w-full text-sm">
+      <thead class="bg-indigo-100 text-indigo-800 font-semibold">
+      <tr>
+        <th class="text-left px-6 py-3">Email</th>
+        <th class="text-left px-6 py-3">Name</th>
+        <th class="text-left px-6 py-3">Current Role</th>
+        <th class="text-left px-6 py-3">Change Role</th>
+      </tr>
+      </thead>
+      <tbody id="userTableBody" class="divide-y divide-gray-200">
+      <tr th:each="user : ${users}" class="hover:bg-gray-50">
+        <td class="px-6 py-4" th:text="${user.email}"></td>
+        <td class="px-6 py-4" th:text="${user.firstName}"></td>
+        <td class="px-6 py-4">
+            <span class="inline-block px-2 py-1 text-xs font-medium rounded-full" th:text="${user.userRole}" th:classappend="${user.userRole.name() == 'SUPERADMIN'} ? ' bg-yellow-400 text-yellow-800' : (${user.userRole.name() == 'ADMIN'} ? ' bg-indigo-100 text-indigo-800' : ' bg-gray-100 text-gray-800')"></span>
+        </td>
+        <td class="px-6 py-4">
+          <form th:action="@{/superadmin/users/update-role}" method="post" oninput="checkChange(this)" class="flex items-center gap-2">
+            <input type="hidden" name="userId" th:value="${user.id}" />
+            <select name="newRole" class="roleSelect px-3 py-2 border border-gray-300 rounded-md text-sm" th:data-current="${user.userRole}">
+              <option value="STUDENT" th:selected="${user.userRole.name() == 'STUDENT'}">Student</option>
+              <option value="ADMIN" th:selected="${user.userRole.name() == 'ADMIN'}">Admin</option>
+              <option value="SUPERADMIN" th:selected="${user.userRole.name() == 'SUPERADMIN'}">Super Admin</option>
+            </select>
+            <button type="submit" disabled class="px-4 py-1.5 bg-indigo-600 text-white text-sm font-semibold rounded-md hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed">Update</button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</main>
 <script>
-  // Live search filter
-  document.getElementById('searchInput').addEventListener('input', function () {
-    const filter = this.value.toLowerCase();
-    const rows = document.querySelectorAll('#userTableBody tr');
-    rows.forEach(row => {
-      const email = row.cells[0].textContent.toLowerCase();
-      const name = row.cells[1].textContent.toLowerCase();
-      row.classList.toggle('hidden', !(email.includes(filter) || name.includes(filter)));
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('searchInput');
+    const userTableBody = document.getElementById('userTableBody');
+
+    // Live search filter
+    searchInput.addEventListener('input', function () {
+      const filter = this.value.toLowerCase();
+      const rows = userTableBody.querySelectorAll('tr');
+      rows.forEach(row => {
+        const email = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
+        const name = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+        row.classList.toggle('hidden', !(email.includes(filter) || name.includes(filter)));
+      });
+    });
+
+    // Enable update button only if role is changed
+    function checkChange(form) {
+      const select = form.querySelector('select');
+      const current = select.dataset.current;
+      const button = form.querySelector('button');
+      button.disabled = (select.value === current);
+    }
+
+    // Attach change listener to all select elements
+    document.querySelectorAll('form').forEach(form => {
+      checkChange(form); // initialize
+      form.querySelector('select').addEventListener('change', () => checkChange(form));
     });
   });
-
-  // Enable update button only if role is changed
-  function checkChange(form) {
-    const select = form.querySelector('select');
-    const current = select.getAttribute('data-current');
-    const button = form.querySelector('button');
-    button.disabled = (select.value === current);
-  }
-
-  // Initialize all form states on load
-  window.onload = function () {
-    document.querySelectorAll('form').forEach(form => checkChange(form));
-  }
 </script>
 </body>
 </html>
