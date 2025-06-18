@@ -1,223 +1,107 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
+    <meta charset="UTF-8" />
     <title>Internship Experiences</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap');
         body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #eee;
-            display: flex;
-            height: 100vh;
+            font-family: 'DM Sans', sans-serif;
         }
-
-        .sidebar {
-            width: 280px;
-            background-color: #1e1e1e;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .sidebar h2 {
-            margin-top: 0;
-            color: #fff;
-        }
-
-        .filter-form input[type="text"],
-        .filter-form button {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            background-color: #2a2a2a;
-            border: none;
-            border-radius: 4px;
-            color: #eee;
-            font-size: 14px;
-        }
-
-        .filter-form button {
-            background-color: #3a7bd5;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .filter-form button:hover {
-            background-color: #305ea8;
-        }
-
-        .main-content {
-            flex: 1;
-            display: flex;
-            padding: 20px;
-            gap: 20px;
-        }
-
-        .experience-list {
-            width: 40%;
-            overflow-y: auto;
-        }
-
-        .experience-item {
-            padding: 15px;
-            background-color: #1e1e1e;
-            border: 1px solid #333;
-            border-radius: 6px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .experience-item:hover {
-            background-color: #2a2a2a;
-        }
-
-        .details-panel {
-            flex: 1;
-            background-color: #1e1e1e;
-            padding: 20px;
-            border-radius: 6px;
-            border: 1px solid #333;
-        }
-
-        .details-panel h3 {
-            margin-top: 0;
-            color: #fff;
-        }
-
-        .details-panel p {
-            color: #ccc;
-        }
-
-
-<!--        filter form css-->
-        .filter-form {
-        max-width: 500px;
-        margin: 20px auto;
-        padding: 20px;
-        background-color: #f8f9fa;
-        border-radius: 10px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        font-family: Arial, sans-serif;
-    }
-
-    .filter-form h3 {
-        text-align: center;
-        color: #343a40;
-    }
-
-    .filter-form label {
-        display: block;
-        margin-top: 15px;
-        font-weight: bold;
-        color: #495057;
-    }
-
-    .filter-form input[type="text"],
-    .filter-form input[type="number"],
-    .filter-form select {
-        width: 100%;
-        padding: 8px 10px;
-        margin-top: 5px;
-        border: 1px solid #ced4da;
-        border-radius: 5px;
-        font-size: 14px;
-    }
-
-    .filter-form input[type="checkbox"],
-    .filter-form input[type="radio"] {
-        margin-right: 8px;
-    }
-
-<!--    #btns{-->
-<!--        display: flex;-->
-<!--    }-->
-    .filter-form button {
-        padding: 10px 20px;
-        margin: 10px 5px 0 0;
-        font-size: 14px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-<!--    .filter-form button[type="submit"] {-->
-<!--        background-color: #007bff;-->
-<!--        color: white;-->
-<!--    }-->
-
-    .filter-form button[type="reset"] {
-        background-color: #6c757d;
-        color: white;
-    }
     </style>
 </head>
-<body>
-<div class="sidebar">
-    <h2>Filter</h2>
-    <form class="filter-form" id="filterForm" method="get" action="/experience-browser">
-        <label for="year">Select Year <span style="color:red">*</span>:</label>
-        <select id="year" name="year" required>
-            <option th:each="yr : ${years}" th:value="${yr}" th:text="${yr}" th:selected="${selectedYear == null ? yr == 2025 : selectedYear == yr}"></option>
-        </select>
+<body class="min-h-screen m-0 bg-slate-100 text-slate-900">
+<header class="bg-white shadow-md py-4 px-6 flex justify-between items-center">
+    <a href="/dashboard" class="text-2xl font-bold text-indigo-700">🗂️ IntervuLog</a>
+    <a href="/logout" class="text-sm text-red-600 font-semibold hover:underline">Logout</a>
+</header>
+<div class="flex min-h-screen -mt-1">
+    <!-- Sidebar Filter -->
+    <div class="w-80 bg-white p-6 rounded-none overflow-y-auto ">
+        <form class="space-y-4" id="filterForm" method="get" action="/experience-browser">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-bold text-slate-800">Filter</h2>
+                <button type="button" onclick="window.location.href='/experience-browser'" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full shadow-md">Reset</button>
+            </div>
 
-        <label for="name">Search by Student Name:</label>
-        <input type="text" id="name" name="name" placeholder="Enter student name" th:value="${selectedName}">
+            <div>
+                <label for="year" class="block font-medium text-sm">Select Year <span class="text-red-600">*</span>:</label>
+                <select id="year" name="year" required class="w-full mt-1 p-2 border border-slate-300 rounded-xl">
+                    <option th:each="yr : ${years}" th:value="${yr}" th:text="${yr}" th:selected="${selectedYear == null ? yr == 2025 : selectedYear == yr}"></option>
+                </select>
+            </div>
 
-        <label for="company">Company:</label>
-        <select id="company" name="company">
-            <option value="">-- Select Company --</option>
-            <option th:each="company : ${companies}" th:value="${company.name}" th:text="${company.name}" th:selected="${selectedCompany != null and selectedCompany.contains(company.name)}">Company Name</option>
-        </select>
+            <div>
+                <label for="name" class="block font-medium text-sm">Search by Student Name:</label>
+                <input type="text" id="name" name="name" placeholder="Enter student name" th:value="${selectedName}" class="w-full mt-1 p-2 border border-slate-300 rounded-xl">
+            </div>
 
-        <label>Role:</label>
-        <input type="checkbox" name="role" value="SDE" th:checked="${selectedRole != null and selectedRole.contains('SDE')}" > SDE<br>
-        <input type="checkbox" name="role" value="Business Analyst" th:checked="${selectedRole != null and selectedRole.contains('Business Analyst')}" > Business Analyst<br>
-        <input type="checkbox" name="role" value="Manager" th:checked="${selectedRole != null and selectedRole.contains('Manager')}"> Manager
+            <div>
+                <label for="company" class="block font-medium text-sm">Company:</label>
+                <select id="company" name="company" class="w-full mt-1 p-2 border border-slate-300 rounded-xl">
+                    <option value="">-- Select Company --</option>
+                    <option th:each="company : ${companies}" th:value="${company.name}" th:text="${company.name}" th:selected="${selectedCompany != null and selectedCompany.contains(company.name)}">Company Name</option>
+                </select>
+            </div>
 
-        <label>Offer Type:</label>
-        <input type="checkbox" name="type" value="InternshipOnly" th:checked="${selectedType != null and selectedType.contains('InternshipOnly')}"> Internship Only<br>
-        <input type="checkbox" name="type" value="Internship(performance-based offer)" th:checked="${selectedType != null and selectedType.contains('Internship(performance-based offer)')}"> Internship (performance-based offer) <br>
-        <input type="checkbox" name="type" value="InternshipPlacement" th:checked="${selectedType != null and selectedType.contains('InternshipPlacement')}"> Internship + Placement<br>
-        <input type="checkbox" name="type" value="PlacementOnly" th:checked="${selectedType != null and selectedType.contains('PlacementOnly')}"> Placement Only
+            <fieldset class="space-y-2">
+                <legend class="font-medium text-sm">Role:</legend>
+                <span class="me-4"><input type="checkbox" name="role" value="SDE" th:checked="${selectedRole != null and selectedRole.contains('SDE')}"> SDE</span>
+                <span class="me-4"><input type="checkbox" name="role" value="Business Analyst" th:checked="${selectedRole != null and selectedRole.contains('Business Analyst')}"> Business Analyst</span>
+                <span class="me-4"><input type="checkbox" name="role" value="Manager" th:checked="${selectedRole != null and selectedRole.contains('Manager')}"> Manager</span>
+            </fieldset>
 
-        <label>CTC Range (₹):</label>
-        <input type="number" name="ctcMin" placeholder="Min"  th:value="${selectedCtcMin}">
-        <input type="number" name="ctcMax" placeholder="Max" th:value="${selectedCtcMax}">
-        <br>
+            <fieldset class="space-y-2">
+                <legend class="font-medium text-sm">Offer Type:</legend>
+                <div><input type="checkbox" name="type" value="InternshipOnly" th:checked="${selectedType != null and selectedType.contains('InternshipOnly')}"> Internship Only</div>
+                <div><input type="checkbox" name="type" value="Internship(performance-based offer)" th:checked="${selectedType != null and selectedType.contains('Internship(performance-based offer)')}"> Internship (performance-based offer)</div>
+                <div><input type="checkbox" name="type" value="InternshipPlacement" th:checked="${selectedType != null and selectedType.contains('InternshipPlacement')}"> Internship + Placement</div>
+                <div><input type="checkbox" name="type" value="PlacementOnly" th:checked="${selectedType != null and selectedType.contains('PlacementOnly')}"> Placement Only</div>
+            </fieldset>
 
-        <label>Stipend Range (₹):</label>
-        <input type="number" name="stipendMin" placeholder="Min" th:value="${selectedStipendMin}">
-        <input type="number" name="stipendMax" placeholder="Max" th:value="${selectedStipendMax}">
-        <br><br>
+            <div>
+                <label class="block font-medium text-sm">CTC Range (₹):</label>
+                <div class="flex space-x-2 mt-1">
+                    <input type="number" name="ctcMin" placeholder="Min" th:value="${selectedCtcMin}" class="w-1/2 p-2 border border-slate-300 rounded-xl">
+                    <input type="number" name="ctcMax" placeholder="Max" th:value="${selectedCtcMax}" class="w-1/2 p-2 border border-slate-300 rounded-xl">
+                </div>
+            </div>
 
-        <div id="btns">
-            <button type="button" onclick="window.location.href='/experience-browser'">Reset</button> <!--  to clear retained values   -->
-<!--            <button type="submit">Apply</button>-->
-        </div>
+            <div>
+                <label class="block font-medium text-sm">Stipend Range (₹):</label>
+                <div class="flex space-x-2 mt-1">
+                    <input type="number" name="stipendMin" placeholder="Min" th:value="${selectedStipendMin}" class="w-1/2 p-2 border border-slate-300 rounded-xl">
+                    <input type="number" name="stipendMax" placeholder="Max" th:value="${selectedStipendMax}" class="w-1/2 p-2 border border-slate-300 rounded-xl">
+                </div>
+            </div>
 
-    </form>
 
-</div>
-
-<div class="main-content">
-    <div class="experience-list">
-        <h2>Experiences</h2>
-        <div th:each="experience : ${experiences}"
-             class="experience-item"
-             th:attr="data-id=${experience.id}"
-             onclick="loadExperienceDetails(this)">
-            <strong th:text="${experience.fullName}">Name</strong><br>
-            <span th:text="${experience.course}">Course</span> -
-            <span th:text="${experience.company != null ? experience.company.name : 'N/A'}">Company</span> -
-            <span th:text="${experience.jobProfile}">Job</span>
-        </div>
+        </form>
     </div>
 
-    <div class="details-panel" id="details-panel">
-        <h3>Experience Details</h3>
-        <p>Select an experience to see details.</p>
+    <!-- Main Content: Experience List + Details -->
+    <div class="flex-1 flex p-6 gap-6 overflow-hidden">
+        <!-- Experience List -->
+        <div class="w-2/5 h-full bg-white p-6 rounded-3xl shadow-2xl overflow-y-auto">
+            <h2 class="text-xl font-semibold mb-4 text-slate-800">Experiences</h2>
+            <div th:each="experience : ${experiences}"
+                 class="bg-indigo-50 hover:bg-indigo-100 p-4 rounded-xl shadow-sm mb-3 cursor-pointer transition duration-200 ease-in-out"
+                 th:attr="data-id=${experience.id}"
+                 onclick="loadExperienceDetails(this)">
+                <strong th:text="${experience.fullName}" class="text-indigo-900 mr-4">Name</strong>
+                <span th:text="${experience.course}" class="text-slate-600">Course</span> -
+                <span th:text="${experience.company != null ? experience.company.name : 'N/A'}" class="text-slate-600">Company</span> -
+                <span th:text="${experience.jobProfile}" class="text-slate-600">Job</span>
+            </div>
+        </div>
+
+        <!-- Details Panel -->
+        <div class="w-3/5 h-full bg-white p-6 rounded-3xl shadow-2xl overflow-y-auto" id="details-panel">
+            <h3 class="text-xl font-semibold mb-2 text-slate-800">Experience Details</h3>
+            <p class="text-slate-500">Select an experience to see details.</p>
+        </div>
+
     </div>
 </div>
 
@@ -296,32 +180,36 @@
                 }
 
                 panel.innerHTML = `
-                    <h3>${data.company?.name || "N/A"} – ${data.jobProfile || "N/A"}</h3>
+                    <h3 class="text-xl font-bold text-indigo-800 mb-4">${data.company?.name || "N/A"} – ${data.jobProfile || "N/A"}</h3>
 
-                    <p><strong>Name:</strong> ${data.fullName || "N/A"}</p>
-                    <p><strong>Course:</strong> ${data.course || "N/A"}</p>
-                    <p><strong>Company:</strong> ${data.company?.name || "N/A"}</p>
-                    ${data.otherCompany && data.otherCompany.trim() !== "" ? `<p><strong>Other Company:</strong> ${data.otherCompany}</p>` : ""}
+                    <div class="space-y-2 text-slate-700">
+                        <p><strong>Name:</strong> ${data.fullName || "N/A"}</p>
+                        <p><strong>Course:</strong> ${data.course || "N/A"}</p>
+                        <p><strong>Company:</strong> ${data.company?.name || "N/A"}</p>
+                        ${data.otherCompany && data.otherCompany.trim() !== "" ? `<p><strong>Other Company:</strong> ${data.otherCompany}</p>` : ""}
+                        <p><strong>Job Profile:</strong> ${data.jobProfile || "N/A"}</p>
+                        ${data.otherJobProfile && data.otherJobProfile.trim() !== "" ? `<p><strong>Other Job Profile:</strong> ${data.otherJobProfile}</p>` : ""}
+                        <p><strong>Offer Type:</strong> ${data.offerType || "N/A"}</p>
+                        <p><strong>CTC:</strong> ₹${data.ctc || "N/A"}</p>
+                        <p><strong>Internship Stipend:</strong> ₹${data.internshipStipend || "N/A"}</p>
+                        <p><strong>Location:</strong> ${data.location?.name || "N/A"}</p>
+                        <p><strong>Process Date:</strong> ${data.processDate || "N/A"}</p>
+                    </div>
 
-                    <p><strong>JobProfile:</strong> ${data.jobProfile || "N/A"}</p>
-                    ${data.otherJobProfile && data.otherJobProfile.trim() !== "" ? `<p><strong>Other Job Profile:</strong> ${data.otherJobProfile}</p>` : ""}
-
-                    <p><strong>Offer Type:</strong> ${data.offerType || "N/A"}</p>
-                    <p><strong>CTC:</strong> ₹${data.ctc || "N/A"}</p>
-                    <p><strong>Internship Stipend:</strong> ₹${data.internshipStipend || "N/A"}</p>
-                    <p><strong>Location:</strong> ${data.location?.name || "N/A"}</p>
-                    <p><strong>Process Date:</strong> ${data.processDate || "N/A"}</p>
-
-<!--                    <p><strong>Submitted On:</strong> ${data.submissionTime || "N/A"}</p>-->
-                    <div>
-                        <h4>Interview Rounds</h4>
+                    <div class="mt-6">
+                        <h4 class="text-lg font-semibold text-slate-800 mb-2">Interview Rounds</h4>
                         ${generateRoundsHTML(data.rounds)}
                     </div>
-                    <p><strong>Comments:</strong><br>${(data.comments || "No comments")
-                        .replace(/\r?\n/g, '<br>')
-                        .replace(/\+/g, '')}</p>
-                    <p><strong>LinkedIn:</strong> ${data.linkedin ? `<a href="${data.linkedin}" target="_blank">${data.linkedin}</a>` : "N/A"}</p>
 
+                    <div class="mt-4 text-slate-700">
+                        <p><strong>Comments:</strong><br>${(data.comments || "No comments")
+                            .replace(/\r?\n/g, '<br>')
+                            .replace(/\+/g, '')}</p>
+                    </div>
+
+                    <div class="mt-2">
+                        <p><strong>LinkedIn:</strong> ${data.linkedin ? `<a href="${data.linkedin}" target="_blank" class="text-blue-600 underline">${data.linkedin}</a>` : "N/A"}</p>
+                    </div>
                 `;
 
             })
