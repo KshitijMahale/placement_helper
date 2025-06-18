@@ -1,13 +1,68 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" class="bg-slate-100">
 <head>
-    <title>Login Page</title>
+    <meta charset="UTF-8" />
+    <title>Internship Portal | Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap');
+        body {
+          font-family: 'DM Sans', sans-serif;
+        }
+    </style>
 </head>
-<body>
-<h1>Welcome to the Placement Portal</h1>
-<div th:if="${logoutMessage}" style="color:red">[[${logoutMessage}]]</div>
-<div th:if="${param.error}" style="color:red">
-    Invalid login. Please use your @spit.ac.in account.
+<body class="min-h-screen flex items-center justify-center bg-gradient-to-tr from-indigo-100 via-slate-100 to-white px-4">
+
+<div class="w-full max-w-5xl bg-white shadow-2xl rounded-3xl overflow-hidden grid md:grid-cols-2">
+
+    <!-- Left: Branding / Illustration -->
+    <div class="bg-gradient-to-br from-indigo-700 via-indigo-600 to-purple-600 text-white p-12 flex flex-col justify-center">
+        <div class="text-center space-y-6">
+            <h1 class="text-5xl font-extrabold tracking-tight leading-tight">
+                <span class="inline-block animate-bounce text-amber-300">🗂️</span>
+                <span class="text-white ml-2">Intervu</span><span class="text-amber-300">Log</span>
+            </h1>
+            <p class="text-indigo-100 text-base max-w-md mx-auto leading-relaxed">
+                Skip the guesswork. Read how students cracked it.<br>
+                Rounds, offers, insights — all in one place.
+            </p>
+            <div class="mt-6 inline-block bg-amber-400 text-indigo-900 font-semibold px-5 py-2 text-sm rounded-full shadow-lg">
+                Navigate rounds. Land offers. Share back.
+            </div>
+        </div>
+    </div>
+
+
+    <div class="p-10 flex flex-col justify-center space-y-6">
+        <h2 class="text-2xl font-bold text-slate-800 text-center">Welcome to the Placement Portal</h2>
+
+        <!-- Logout Message -->
+        <div th:if="${logoutMessage}" class="bg-green-100 text-green-700 text-sm p-3 rounded-md border border-green-200">
+            [[${logoutMessage}]]
+        </div>
+
+        <!-- Error Message -->
+        <div th:if="${param.error}" class="bg-red-100 text-red-700 text-sm p-3 rounded-md border border-red-200">
+            Invalid login. Please use your <strong>@spit.ac.in</strong> account.
+        </div>
+
+        <div class="flex justify-center">
+            <a href="/oauth2/authorization/google"
+               class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-full font-medium shadow-md transition transform hover:scale-105">
+          <span class="inline-flex items-center gap-2">
+            <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" class="h-5 w-5">
+            Login with Google
+          </span>
+            </a>
+        </div>
+
+        <p class="text-xs text-center text-slate-400 pt-4">
+            Designed to give back. Built by <span class="font-semibold text-slate-500">Kshitij Mahale</span> • MCA'26
+        </p>
+
+    </div>
+
 </div>
-<a href="/oauth2/authorization/google">Login with Google</a>
+
 </body>
 </html>

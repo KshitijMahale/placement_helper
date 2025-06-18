@@ -4,191 +4,190 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Internship Details Submission</title>
-  <style>
-    .round-section {
-        margin-bottom: 20px;
-        padding: 15px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-    .round-header {
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-    .remove-round {
-        color: red;
-        cursor: pointer;
-    }
-    .question-section {
-        margin-top: 10px;
-    }
-    .add-question {
-        margin-top: 10px;
-        cursor: pointer;
-        color: green;
-    }
-    .input-box {
-        margin-top: 10px;
-    }
-  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-50 text-gray-800">
+<header class="bg-white shadow-md py-4 px-6 flex justify-between items-center">
+  <h1 class="text-2xl font-bold text-indigo-700">🗂️ IntervuLog Dashboard</h1>
+  <a href="/logout" class="text-sm text-red-600 font-semibold hover:underline">Logout</a>
+</header>
 
-<h1>Internship Details Submission</h1>
-
-<div th:if="${noExperience}">
-  <form id="internshipForm" action="/submit-experience" method="post" th:action="@{/submit-experience}">
-
-  <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-
-  <h2>Personal Information</h2>
-  <label for="fullName">Full Name:</label><br>
-  <input type="text" id="fullName" name="fullName" placeholder="FirstName Surname" required><br><br>
-
-  <label for="course">Course/Branch:</label><br>
-  <select id="course" name="course" required>
-    <option value="CS">Btech Computer Science</option>
-    <option value="CSE">Btech Computer Science Engineering</option>
-    <option value="EXTC">Btech EXTC</option>
-    <option value="MCA">MCA</option>
-    <option value="Mtech">Mtech</option>
-  </select>
-  <br/>
-
-  <h2>Company & Job Details</h2>
-  <label for="company">Company:</label><br>
-  <select id="company" name="company" onchange="toggleCompanyInput()" required>
-<!--    <option value="" disabled selected>Select a company</option>-->
-    <option th:each="company : ${companies}" th:value="${company.name}" th:text="${company.name}"></option>
-    <option value="Other">Other</option>
-  </select><br><br>
-
-  <div id="companyInputDiv" class="input-box" style="display: none;">
-    <label for="otherCompany">Please specify the company name:</label><br>
-    <input type="text" id="otherCompany" name="otherCompany" placeholder="Enter company name"><br><br>
+<div class="max-w-4xl mx-auto px-4 py-8">
+  <div class="mb-6">
+    <a href="/dashboard" class="inline-block bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition">← Back to Dashboard</a>
   </div>
 
-  <label for="jobProfile">Job Profile:</label><br>
-  <select id="jobProfile" name="jobProfile" onchange="toggleJobProfileInput()" required>
-    <option value="SDE">SDE</option>
-    <option value="Business Analyst">Business Analyst</option>
-    <option value="Other">Other</option>
-  </select><br><br>
+  <h1 class="text-3xl font-bold mb-4">Internship Details Submission</h1>
 
-  <div id="jobProfileInputDiv" class="input-box" style="display: none;">
-    <label for="otherJobProfile">Please specify the job profile:</label><br>
-    <input type="text" id="otherJobProfile" name="otherJobProfile" placeholder="Enter job profile"><br><br>
-  </div>
+  <div th:if="${noExperience}">
+    <form id="internshipForm" action="/submit-experience" method="post" th:action="@{/submit-experience}" class="space-y-8 bg-white p-6 rounded shadow">
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
-  <label for="offerType">Offer Type:</label><br>
-  <select id="offerType" name="offerType" onchange="toggleOfferFields()" required>
-    <option value="Internship(performance-based offer)">Internship (performance-based offer)</option>
-    <option value="InternshipOnly">Internship only</option>
-    <option value="PlacementOnly">Placement only</option>
-    <option value="InternshipPlacement">Internship + Placement </option>
-
-  </select><br><br>
-
-  <div id="stipendDiv">
-    <label for="internshipStipend">Internship Stipend:</label><br>
-    <input type="text" id="internshipStipend" name="internshipStipend" placeholder="20000"><br><br>
-  </div>
-
-  <div id="ctcDiv">
-    <label for="ctc">CTC (in LPA):</label><br>
-    <input type="text" id="ctc" name="ctc" placeholder="For 8LPA -> 800000">
-  </div>
-  <br>
-
-  <label for="location">Location:</label><br>
-  <select id="location" name="location" required>
-    <option value="" disabled selected>Select a location</option>
-    <option th:each="loc : ${locations}" th:value="${loc.name}" th:text="${loc.name}"></option>
-  </select><br><br>
-
-  <label for="processDate">Process Date:</label><br>
-  <input type="date" id="processDate" name="processDate" required><br><br>
-
-  <h2>Placement Process</h2>
-  <div id="roundsContainer">
-    <div class="round-section" id="round1">
-      <div class="round-header">Round 1</div>
-
-      <label for="roundType1">Round Type:</label><br>
-      <select id="roundType1" name="roundType1" onchange="toggleRoundTypeInput(1)" required>
-        <option value="Online Assessment">Online Assessment</option>
-        <option value="Technical">Technical</option>
-        <option value="HR">HR</option>
-        <option value="Other">Other</option>
-      </select><br><br>
-
-      <div id="roundTypeInputDiv1" class="input-box" style="display: none;">
-        <label for="otherRoundType1">Please specify the round type:</label><br>
-        <input type="text" id="otherRoundType1" name="otherRoundType1" placeholder="Enter round type"><br><br>
+      <div>
+        <h2 class="text-xl font-semibold mb-2">Personal Information</h2>
+        <label class="block font-medium">Full Name:</label>
+        <input type="text" id="fullName" name="fullName" placeholder="FirstName Surname" required class="w-full border rounded p-2 mt-1">
       </div>
 
-      <div class="question-section" id="questions1">
-        <label>Questions:</label><br>
-        <div class="question">
-          <label for="q1_1">Question 1:</label><br>
-          <textarea id="q1_1" name="q1_1" rows="4" cols="50" placeholder="Describe the question and your approach." required></textarea><br><br>
+      <div>
+        <label class="block font-medium">Course/Branch:</label>
+        <select id="course" name="course" required class="w-full border rounded p-2 mt-1">
+          <option value="CS">Btech Computer Science</option>
+          <option value="CSE">Btech Computer Science Engineering</option>
+          <option value="EXTC">Btech EXTC</option>
+          <option value="MCA">MCA</option>
+          <option value="Mtech">Mtech</option>
+        </select>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold mb-2">Company & Job Details</h2>
+        <label class="block font-medium">Company:</label>
+        <select id="company" name="company" onchange="toggleCompanyInput()" required class="w-full border rounded p-2 mt-1">
+          <option th:each="company : ${companies}" th:value="${company.name}" th:text="${company.name}"></option>
+          <option value="Other">Other</option>
+        </select>
+
+        <div id="companyInputDiv" style="display: none;" class="mt-2">
+          <label class="block font-medium">Please specify the company name:</label>
+          <input type="text" id="otherCompany" name="otherCompany" placeholder="Enter company name" class="w-full border rounded p-2 mt-1">
         </div>
       </div>
-      <span class="add-question" onclick="addQuestion(1)">+ Add Question</span><br>
-      <span class="remove-round" onclick="removeRound(1)">Remove Round</span><br><br>
-    </div>
+
+      <div>
+        <label class="block font-medium">Job Profile:</label>
+        <select id="jobProfile" name="jobProfile" onchange="toggleJobProfileInput()" required class="w-full border rounded p-2 mt-1">
+          <option value="SDE">SDE</option>
+          <option value="Business Analyst">Business Analyst</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <div id="jobProfileInputDiv" style="display: none;" class="mt-2">
+          <label class="block font-medium">Please specify the job profile:</label>
+          <input type="text" id="otherJobProfile" name="otherJobProfile" placeholder="Enter job profile" class="w-full border rounded p-2 mt-1">
+        </div>
+      </div>
+
+      <div>
+        <label class="block font-medium">Offer Type:</label>
+        <select id="offerType" name="offerType" onchange="toggleOfferFields()" required class="w-full border rounded p-2 mt-1">
+          <option value="Internship(performance-based offer)">Internship (performance-based offer)</option>
+          <option value="InternshipOnly">Internship only</option>
+          <option value="PlacementOnly">Placement only</option>
+          <option value="InternshipPlacement">Internship + Placement</option>
+        </select>
+      </div>
+
+      <div id="stipendDiv">
+        <label class="block font-medium">Internship Stipend:</label>
+        <input type="text" id="internshipStipend" name="internshipStipend" placeholder="20000" class="w-full border rounded p-2 mt-1">
+      </div>
+
+      <div id="ctcDiv">
+        <label class="block font-medium">CTC (in LPA):</label>
+        <input type="text" id="ctc" name="ctc" placeholder="For 8LPA -> 800000" class="w-full border rounded p-2 mt-1">
+      </div>
+
+      <div>
+        <label class="block font-medium">Location:</label>
+        <select id="location" name="location" required class="w-full border rounded p-2 mt-1">
+          <option value="" disabled selected>Select a location</option>
+          <option th:each="loc : ${locations}" th:value="${loc.name}" th:text="${loc.name}"></option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block font-medium">Process Date:</label>
+        <input type="date" id="processDate" name="processDate" required class="w-full border rounded p-2 mt-1">
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold">Placement Process</h2>
+        <div id="roundsContainer" class="space-y-6">
+          <div class="round-section p-4 mb-4 rounded border border-indigo-300 bg-indigo-50" id="round1">
+            <div class="round-header font-semibold text-lg text-indigo-700 mb-2">Round 1</div>
+
+            <label class="block font-medium">Round Type:</label>
+            <select id="roundType1" name="roundType1" onchange="toggleRoundTypeInput(1)" required class="w-full border border-slate-300 rounded p-2 mt-1">
+              <option value="Online Assessment">Online Assessment</option>
+              <option value="Technical">Technical</option>
+              <option value="HR">HR</option>
+              <option value="Other">Other</option>
+            </select>
+
+            <div id="roundTypeInputDiv1" style="display: none;" class="input-box mt-2">
+              <label class="block font-medium">Please specify the round type:</label>
+              <input type="text" id="otherRoundType1" name="otherRoundType1" class="w-full border border-slate-300 rounded p-2 mt-1">
+            </div>
+
+            <div id="questions1" class="question-section mt-4 space-y-2">
+              <label class="block font-medium">Questions:</label>
+              <div class="question mb-4">
+                <label class="block">Question 1:</label>
+                <textarea id="q1_1" name="q1_1" rows="4" class="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-indigo-300 mt-1" placeholder="Describe the question and your approach." required></textarea>
+              </div>
+            </div>
+
+            <button type="button" onclick="addQuestion(1)" class="text-sm text-indigo-600 hover:underline mt-2">+ Add Question</button><br>
+            <button type="button" onclick="removeRound(1)" class="text-sm text-red-600 hover:underline mt-1">Remove Round</button>
+          </div>
+        </div>
+        <button type="button" onclick="addRound()" class="mt-3 bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">+ Add New Round</button>
+
+        <div>
+          <h2 class="text-xl font-semibold">Additional Information</h2>
+          <label class="block font-medium">LinkedIn Profile (optional):</label>
+          <input type="url" id="linkedin" name="linkedin" class="w-full border rounded p-2 mt-1">
+
+          <label class="block font-medium mt-4">Additional Comments or Advice:</label>
+          <textarea id="comments" name="comments" rows="6" class="w-full border rounded p-2 mt-1"></textarea>
+        </div>
+
+        <input type="submit" value="Submit" class="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition">
+    </form>
   </div>
 
-  <button type="button" onclick="addRound()">+ Add New Round</button><br><br>
-
-  <h2>Additional Information</h2>
-  <label for="linkedin">LinkedIn Profile (optional):</label><br>
-  <input type="url" id="linkedin" name="linkedin"><br><br>
-
-  <label for="comments">Additional Comments or Advice:</label><br>
-  <textarea id="comments" name="comments" rows="6" cols="50"></textarea><br><br>
-
-  <input type="submit" value="Submit">
-</form>
-</div>
-
-<div th:if="${experiences != null and !#lists.isEmpty(experiences)}">
-  <p>You have already submitted your experience. Thank you!</p>
-</div>
-<div th:if="${experiences != null}">
-  <h2>Your Submitted Experiences</h2>
-
-  <div th:each="experience : ${experiences}">
-    <hr/>
-    <p><strong>Full Name:</strong> <span th:text="${experience.fullName}"></span></p>
-    <p><strong>Company:</strong>
-      <span th:text="${experience.company.name == 'Other' ? experience.otherCompany : experience.company.name}"></span>
+  <div th:if="${experiences != null and !#lists.isEmpty(experiences)}" class="bg-green-50 border border-green-200 text-green-800 p-4 rounded-md mt-8 shadow">
+    <p class="flex items-center gap-2 font-medium">
+      <span class="text-lg">✅</span> You have already submitted your experience. Thank you!
     </p>
-    <p><strong>Job Profile:</strong>
-      <span th:text="${experience.jobProfile == 'Other' ? experience.otherJobProfile : experience.jobProfile}"></span>
-    </p>
-    <p><strong>Offer Type:</strong> <span th:text="${experience.offerType}"></span></p>
-    <p><strong>Internship Stipend:</strong> <span th:text="${experience.internshipStipend}"></span></p>
-    <p><strong>CTC:</strong> <span th:text="${experience.ctc}"></span></p>
-    <p><strong>Location:</strong> <span th:text="${experience.location.name}"></span></p>
-    <p><strong>Process Date:</strong> <span th:text="${experience.processDate}"></span></p>
-    <div th:each="experience : ${experiences}">
-      <div th:each="round, iStat : ${experience.parsedRounds}">
-        <h4 th:text="'Round ' + ${iStat.index + 1} + ' - ' + ${round.roundType}"></h4>
-        <ul>
+  </div>
+
+  <div th:if="${experiences != null}" class="mt-10">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6">Your Submitted Experiences</h2>
+
+    <div th:each="experience : ${experiences}" class="bg-white border border-gray-200 rounded-xl shadow-md p-6 mb-8 space-y-4">
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
+        <p><span class="font-semibold">Full Name:</span> <span th:text="${experience.fullName}"></span></p>
+        <p><span class="font-semibold">Company:</span>
+          <span th:text="${experience.company.name == 'Other' ? experience.otherCompany : experience.company.name}"></span></p>
+        <p><span class="font-semibold">Job Profile:</span>
+          <span th:text="${experience.jobProfile == 'Other' ? experience.otherJobProfile : experience.jobProfile}"></span></p>
+        <p><span class="font-semibold">Offer Type:</span> <span th:text="${experience.offerType}"></span></p>
+        <p><span class="font-semibold">Internship Stipend:</span> <span th:text="${experience.internshipStipend}"></span></p>
+        <p><span class="font-semibold">CTC:</span> <span th:text="${experience.ctc}"></span></p>
+        <p><span class="font-semibold">Location:</span> <span th:text="${experience.location.name}"></span></p>
+        <p><span class="font-semibold">Process Date:</span> <span th:text="${experience.processDate}"></span></p>
+      </div>
+
+      <div th:each="round, iStat : ${experience.parsedRounds}" class="bg-gray-50 border border-gray-200 rounded p-4 mt-4">
+        <h4 class="font-semibold text-indigo-700 mb-2" th:text="'Round ' + ${iStat.index + 1} + ' - ' + ${round.roundType}"></h4>
+        <ul class="list-disc list-inside space-y-1 text-gray-800">
           <li th:each="q : ${round.questions}" th:text="${q}"></li>
         </ul>
       </div>
 
+      <div class="pt-4 border-t border-gray-200">
+        <p class="mb-2"><span class="font-semibold text-gray-800">Comments:</span> <span th:text="${experience.comments}"></span></p>
+        <p><span class="font-semibold text-gray-800">LinkedIn:</span>
+          <a class="text-blue-600 underline break-words" th:href="${experience.linkedin}" target="_blank" th:text="${experience.linkedin}"></a>
+        </p>
+      </div>
+
     </div>
-
-
-    </p>
-    <p><strong>Comments:</strong><br/><span th:text="${experience.comments}"></span></p>
-    <p><strong>LinkedIn:</strong>
-      <a th:href="${experience.linkedin}" target="_blank" th:text="${experience.linkedin}"></a>
-    </p>
   </div>
+
 </div>
 <script>
   let roundCount = 1;
@@ -231,33 +230,36 @@
   function addRound() {
     roundCount++;
     const newRound = document.createElement('div');
-    newRound.classList.add('round-section');
+    newRound.classList.add('round-section', 'p-4', 'mb-4', 'rounded-xl', 'border', 'border-indigo-300', 'bg-indigo-50', 'shadow-sm');
     newRound.id = `round${roundCount}`;
     newRound.innerHTML = `
-      <div class="round-header">Round ${roundCount}</div>
+      <div class="round-header font-semibold text-lg text-indigo-700 mb-4">Round ${roundCount}</div>
 
-      <label for="roundType${roundCount}">Round Type:</label><br>
-      <select id="roundType${roundCount}" name="roundType${roundCount}" onchange="toggleRoundTypeInput(${roundCount})" required>
+      <label for="roundType${roundCount}" class="block font-medium text-sm text-gray-700 mb-1">Round Type:</label>
+      <select id="roundType${roundCount}" name="roundType${roundCount}" onchange="toggleRoundTypeInput(${roundCount})" required
+              class="w-full p-2 mb-4 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white">
           <option value="Online Assessment">Online Assessment</option>
           <option value="Technical">Technical</option>
           <option value="HR">HR</option>
           <option value="Other">Other</option>
-      </select><br><br>
+      </select>
 
-      <div id="roundTypeInputDiv${roundCount}" class="input-box" style="display: none;">
-          <label for="otherRoundType${roundCount}">Please specify the round type:</label><br>
-          <input type="text" id="otherRoundType${roundCount}" name="otherRoundType${roundCount}" placeholder="Enter round type"><br><br>
+      <div id="roundTypeInputDiv${roundCount}" class="input-box mb-4 hidden">
+          <label for="otherRoundType${roundCount}" class="block font-medium text-sm text-gray-700 mb-1">Please specify the round type:</label>
+          <input type="text" id="otherRoundType${roundCount}" name="otherRoundType${roundCount}" placeholder="Enter round type"
+                 class="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white">
       </div>
 
       <div class="question-section" id="questions${roundCount}">
-          <label>Questions:</label><br>
-          <div class="question">
-              <label for="q${roundCount}_1">Question 1:</label><br>
-              <textarea id="q${roundCount}_1" name="q${roundCount}_1" rows="4" cols="50" placeholder="Describe the question and your approach." required></textarea><br><br>
+          <label class="block font-medium text-sm text-gray-700 mb-2">Questions:</label>
+          <div class="question mb-4">
+              <label for="q${roundCount}_1" class="block text-sm font-semibold text-gray-700 mb-1">Question 1:</label>
+              <textarea id="q${roundCount}_1" name="q${roundCount}_1" rows="4" cols="50" placeholder="Describe the question and your approach." required
+                        class="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-indigo-300"></textarea>
           </div>
       </div>
-      <span class="add-question" onclick="addQuestion(${roundCount})">+ Add Question</span><br>
-      <span class="remove-round" onclick="removeRound(${roundCount})">Remove Round</span><br><br>
+      <span class="add-question text-indigo-600 font-medium hover:underline cursor-pointer text-sm" onclick="addQuestion(${roundCount})">+ Add Question</span><br>
+      <span class="remove-round text-red-500 font-medium hover:underline cursor-pointer text-sm" onclick="removeRound(${roundCount})">Remove Round</span><br><br>
     `;
     document.getElementById('roundsContainer').appendChild(newRound);
   }
@@ -265,10 +267,11 @@
   function addQuestion(roundNumber) {
     const questionCount = document.getElementById(`questions${roundNumber}`).getElementsByClassName('question').length + 1;
     const newQuestion = document.createElement('div');
-    newQuestion.classList.add('question');
+    newQuestion.classList.add('question', 'mb-4');
     newQuestion.innerHTML = `
-      <label for="q${roundNumber}_${questionCount}">Question ${questionCount}:</label><br>
-      <textarea id="q${roundNumber}_${questionCount}" name="q${roundNumber}_${questionCount}" rows="4" cols="50" placeholder="Describe the question and your approach." required></textarea><br><br>
+      <label for="q${roundNumber}_${questionCount}" class="block text-sm font-semibold text-gray-700 mb-1">Question ${questionCount}:</label>
+      <textarea id="q${roundNumber}_${questionCount}" name="q${roundNumber}_${questionCount}" rows="4" cols="50" placeholder="Describe the question and your approach." required
+                class="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-indigo-300"></textarea>
     `;
     document.getElementById(`questions${roundNumber}`).appendChild(newQuestion);
   }
@@ -304,6 +307,10 @@
         const textarea = q.querySelector('textarea');
         textarea.id = `q${newIndex}_${qIndex + 1}`;
         textarea.name = `q${newIndex}_${qIndex + 1}`;
+
+        const label = q.querySelector('label');
+        if (label) label.textContent = `Question ${qIndex + 1}:`;
+        label.classList.add('block', 'text-sm', 'font-semibold', 'text-gray-700', 'mb-1');
       });
 
       round.querySelector('.add-question').setAttribute('onclick', `addQuestion(${newIndex})`);
@@ -311,13 +318,13 @@
     });
   }
 
-  // Call initial toggles when page loads
   window.onload = function () {
     toggleCompanyInput();
     toggleJobProfileInput();
     toggleOfferFields();
   };
 </script>
+
 
 
 </body>

@@ -1,56 +1,86 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>User Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<h2>Welcome, <span th:text="${firstName}">User</span> 👋</h2>
+<body class="bg-gray-100 min-h-screen flex flex-col">
 
-<h2>Fill out your details</h2>
+<!-- Header -->
+<header class="bg-white shadow-md py-4 px-6 flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-indigo-700 flex items-center gap-2">
+        🗂️ <span>IntervuLog Dashboard</span>
+    </h1>
+    <a href="/logout" class="text-sm text-red-600 font-semibold hover:underline">Logout</a>
+</header>
 
-<form action="#" th:action="@{/saveUser}" th:object="${user}" method="post">
+<!-- Main Content -->
+<main class="flex-grow flex items-center justify-center p-6">
+    <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-xl">
+        <h2 class="text-2xl font-bold text-indigo-700 mb-2">
+            Welcome, <span th:text="${firstName}">User</span> 👋
+        </h2>
+        <p class="text-gray-600 mb-6">Fill out your details below</p>
 
-    <!-- Hidden email field -->
-    <input type="hidden" th:field="*{email}" />
+        <form action="#" th:action="@{/saveUser}" th:object="${user}" method="post" class="space-y-5">
 
-    <label for="name">Name: </label>
-    <input type="text" id="name" th:field="*{firstName}" placeholder="Enter your name" required/>
-    <br/>
+            <!-- Hidden email field -->
+            <input type="hidden" th:field="*{email}" />
 
-    <label for="department">Department:</label>
-    <select id="department" th:field="*{department}">
-        <option value="CS">Computer Science</option>
-        <option value="CSE">Computer Science Engineering</option>
-        <option value="EXTC">EXTC</option>
-    </select>
-    <br/>
+            <div>
+                <label for="name" class="block font-medium mb-1">Name</label>
+                <input type="text" id="name" th:field="*{firstName}" placeholder="Enter your name" required
+                       class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
+            </div>
 
-    <label for="year">Academic Year:</label>
-    <select id="year" th:field="*{academicYear}">
-        <option value="First Year">First Year</option>
-        <option value="Second Year">Second Year</option>
-        <option value="Third Year">Third Year</option>
-        <option value="Final Year">Final Year</option>
-    </select>
-    <br/>
+            <div>
+                <label for="department" class="block font-medium mb-1">Department</label>
+                <select id="department" th:field="*{department}"
+                        class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="CS">Computer Science</option>
+                    <option value="CSE">Computer Science Engineering</option>
+                    <option value="EXTC">EXTC</option>
+                </select>
+            </div>
 
-    <label for="degree">Degree:</label>
-    <select id="degree" th:field="*{degree}">
-        <option value="BTech">B.Tech</option>
-        <option value="MCA">M.C.A</option>
-        <option value="MTech">M.Tech</option>
-    </select>
-    <br/>
+            <div>
+                <label for="year" class="block font-medium mb-1">Academic Year</label>
+                <select id="year" th:field="*{academicYear}"
+                        class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="First Year">First Year</option>
+                    <option value="Second Year">Second Year</option>
+                    <option value="Third Year">Third Year</option>
+                    <option value="Final Year">Final Year</option>
+                </select>
+            </div>
 
-    <label for="passoutYear">Passout Year:</label>
-    <select id="passoutYear" th:field="*{passoutYear}">
-        <option th:each="year : ${#numbers.sequence(2000, 2050)}"
-                th:value="${year}"
-                th:text="${year}">
-        </option>
-    </select>
-    <br/>
+            <div>
+                <label for="degree" class="block font-medium mb-1">Degree</label>
+                <select id="degree" th:field="*{degree}"
+                        class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="BTech">B.Tech</option>
+                    <option value="MCA">M.C.A</option>
+                    <option value="MTech">M.Tech</option>
+                </select>
+            </div>
 
-    <button type="submit">Submit</button>
-</form>
+            <div>
+                <label for="passoutYear" class="block font-medium mb-1">Passout Year</label>
+                <select id="passoutYear" th:field="*{passoutYear}"
+                        class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option th:each="year : ${#numbers.sequence(2000, 2050)}"
+                            th:value="${year}" th:text="${year}"></option>
+                </select>
+            </div>
+
+            <div class="pt-4">
+                <button type="submit"
+                        class="w-full bg-yellow-400 text-white py-2 px-4 rounded hover:bg-yellow-500 transition">
+                    Submit
+                </button>
+            </div>
+
+        </form>
+    </div>
+</main>
 </body>
 </html>

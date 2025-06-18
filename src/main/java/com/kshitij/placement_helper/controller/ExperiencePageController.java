@@ -8,11 +8,14 @@ import com.kshitij.placement_helper.repository.CompanyRepository;
 import com.kshitij.placement_helper.repository.InternshipExperienceRepository;
 import com.kshitij.placement_helper.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Year;
 import java.util.List;
@@ -113,8 +116,16 @@ public class ExperiencePageController {
         return "experience-details";
     }
 
-    @GetMapping("/experience-browser/{id}")
-    public InternshipExperience getExperienceById(@PathVariable Long id) {
-        return experienceRepository.findById(id).orElse(null);
-    }
+//    @GetMapping("/experience-browser/{id}")
+//    public InternshipExperience getExperienceById(@PathVariable Long id) {
+//        return experienceRepository.findById(id).orElse(null);
+//    }
+@GetMapping("/experience-browser/{id}")
+@ResponseBody
+public InternshipExperience getExperienceById(@PathVariable Long id) {
+    return experienceRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Experience not found"));
+}
+
 }
