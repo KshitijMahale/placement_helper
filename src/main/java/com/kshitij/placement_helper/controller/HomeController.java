@@ -1,6 +1,5 @@
 package com.kshitij.placement_helper.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kshitij.placement_helper.enums.UserRole;
@@ -53,19 +52,24 @@ public class HomeController {
         return "login";
     }
 
-//    @GetMapping("/dashboard")
-//    public String dashboard() {
-//        return "dashboard";
-//    }
     @GetMapping("/dashboard")
-    public String dashboard(Principal principal) {
+    public String dashboard(Principal principal, Model model) {
         if (principal == null) {
             return "redirect:/login";
         }
 
-        String email = principal.getName(); // assuming email is username
+        String email = principal.getName();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Fetch data for community impact
+        long totalCompanies = companyRepo.count();
+        long totalExperiences = internshipExperienceRepository.count();
+        long totalUsers = userRepository.count();
+
+        model.addAttribute("totalCompanies", formatDisplayNumber(totalCompanies));
+        model.addAttribute("totalExperiences", formatDisplayNumber(totalExperiences));
+        model.addAttribute("totalUsers", formatDisplayNumber(totalUsers));
 
         if (user == null) {
             return "redirect:/login";
@@ -79,6 +83,17 @@ public class HomeController {
             case STUDENT:
             default:
                 return "dashboard";
+        }
+    }
+    private String formatDisplayNumber(long number) {
+        if (number >= 1_000) {
+            return (number / 1_000) + "K+";
+        } else if (number >= 100) {
+            return ((number / 10) * 10) + "+";
+        } else if (number >= 5) {
+            return ((number / 5) * 5) + "+";
+        } else {
+            return String.valueOf(number);
         }
     }
 
