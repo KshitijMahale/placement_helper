@@ -27,19 +27,19 @@
             </div>
 
             <div>
-                <label for="year" class="block font-medium text-sm">Select Year <span class="text-red-600">*</span>:</label>
+                <label for="year" class="block font-bold text-sm">Select Year <span class="text-red-600">*</span>:</label>
                 <select id="year" name="year" required class="w-full mt-1 p-2 border border-slate-300 rounded-xl">
                     <option th:each="yr : ${years}" th:value="${yr}" th:text="${yr}" th:selected="${selectedYear == null ? yr == 2025 : selectedYear == yr}"></option>
                 </select>
             </div>
 
             <div>
-                <label for="name" class="block font-medium text-sm">Search by Student Name:</label>
+                <label for="name" class="block font-bold text-sm">Search by Student Name:</label>
                 <input type="text" id="name" name="name" placeholder="Enter student name" th:value="${selectedName}" class="w-full mt-1 p-2 border border-slate-300 rounded-xl">
             </div>
 
             <div>
-                <label for="company" class="block font-medium text-sm">Company:</label>
+                <label for="company" class="block font-bold text-sm">Company:</label>
                 <select id="company" name="company" class="w-full mt-1 p-2 border border-slate-300 rounded-xl">
                     <option value="">-- Select Company --</option>
                     <option th:each="company : ${companies}" th:value="${company.name}" th:text="${company.name}" th:selected="${selectedCompany != null and selectedCompany.contains(company.name)}">Company Name</option>
@@ -47,37 +47,73 @@
             </div>
 
             <fieldset class="space-y-2">
-                <legend class="font-medium text-sm">Role:</legend>
+                <legend class="text-sm font-bold">Role:</legend>
                 <span class="me-4"><input type="checkbox" name="role" value="SDE" th:checked="${selectedRole != null and selectedRole.contains('SDE')}"> SDE</span>
                 <span class="me-4"><input type="checkbox" name="role" value="Business Analyst" th:checked="${selectedRole != null and selectedRole.contains('Business Analyst')}"> Business Analyst</span>
                 <span class="me-4"><input type="checkbox" name="role" value="Manager" th:checked="${selectedRole != null and selectedRole.contains('Manager')}"> Manager</span>
             </fieldset>
 
             <fieldset class="space-y-2">
-                <legend class="font-medium text-sm">Offer Type:</legend>
+                <legend class="text-sm font-bold">Offer Type:</legend>
                 <div><input type="checkbox" name="type" value="InternshipOnly" th:checked="${selectedType != null and selectedType.contains('InternshipOnly')}"> Internship Only</div>
                 <div><input type="checkbox" name="type" value="Internship(performance-based offer)" th:checked="${selectedType != null and selectedType.contains('Internship(performance-based offer)')}"> Internship (performance-based offer)</div>
                 <div><input type="checkbox" name="type" value="InternshipPlacement" th:checked="${selectedType != null and selectedType.contains('InternshipPlacement')}"> Internship + Placement</div>
                 <div><input type="checkbox" name="type" value="PlacementOnly" th:checked="${selectedType != null and selectedType.contains('PlacementOnly')}"> Placement Only</div>
             </fieldset>
 
-            <div>
-                <label class="block font-medium text-sm">CTC Range (₹):</label>
-                <div class="flex space-x-2 mt-1">
-                    <input type="number" name="ctcMin" placeholder="Min" th:value="${selectedCtcMin}" class="w-1/2 p-2 border border-slate-300 rounded-xl">
-                    <input type="number" name="ctcMax" placeholder="Max" th:value="${selectedCtcMax}" class="w-1/2 p-2 border border-slate-300 rounded-xl">
+            <div class="mt-4">
+                <div>
+                    <label class="block font-bold text-sm">CTC Minimum (₹):</label>
+                    <input type="number" name="ctcMin" id="ctcMin" placeholder="Min" th:value="${selectedCtcMin}" class="w-full mt-1 p-2 border border-slate-300 rounded-xl" onchange="updateCtcMaxRadios()">
+                </div>
+
+                <label class="block font-bold text-sm mt-1 mb-1">CTC Maximum (based on Min):</label>
+                <div class="flex flex-wrap gap-4">
+                    <label class="flex items-center">
+                        <input type="radio" name="ctcMaxOption" value="2" th:checked="${selectedCtcMax != null && selectedCtcMin != null && selectedCtcMax - selectedCtcMin == 200000}" class="mr-1">+2L
+                    </label><br>
+
+                    <label class="flex items-center">
+                        <input type="radio" name="ctcMaxOption" value="5" th:checked="${selectedCtcMax != null && selectedCtcMin != null && selectedCtcMax - selectedCtcMin == 500000}" class="mr-1">+5L
+                    </label><br>
+
+                    <label class="flex items-center">
+                        <input type="radio" name="ctcMaxOption" value="10" th:checked="${selectedCtcMax != null && selectedCtcMin != null && selectedCtcMax - selectedCtcMin == 1000000}" class="mr-1">+10L
+                    </label><br>
+
+                    <label class="flex items-center">
+                        <input type="radio" name="ctcMaxOption" value="all" th:checked="${selectedCtcMax == null || selectedCtcMax == 0}" class="mr-1">All above minimum
+                    </label>
+                    <input type="hidden" id="ctcMax" name="ctcMax" th:value="${selectedCtcMax}">
                 </div>
             </div>
 
-            <div>
-                <label class="block font-medium text-sm">Stipend Range (₹):</label>
-                <div class="flex space-x-2 mt-1">
-                    <input type="number" name="stipendMin" placeholder="Min" th:value="${selectedStipendMin}" class="w-1/2 p-2 border border-slate-300 rounded-xl">
-                    <input type="number" name="stipendMax" placeholder="Max" th:value="${selectedStipendMax}" class="w-1/2 p-2 border border-slate-300 rounded-xl">
+            <div class="mt-4">
+                <div>
+                    <label class="block font-bold text-sm">Stipend Minimum (₹):</label>
+                    <input type="number" id="stipendMin" name="stipendMin" placeholder="Min" th:value="${selectedStipendMin}" class="w-full p-2 border border-slate-300 rounded-xl">
+                </div>
+
+                <label class="block font-bold text-sm mb-1">Stipend Maximum (based on Min):</label>
+                <div class="flex flex-wrap gap-4">
+                    <label class="flex items-center">
+                        <input type="radio" name="stipendMaxOption" value="10" th:checked="${selectedStipendMax != null && selectedStipendMin != null && selectedStipendMax - selectedStipendMin == 10000}" class="mr-1">+10K
+                    </label><br>
+
+                    <label class="flex items-center">
+                        <input type="radio" name="stipendMaxOption" value="20" th:checked="${selectedStipendMax != null && selectedStipendMin != null && selectedStipendMax - selectedStipendMin == 20000}" class="mr-1">+20K
+                    </label><br>
+
+                    <label class="flex items-center">
+                        <input type="radio" name="stipendMaxOption" value="50" th:checked="${selectedStipendMax != null && selectedStipendMin != null && selectedStipendMax - selectedStipendMin == 50000}" class="mr-1">+50K
+                    </label><br>
+
+                    <label class="flex items-center">
+                        <input type="radio" name="stipendMaxOption" value="all" th:checked="${selectedStipendMax == null || selectedStipendMax == 0}" class="mr-1">All above minimum
+                    </label>
+                    <input type="hidden" id="stipendMax" name="stipendMax" th:value="${selectedStipendMax}">
                 </div>
             </div>
-
-
         </form>
     </div>
 
@@ -191,8 +227,6 @@
                         <p><strong>Job Profile:</strong> ${data.jobProfile || "N/A"}</p>
                         ${data.otherJobProfile && data.otherJobProfile.trim() !== "" ? `<p><strong>Other Job Profile:</strong> ${data.otherJobProfile}</p>` : ""}
                         <p><strong>Offer Type:</strong> ${data.offerType || "N/A"}</p>
-                        <p><strong>CTC:</strong> ₹${data.ctc || "N/A"}</p>
-                        <p><strong>Internship Stipend:</strong> ₹${data.internshipStipend || "N/A"}</p>
                         <p><strong>Location:</strong> ${data.location?.name || "N/A"}</p>
                         <p><strong>Process Date:</strong> ${data.processDate || "N/A"}</p>
                     </div>
@@ -219,6 +253,59 @@
             });
     }
 
+    function setupCtcRangeRadios() {
+        const ctcMinInput = document.getElementById("ctcMin");
+        const ctcMaxHidden = document.getElementById("ctcMax");
+        const radios = document.getElementsByName("ctcMaxOption");
+
+        function updateMax() {
+            const min = parseInt(ctcMinInput.value) || 0;
+            radios.forEach(radio => {
+                if (radio.checked) {
+                    if (radio.value === "all") {
+                        ctcMaxHidden.value = "";
+                    } else {
+                        ctcMaxHidden.value = min + parseInt(radio.value) * 100000;
+                    }
+                    form.submit();
+                }
+            });
+        }
+
+        // Listen for radio changes
+        radios.forEach(radio => {
+            radio.addEventListener("change", updateMax);
+        });
+
+        // Update on min input change too
+        ctcMinInput.addEventListener("change", updateMax);
+    }
+
+    function setupStipendRangeRadios() {
+        const stipendMinInput = document.getElementById("stipendMin");
+        const stipendMaxHidden = document.getElementById("stipendMax");
+        const radios = document.getElementsByName("stipendMaxOption");
+
+        function updateMax() {
+            const min = parseInt(stipendMinInput.value) || 0;
+            radios.forEach(radio => {
+                if (radio.checked) {
+                    if (radio.value === "all") {
+                        stipendMaxHidden.value = "";
+                    } else {
+                        stipendMaxHidden.value = min + parseInt(radio.value) * 1000;
+                    }
+                    form.submit();
+                }
+            });
+        }
+
+        radios.forEach(radio => {
+            radio.addEventListener("change", updateMax);
+        });
+        stipendMinInput.addEventListener("change", updateMax);
+    }
+
     window.addEventListener("DOMContentLoaded", () => {
         const savedId = localStorage.getItem("activeInputId");
         const savedCaret = parseInt(localStorage.getItem("caretPosition"), 10);
@@ -230,6 +317,9 @@
                 input.setSelectionRange(savedCaret, savedCaret);
             }
         }
+
+        setupCtcRangeRadios();
+        setupStipendRangeRadios();
 
         // cleanup
         localStorage.removeItem("activeInputId");
