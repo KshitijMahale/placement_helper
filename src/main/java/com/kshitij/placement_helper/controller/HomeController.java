@@ -201,5 +201,9 @@ public class HomeController {
         return "exp-form";
 
     }
+    @GetMapping("/contact")
+    public String contactPage() {
+        return "contact";
+    }
 
 }
