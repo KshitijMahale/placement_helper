@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: IntervuLog
+    env: java
+    region: singapore
+    plan: free
+    branch: main
+    buildCommand: "./mvnw clean install"
+    startCommand: "java -jar target/IntervuLog-0.0.1-SNAPSHOT.jar"
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://dpg-d12na215pdvs73cu15s0-a.singapore-postgres.render.com/placement_helper
+      - key: SPRING_DATASOURCE_USERNAME
+        value: placement_helper_user
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: IAYzRTZ6s8H0DkTqmcsDn5tvnWe1yFcx
+      - key: SPRING_DATASOURCE_DRIVER-CLASS-NAME
+        value: org.postgresql.Driver
+      - key: SPRING_JPA_HIBERNATE_DDL-AUTO
+        value: validate
