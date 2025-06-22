@@ -1,6 +1,6 @@
-package com.kshitij.placement_helper.repository;
+package com.kshitij.IntervuLog.repository;
 
-import com.kshitij.placement_helper.model.Company;
+import com.kshitij.IntervuLog.model.Company;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

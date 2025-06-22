@@ -1,13 +1,13 @@
-package com.kshitij.placement_helper.controller;
+package com.kshitij.IntervuLog.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kshitij.placement_helper.enums.UserRole;
-import com.kshitij.placement_helper.model.*;
-import com.kshitij.placement_helper.repository.CompanyRepository;
-import com.kshitij.placement_helper.repository.InternshipExperienceRepository;
-import com.kshitij.placement_helper.repository.LocationRepository;
-import com.kshitij.placement_helper.repository.UserRepository;
+import com.kshitij.IntervuLog.enums.UserRole;
+import com.kshitij.IntervuLog.model.*;
+import com.kshitij.IntervuLog.repository.CompanyRepository;
+import com.kshitij.IntervuLog.repository.InternshipExperienceRepository;
+import com.kshitij.IntervuLog.repository.LocationRepository;
+import com.kshitij.IntervuLog.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;

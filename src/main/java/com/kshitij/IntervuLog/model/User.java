@@ -1,7 +1,7 @@
-package com.kshitij.placement_helper.model;
+package com.kshitij.IntervuLog.model;
 
 
-import com.kshitij.placement_helper.enums.UserRole;
+import com.kshitij.IntervuLog.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Data;
 

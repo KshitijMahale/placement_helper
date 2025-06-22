@@ -1,9 +1,9 @@
-package com.kshitij.placement_helper.repository;
+package com.kshitij.IntervuLog.repository;
 
-import com.kshitij.placement_helper.enums.ExperienceStatus;
-import com.kshitij.placement_helper.model.InternshipExperience;
+import com.kshitij.IntervuLog.enums.ExperienceStatus;
+import com.kshitij.IntervuLog.model.InternshipExperience;
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.kshitij.placement_helper.model.User;
+import com.kshitij.IntervuLog.model.User;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;

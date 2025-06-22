@@ -1,7 +1,7 @@
-package com.kshitij.placement_helper.controller;
+package com.kshitij.IntervuLog.controller;
 
-import com.kshitij.placement_helper.model.InternshipExperience;
-import com.kshitij.placement_helper.repository.InternshipExperienceRepository;
+import com.kshitij.IntervuLog.model.InternshipExperience;
+import com.kshitij.IntervuLog.repository.InternshipExperienceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

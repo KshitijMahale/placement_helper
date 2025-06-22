@@ -1,16 +1,16 @@
-package com.kshitij.placement_helper.controller;
+package com.kshitij.IntervuLog.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kshitij.placement_helper.enums.ExperienceStatus;
-import com.kshitij.placement_helper.model.Company;
-import com.kshitij.placement_helper.model.InternshipExperience;
-import com.kshitij.placement_helper.model.Location;
-import com.kshitij.placement_helper.model.User;
-import com.kshitij.placement_helper.repository.CompanyRepository;
-import com.kshitij.placement_helper.repository.InternshipExperienceRepository;
-import com.kshitij.placement_helper.repository.LocationRepository;
-import com.kshitij.placement_helper.repository.UserRepository;
+import com.kshitij.IntervuLog.enums.ExperienceStatus;
+import com.kshitij.IntervuLog.model.Company;
+import com.kshitij.IntervuLog.model.InternshipExperience;
+import com.kshitij.IntervuLog.model.Location;
+import com.kshitij.IntervuLog.model.User;
+import com.kshitij.IntervuLog.repository.CompanyRepository;
+import com.kshitij.IntervuLog.repository.InternshipExperienceRepository;
+import com.kshitij.IntervuLog.repository.LocationRepository;
+import com.kshitij.IntervuLog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;

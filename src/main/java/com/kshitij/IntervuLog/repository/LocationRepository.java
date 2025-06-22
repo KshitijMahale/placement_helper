@@ -1,6 +1,6 @@
-package com.kshitij.placement_helper.repository;
+package com.kshitij.IntervuLog.repository;
 
-import com.kshitij.placement_helper.model.Location;
+import com.kshitij.IntervuLog.model.Location;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LocationRepository extends JpaRepository<Location, Integer> {

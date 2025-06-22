@@ -1,8 +1,8 @@
-package com.kshitij.placement_helper.controller;
+package com.kshitij.IntervuLog.controller;
 
-import com.kshitij.placement_helper.enums.ExperienceStatus;
-import com.kshitij.placement_helper.model.InternshipExperience;
-import com.kshitij.placement_helper.repository.InternshipExperienceRepository;
+import com.kshitij.IntervuLog.enums.ExperienceStatus;
+import com.kshitij.IntervuLog.model.InternshipExperience;
+import com.kshitij.IntervuLog.repository.InternshipExperienceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

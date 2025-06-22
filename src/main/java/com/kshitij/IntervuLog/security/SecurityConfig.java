@@ -1,7 +1,7 @@
-package com.kshitij.placement_helper.security;
+package com.kshitij.IntervuLog.security;
 
-import com.kshitij.placement_helper.model.User;
-import com.kshitij.placement_helper.repository.UserRepository;
+import com.kshitij.IntervuLog.model.User;
+import com.kshitij.IntervuLog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -58,7 +58,7 @@ public class SecurityConfig {
             String email = oAuth2User.getAttribute("email");
 
             // If the email domain is not allowed, reject the login attempt
-            if (!(email.endsWith("@spit.ac.in") || email.equals("kshitijmahale7@gmail.com") || email.equals("kshitijmahale02@gmail.com"))) {
+            if (!(email.endsWith("@spit.ac.in") || email.equals("mahalekshitij7@gmail.com") || email.equals("kshitijmahale02@gmail.com"))) {
                 throw new OAuth2AuthenticationException("Unauthorized domain");
             }
 

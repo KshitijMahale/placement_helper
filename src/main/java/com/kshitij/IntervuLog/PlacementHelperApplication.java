@@ -1,4 +1,4 @@
-package com.kshitij.placement_helper;
+package com.kshitij.IntervuLog;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

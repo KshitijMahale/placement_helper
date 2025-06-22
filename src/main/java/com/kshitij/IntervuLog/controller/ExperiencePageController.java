@@ -1,12 +1,12 @@
-package com.kshitij.placement_helper.controller;
+package com.kshitij.IntervuLog.controller;
 
-import com.kshitij.placement_helper.enums.ExperienceStatus;
-import com.kshitij.placement_helper.model.Company;
-import com.kshitij.placement_helper.model.InternshipExperience;
-import com.kshitij.placement_helper.model.Location;
-import com.kshitij.placement_helper.repository.CompanyRepository;
-import com.kshitij.placement_helper.repository.InternshipExperienceRepository;
-import com.kshitij.placement_helper.repository.LocationRepository;
+import com.kshitij.IntervuLog.enums.ExperienceStatus;
+import com.kshitij.IntervuLog.model.Company;
+import com.kshitij.IntervuLog.model.InternshipExperience;
+import com.kshitij.IntervuLog.model.Location;
+import com.kshitij.IntervuLog.repository.CompanyRepository;
+import com.kshitij.IntervuLog.repository.InternshipExperienceRepository;
+import com.kshitij.IntervuLog.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;

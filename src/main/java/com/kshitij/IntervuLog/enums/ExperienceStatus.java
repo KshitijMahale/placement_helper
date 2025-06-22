@@ -1,4 +1,4 @@
-package com.kshitij.placement_helper.enums;
+package com.kshitij.IntervuLog.enums;
 
 public enum ExperienceStatus {
     PENDING,

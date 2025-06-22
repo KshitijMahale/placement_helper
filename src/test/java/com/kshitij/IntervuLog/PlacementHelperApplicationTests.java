@@ -1,4 +1,4 @@
-package com.kshitij.placement_helper;
+package com.kshitij.IntervuLog;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

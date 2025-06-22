@@ -1,6 +1,6 @@
-package com.kshitij.placement_helper.repository;
+package com.kshitij.IntervuLog.repository;
 
-import com.kshitij.placement_helper.model.User;
+import com.kshitij.IntervuLog.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 

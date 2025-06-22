@@ -1,4 +1,4 @@
-package com.kshitij.placement_helper.model;
+package com.kshitij.IntervuLog.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;

@@ -1,6 +1,6 @@
-package com.kshitij.placement_helper.model;
+package com.kshitij.IntervuLog.model;
 
-import com.kshitij.placement_helper.enums.ExperienceStatus;
+import com.kshitij.IntervuLog.enums.ExperienceStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.JdbcTypeCode;

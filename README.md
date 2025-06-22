@@ -5,7 +5,7 @@ SpringBoot + Thymeleaf Project
 ```yaml
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/placement_helper
+    url: jdbc:postgresql://localhost:5432/IntervuLog
     username: postgres
     password: <YOUR_DB_PASSWORD>
   jpa:
