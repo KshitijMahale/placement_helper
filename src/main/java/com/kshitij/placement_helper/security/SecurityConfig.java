@@ -58,9 +58,9 @@ public class SecurityConfig {
             String email = oAuth2User.getAttribute("email");
 
             // If the email domain is not allowed, reject the login attempt
-//            if (!email.endsWith("@spit.ac.in")) {
-//                throw new OAuth2AuthenticationException("Unauthorized domain");
-//            }
+            if (!(email.endsWith("@spit.ac.in") || email.equals("kshitijmahale7@gmail.com") || email.equals("kshitijmahale02@gmail.com"))) {
+                throw new OAuth2AuthenticationException("Unauthorized domain");
+            }
 
             User user = userRepository.findByEmail(email)
                     .orElseThrow(() -> new OAuth2AuthenticationException("User not found"));
