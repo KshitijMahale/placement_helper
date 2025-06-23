@@ -56,10 +56,19 @@
       </div>
 
       <div>
-        <label class="block font-medium">Job Profile:</label>
+        <label for="jobProfile" class="block font-medium">Job Profile:</label>
         <select id="jobProfile" name="jobProfile" onchange="toggleJobProfileInput()" required class="w-full border rounded p-2 mt-1">
-          <option value="SDE">SDE</option>
+          <option value="" disabled selected>Select a job profile</option>
+          <option value="AI Engineer">AI Engineer</option>
+          <option value="App Developer">App Developer</option>
+          <option value="Associate Manager">Associate Manager</option>
           <option value="Business Analyst">Business Analyst</option>
+          <option value="Data Analyst">Data Analyst</option>
+          <option value="Data Scientist">Data Scientist</option>
+          <option value="Java Developer">Java Developer</option>
+          <option value="Machine Learning Engineer">Machine Learning Engineer</option>
+          <option value="SDE">SDE</option>
+          <option value="Software Developer">Software Developer</option>
           <option value="Other">Other</option>
         </select>
 
