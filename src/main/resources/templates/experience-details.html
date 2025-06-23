@@ -47,10 +47,39 @@
             </div>
 
             <fieldset class="space-y-2">
-                <legend class="text-sm font-bold">Role:</legend>
-                <span class="me-4"><input type="checkbox" name="role" value="SDE" th:checked="${selectedRole != null and selectedRole.contains('SDE')}"> SDE</span>
-                <span class="me-4"><input type="checkbox" name="role" value="Business Analyst" th:checked="${selectedRole != null and selectedRole.contains('Business Analyst')}"> Business Analyst</span>
-                <span class="me-4"><input type="checkbox" name="role" value="Manager" th:checked="${selectedRole != null and selectedRole.contains('Manager')}"> Manager</span>
+                <legend class="text-sm font-bold text-slate-700 mb-1">Select Role(s):</legend>
+                <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-700">
+                    <label class="flex items-center gap-1">
+                        <input type="checkbox" name="role" value="AI Engineer" th:checked="${selectedRole != null and selectedRole.contains('AI Engineer')}" class="accent-indigo-600"> AI Eng
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="checkbox" name="role" value="App Developer" th:checked="${selectedRole != null and selectedRole.contains('App Developer')}" class="accent-indigo-600"> App Dev
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="checkbox" name="role" value="Associate Manager" th:checked="${selectedRole != null and selectedRole.contains('Associate Manager')}" class="accent-indigo-600"> Assoc. Manager
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="checkbox" name="role" value="Business Analyst" th:checked="${selectedRole != null and selectedRole.contains('Business Analyst')}" class="accent-indigo-600"> Biz Analyst
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="checkbox" name="role" value="Data Analyst" th:checked="${selectedRole != null and selectedRole.contains('Data Analyst')}" class="accent-indigo-600"> Data Analyst
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="checkbox" name="role" value="Data Scientist" th:checked="${selectedRole != null and selectedRole.contains('Data Scientist')}" class="accent-indigo-600"> Data Scientist
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="checkbox" name="role" value="Java Developer" th:checked="${selectedRole != null and selectedRole.contains('Java Developer')}" class="accent-indigo-600"> Java Dev
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="checkbox" name="role" value="Machine Learning Engineer" th:checked="${selectedRole != null and selectedRole.contains('Machine Learning Engineer')}" class="accent-indigo-600"> ML Eng
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="checkbox" name="role" value="SDE" th:checked="${selectedRole != null and selectedRole.contains('SDE')}" class="accent-indigo-600"> SDE
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="checkbox" name="role" value="Software Developer" th:checked="${selectedRole != null and selectedRole.contains('Software Developer')}" class="accent-indigo-600"> Software Dev
+                    </label>
+                </div>
             </fieldset>
 
             <fieldset class="space-y-2">

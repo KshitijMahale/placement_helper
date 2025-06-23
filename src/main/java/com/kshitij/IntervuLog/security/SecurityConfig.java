@@ -31,6 +31,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/health").permitAll()
                         .requestMatchers("/icon.png", "/css/**", "/js/**").permitAll()
                         .requestMatchers("/", "/login").permitAll()  // Allow access to login page without authentication
                         .requestMatchers("/admin/**").hasAnyRole("ADMIN", "SUPERADMIN")
