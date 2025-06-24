@@ -13,6 +13,9 @@ import com.kshitij.IntervuLog.repository.InternshipExperienceRepository;
 import com.kshitij.IntervuLog.repository.LocationRepository;
 import com.kshitij.IntervuLog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -45,9 +48,16 @@ public class SuperadminController {
     }
 
     @GetMapping("/users")
-    public String manageUsers(Model model) {
-        List<User> users = userRepository.findAll();
-        model.addAttribute("users", users);
+    public String manageUsers(@RequestParam(defaultValue = "0") int page,
+                              @RequestParam(defaultValue = "7") int size,
+                              Model model) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> userPage = userRepository.findAll(pageable);
+
+        model.addAttribute("users", userPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", userPage.getTotalPages());
+
         return "superadmin/manage-users";
     }
 
@@ -65,7 +75,7 @@ public class SuperadminController {
         model.addAttribute("experience", new InternshipExperience());
         model.addAttribute("companies", companyRepo.findAll());
         model.addAttribute("locations", locationRepo.findAll());
-        return "/superadmin/add-experience";
+        return "superadmin/add-experience";
     }
 
     @PostMapping("/add-experience")

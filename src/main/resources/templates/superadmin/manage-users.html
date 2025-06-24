@@ -50,6 +50,18 @@
       </tbody>
     </table>
   </div>
+  <!-- Pagination -->
+  <div class="mt-6 flex justify-center items-center gap-4 text-sm">
+    <a th:if="${currentPage > 0}"
+       th:href="@{/superadmin/users(page=${currentPage - 1}, size=10)}"
+       class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 transition">Previous</a>
+
+    <span th:text="'Page ' + (${currentPage + 1}) + ' of ' + ${totalPages}"></span>
+
+    <a th:if="${currentPage < totalPages - 1}"
+       th:href="@{/superadmin/users(page=${currentPage + 1}, size=10)}"
+       class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 transition">Next</a>
+  </div>
 </main>
 <script>
   document.addEventListener('DOMContentLoaded', () => {

@@ -8,6 +8,10 @@ import com.kshitij.IntervuLog.repository.CompanyRepository;
 import com.kshitij.IntervuLog.repository.InternshipExperienceRepository;
 import com.kshitij.IntervuLog.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,6 +49,8 @@ public class ExperiencePageController {
             @RequestParam(required = false) Integer ctcMax,
             @RequestParam(required = false) Integer stipendMin,
             @RequestParam(required = false) Integer stipendMax,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "7") int size,
             Model model) {
 
         // Set curr year as default if not provided
@@ -96,7 +102,15 @@ public class ExperiencePageController {
 
                 .collect(Collectors.toList());
 
-        model.addAttribute("experiences", experiences);
+        // Pagination logic
+        int start = Math.min(page * size, experiences.size());
+        int end = Math.min((page + 1) * size, experiences.size());
+        List<InternshipExperience> pagedExperiences = experiences.subList(start, end);
+
+        model.addAttribute("experiences", pagedExperiences);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", (int) Math.ceil((double) experiences.size() / size));
+        model.addAttribute("size", size);
         model.addAttribute("companies", companyRepo.findAll());
         model.addAttribute("locations", locationRepo.findAll());
 
@@ -116,16 +130,12 @@ public class ExperiencePageController {
         return "experience-details";
     }
 
-//    @GetMapping("/experience-browser/{id}")
-//    public InternshipExperience getExperienceById(@PathVariable Long id) {
-//        return experienceRepository.findById(id).orElse(null);
-//    }
-@GetMapping("/experience-browser/{id}")
-@ResponseBody
-public InternshipExperience getExperienceById(@PathVariable Long id) {
-    return experienceRepository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Experience not found"));
-}
+    @GetMapping("/experience-browser/{id}")
+    @ResponseBody
+    public InternshipExperience getExperienceById(@PathVariable Long id) {
+        return experienceRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Experience not found"));
+    }
 
 }
