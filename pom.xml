@@ -101,6 +101,11 @@
 			<artifactId>h2</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.thymeleaf.extras</groupId>
+			<artifactId>thymeleaf-extras-springsecurity6</artifactId> <!-- or springsecurity5 if using Spring Security 5 -->
+		</dependency>
+
 
 	</dependencies>
 

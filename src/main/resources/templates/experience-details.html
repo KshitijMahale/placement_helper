@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 <head>
     <meta charset="UTF-8" />
     <title>IntervuLog | Interview Experiences</title>
@@ -13,20 +13,18 @@
     </style>
 </head>
 <body class="h-screen flex flex-col bg-slate-100 text-slate-900">
-<header class="sticky top-0 z-50 bg-white shadow px-6 py-4">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <a href="/dashboard" class="text-2xl font-bold text-indigo-700 flex items-center gap-2">
-            🗂️<span>IntervuLog</span>
-        </a>
-        <nav class="flex flex-wrap sm:flex-nowrap justify-start sm:justify-end gap-4 sm:gap-6 text-[15px] sm:text-[16px] font-medium text-gray-700">
-            <a href="/dashboard" class="hover:text-indigo-700 transition">Dashboard</a>
-            <a href="/exp-form" class="hover:text-indigo-700 transition">Submit Experience</a>
-            <a href="/experience-browser" class="hover:text-indigo-700 transition">Browse</a>
-            <a href="/userForm" class="hover:text-indigo-700 transition">Profile</a>
-            <a href="/logout" class="text-red-600 font-semibold hover:underline transition">Logout</a>
-        </nav>
-    </div>
-</header>
+<!--    header -->
+<div sec:authorize="hasRole('SUPERADMIN')">
+    <div th:replace="~{fragments/superadmin-header :: superadminHeader}"></div>
+</div>
+
+<div sec:authorize="hasRole('ADMIN') and not hasRole('SUPERADMIN')">
+    <div th:replace="~{fragments/admin-header :: adminHeader}"></div>
+</div>
+
+<div sec:authorize="hasRole('STUDENT') and not hasRole('ADMIN')">
+    <div th:replace="~{fragments/student-header :: studentHeader}"></div>
+</div>
 <div class="flex flex-1 overflow-hidden">
     <!-- Sidebar Filter -->
     <div class="w-80 bg-white p-6 overflow-y-auto h-full">
