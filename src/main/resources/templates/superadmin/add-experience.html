@@ -4,14 +4,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>IntervuLog | Add Interview Experiences</title>
-  <link rel="icon" href="icon.png" type="image/png">
+  <link rel="icon" th:href="@{/icon.png}" type="image/png">
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap');
+    body {
+        font-family: 'DM Sans', sans-serif;
+    }
+  </style>
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans">
 
-<header class="bg-white shadow px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
-  <a href="/dashboard" class="text-2xl font-bold text-indigo-700 flex items-center gap-2">🗂️ <span>IntervuLog – Super Admin</span></a>
-  <a href="/logout" class="text-sm text-red-600 font-semibold hover:underline">Logout</a>
+<header class="sticky top-0 z-50 bg-white shadow px-6 py-4">
+  <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <a href="/dashboard" class="text-2xl font-bold text-indigo-700 flex items-center gap-2">
+      🗂️<span>IntervuLog<span class="text-sm font-medium text-gray-500 ml-1">– Super Admin</span></span>
+    </a>
+    <nav class="flex flex-wrap sm:flex-nowrap justify-start sm:justify-end gap-4 sm:gap-6 text-[15px] sm:text-[16px] font-medium text-gray-700">
+      <a href="/superadmin/users" class="hover:text-indigo-700 transition">Manage Users</a>
+      <a href="/admin/experiences/pending" class="hover:text-indigo-700 transition">Approvals</a>
+      <a href="/experience-browser" class="hover:text-indigo-700 transition">Experiences</a>
+      <a href="/superadmin/add-experience" class="hover:text-indigo-700 transition">Add Experience</a>
+      <a href="/userForm" class="hover:text-indigo-700 transition">Your Info</a>
+      <a href="/logout" class="text-red-600 font-semibold hover:underline transition">Logout</a>
+    </nav>
+  </div>
 </header>
 
 <main class="max-w-5xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
@@ -30,9 +47,10 @@
         <div>
           <label for="course" class="block text-sm font-medium">Course/Branch</label>
           <select id="course" name="course" required class="w-full border rounded-md px-3 py-2 shadow-sm">
-            <option value="CS">Btech Computer Science</option>
-            <option value="CSE">Btech Computer Science Engineering</option>
-            <option value="EXTC">Btech EXTC</option>
+            <option value="COMP">Comp</option>
+            <option value="EXTC">EXTC</option>
+            <option value="DS">CSE - DS</option>
+            <option value="AIML">CSE - AIML</option>
             <option value="MCA">MCA</option>
             <option value="Mtech">Mtech</option>
           </select>
@@ -56,10 +74,19 @@
         </div>
 
         <div>
-          <label for="jobProfile" class="block text-sm font-medium">Job Profile</label>
-          <select id="jobProfile" name="jobProfile" onchange="toggleJobProfileInput()" required class="w-full border rounded-md px-3 py-2 shadow-sm">
-            <option value="SDE">SDE</option>
+          <label for="jobProfile" class="block font-medium">Job Profile:</label>
+          <select id="jobProfile" name="jobProfile" onchange="toggleJobProfileInput()" required class="w-full border rounded p-2 mt-1">
+            <option value="" disabled selected>Select a job profile</option>
+            <option value="AI Engineer">AI Engineer</option>
+            <option value="App Developer">App Developer</option>
+            <option value="Associate Manager">Associate Manager</option>
             <option value="Business Analyst">Business Analyst</option>
+            <option value="Data Analyst">Data Analyst</option>
+            <option value="Data Scientist">Data Scientist</option>
+            <option value="Java Developer">Java Developer</option>
+            <option value="Machine Learning Engineer">Machine Learning Engineer</option>
+            <option value="SDE">SDE</option>
+            <option value="Software Developer">Software Developer</option>
             <option value="Other">Other</option>
           </select>
           <div id="jobProfileInputDiv" class="mt-3 hidden">
@@ -120,7 +147,9 @@
         </div>
         <div>
           <label for="comments" class="block text-sm font-medium">Additional Comments or Advice</label>
-          <textarea id="comments" name="comments" rows="5" class="w-full border rounded-md px-3 py-2 shadow-sm"></textarea>
+          <textarea id="comments" name="comments" rows="5" class="w-full border rounded-md px-3 py-2 shadow-sm"
+                    placeholder="You can paste helpful links here too, like YouTube, Whimsical, etc.&#10;Example:&#10;For OOPS: https://whimsical.com/oops-link">
+          </textarea>
         </div>
       </div>
     </section>
@@ -193,70 +222,26 @@
       </div>
 
       <div class="question-section" id="questions${roundCount}">
-          <label class="block font-medium text-sm text-gray-700 mb-2">Questions:</label>
+          <label class="block font-medium text-sm text-gray-700 mb-2">Description:</label>
           <div class="question mb-4">
-              <label for="q${roundCount}_1" class="block text-sm font-semibold text-gray-700 mb-1">Question 1:</label>
-              <textarea id="q${roundCount}_1" name="q${roundCount}_1" rows="4" cols="50" placeholder="Describe the question and your approach." required
-                        class="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-indigo-300"></textarea>
+              <textarea id="q${roundCount}_1" name="q${roundCount}_1" rows="10" cols="50" placeholder="Describe the question and your approach." required class="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-indigo-300"></textarea>
           </div>
       </div>
-      <span class="add-question inline-block px-3 py-1.5 text-sm font-medium text-indigo-700 bg-indigo-100 hover:bg-indigo-200 rounded-md cursor-pointer transition-colors" onclick="addQuestion(${roundCount})">+ Add Question </span>
       <span class="remove-round inline-block px-3 py-1.5 text-sm font-medium text-red-600 border border-red-300 hover:bg-red-50 rounded-md cursor-pointer transition-colors ml-3" onclick="removeRound(${roundCount})"> 🗑 Remove Round </span>
     `;
     document.getElementById('roundsContainer').appendChild(newRound);
   }
 
-  function addQuestion(roundNumber) {
-    const questionCount = document.getElementById(`questions${roundNumber}`).getElementsByClassName('question').length + 1;
-    const newQuestion = document.createElement('div');
-    newQuestion.classList.add('question', 'mb-4');
-    newQuestion.innerHTML = `
-      <label for="q${roundNumber}_${questionCount}" class="block text-sm font-semibold text-gray-700 mb-1">Question ${questionCount}:</label>
-      <textarea id="q${roundNumber}_${questionCount}" name="q${roundNumber}_${questionCount}" rows="4" cols="50" placeholder="Describe the question and your approach." required
-                class="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-indigo-300"></textarea>
-    `;
-    document.getElementById(`questions${roundNumber}`).appendChild(newQuestion);
-  }
-
   function removeRound(roundNumber) {
     const round = document.getElementById(`round${roundNumber}`);
-    round.remove();
-
+    if (round){
+      round.remove();
+      roundCount--;
+     }
     const rounds = document.querySelectorAll('.round-section');
-    roundCount = rounds.length;
-
     rounds.forEach((round, index) => {
-      const newIndex = index + 1;
-      round.querySelector('.round-header').textContent = `Round ${newIndex}`;
-      round.id = `round${newIndex}`;
-
-      const select = round.querySelector('select');
-      select.id = `roundType${newIndex}`;
-      select.name = `roundType${newIndex}`;
-      select.setAttribute('onchange', `toggleRoundTypeInput(${newIndex})`);
-
-      const roundTypeDiv = round.querySelector('.input-box');
-      roundTypeDiv.id = `roundTypeInputDiv${newIndex}`;
-      const input = roundTypeDiv.querySelector('input');
-      input.id = `otherRoundType${newIndex}`;
-      input.name = `otherRoundType${newIndex}`;
-
-      const questionSection = round.querySelector('.question-section');
-      questionSection.id = `questions${newIndex}`;
-      const questions = questionSection.querySelectorAll('.question');
-
-      questions.forEach((q, qIndex) => {
-        const textarea = q.querySelector('textarea');
-        textarea.id = `q${newIndex}_${qIndex + 1}`;
-        textarea.name = `q${newIndex}_${qIndex + 1}`;
-
-        const label = q.querySelector('label');
-        if (label) label.textContent = `Question ${qIndex + 1}:`;
-        label.classList.add('block', 'text-sm', 'font-semibold', 'text-gray-700', 'mb-1');
-      });
-
-      round.querySelector('.add-question').setAttribute('onclick', `addQuestion(${newIndex})`);
-      round.querySelector('.remove-round').setAttribute('onclick', `removeRound(${newIndex})`);
+      const header = round.querySelector('.round-header');
+      if (header) header.textContent = `Round ${index + 1}`;
     });
   }
 

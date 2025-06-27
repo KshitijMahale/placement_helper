@@ -50,7 +50,7 @@ public class InternshipExperience {
     private LocalDateTime submissionTime;
 
     @ManyToOne
-    @JoinColumn(name = "submitted_by", nullable = false)
+    @JoinColumn(name = "submitted_by", nullable = true)
     private User submittedBy;
 
     @Enumerated(EnumType.STRING)
@@ -65,5 +65,14 @@ public class InternshipExperience {
     }
     @Transient
     private List<Round> parsedRounds;
+
+    public String getCommentsWithLinks() {
+        if (comments == null) return "";
+        String str = comments.replaceAll(
+                "(https?://\\S+)",
+                "<a href=\"$1\" target=\"_blank\" class=\"text-blue-600 underline\">$1</a>"
+        );
+        return str.replace("\n", "<br>");
+    }
 
 }

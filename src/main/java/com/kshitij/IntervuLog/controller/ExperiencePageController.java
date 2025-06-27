@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Year;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -100,6 +101,8 @@ public class ExperiencePageController {
                     return true;
                 })
 
+                .sorted(Comparator.comparing(exp ->
+                        exp.getCompany() != null && exp.getCompany().getName() != null ? exp.getCompany().getName().toLowerCase() : ""))
                 .collect(Collectors.toList());
 
         // Pagination logic
@@ -111,7 +114,9 @@ public class ExperiencePageController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", (int) Math.ceil((double) experiences.size() / size));
         model.addAttribute("size", size);
-        model.addAttribute("companies", companyRepo.findAll());
+        List<Company> companies = companyRepo.findAll();
+        companies.sort(Comparator.comparing(Company::getName));
+        model.addAttribute("companies", companies);
         model.addAttribute("locations", locationRepo.findAll());
 
         List<Integer> years = IntStream.rangeClosed(2020, 2030).boxed().collect(Collectors.toList());

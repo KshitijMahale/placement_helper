@@ -4,13 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IntervuLog | Interview Experience Form</title>
-  <link rel="icon" href="icon.png" type="image/png">
+  <link rel="icon" th:href="@{/icon.png}" type="image/png">
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap');
+    body {
+        font-family: 'DM Sans', sans-serif;
+    }
+  </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
-<header class="bg-white shadow-md py-4 px-6 flex justify-between items-center">
-  <a href="/dashboard" class="text-2xl font-bold text-indigo-700">🗂️ IntervuLog</a>
-  <a href="/logout" class="text-sm text-red-600 font-semibold hover:underline">Logout</a>
+<header class="sticky top-0 z-50 bg-white shadow px-6 py-4">
+  <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <a href="/dashboard" class="text-2xl font-bold text-indigo-700 flex items-center gap-2">
+      🗂️<span>IntervuLog</span>
+    </a>
+    <nav class="flex flex-wrap sm:flex-nowrap justify-start sm:justify-end gap-4 sm:gap-6 text-[15px] sm:text-[16px] font-medium text-gray-700">
+      <a href="/dashboard" class="hover:text-indigo-700 transition">Dashboard</a>
+      <a href="/exp-form" class="hover:text-indigo-700 transition">Submit Experience</a>
+      <a href="/experience-browser" class="hover:text-indigo-700 transition">Browse</a>
+      <a href="/userForm" class="hover:text-indigo-700 transition">Profile</a>
+      <a href="/logout" class="text-red-600 font-semibold hover:underline transition">Logout</a>
+    </nav>
+  </div>
 </header>
 
 <div class="max-w-4xl mx-auto px-4 py-8">
@@ -33,9 +49,10 @@
       <div>
         <label class="block font-medium">Course/Branch:</label>
         <select id="course" name="course" required class="w-full border rounded p-2 mt-1">
-          <option value="CS">Btech Computer Science</option>
-          <option value="CSE">Btech Computer Science Engineering</option>
-          <option value="EXTC">Btech EXTC</option>
+          <option value="COMP">Comp</option>
+          <option value="EXTC">EXTC</option>
+          <option value="DS">CSE - DS</option>
+          <option value="AIML">CSE - AIML</option>
           <option value="MCA">MCA</option>
           <option value="Mtech">Mtech</option>
         </select>
@@ -123,8 +140,10 @@
           <label class="block font-medium">LinkedIn Profile (optional):</label>
           <input type="url" id="linkedin" name="linkedin" class="w-full border rounded p-2 mt-1">
 
-          <label class="block font-medium mt-4">Additional Comments or Advice:</label>
-          <textarea id="comments" name="comments" rows="6" class="w-full border rounded p-2 mt-1"></textarea>
+          <label for="comments" class="block text-sm font-medium">Additional Comments or Advice</label>
+          <textarea id="comments" name="comments" rows="5" class="w-full border rounded-md px-3 py-2 shadow-sm"
+                    placeholder="You can paste helpful links here too, like YouTube, Whimsical, etc.&#10;Example:&#10;For OOPS: https://whimsical.com/oops-link">
+          </textarea>
         </div>
 
         <input type="submit" value="Submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700 transition">
@@ -158,14 +177,19 @@
       </div>
 
       <div th:each="round, iStat : ${experience.parsedRounds}" class="bg-gray-50 border border-gray-200 rounded p-4 mt-4">
-        <h4 class="font-semibold text-indigo-700 mb-2" th:text="'Round ' + ${iStat.index + 1} + ' - ' + ${round.roundType}"></h4>
+        <h4 class="font-semibold text-indigo-700 mb-2"
+            th:text="'Round ' + ${iStat.index + 1} + ' - ' + (${round.roundType.equals('Other')} ? ${round.otherRoundType} : ${round.roundType})">
+        </h4>
         <ul class="list-disc list-inside space-y-1 text-gray-800">
-          <li th:each="q : ${round.questions}" th:text="${q}"></li>
+          <li th:each="q : ${round.questions}" th:utext="${q}"></li>
         </ul>
       </div>
 
       <div class="pt-4 border-t border-gray-200">
-        <p class="mb-2"><span class="font-semibold text-gray-800">Comments:</span> <span th:text="${experience.comments}"></span></p>
+        <p class="mb-2">
+          <span class="font-semibold text-gray-800">Comments:</span>
+          <span th:utext="${experience.commentsWithLinks}"></span>
+        </p>
         <p><span class="font-semibold text-gray-800">LinkedIn:</span>
           <a class="text-blue-600 underline break-words" th:href="${experience.linkedin}" target="_blank" th:text="${experience.linkedin}"></a>
         </p>
@@ -237,14 +261,11 @@
       </div>
 
       <div class="question-section" id="questions${roundCount}">
-          <label class="block font-medium text-sm text-gray-700 mb-2">Questions:</label>
+          <label class="block font-medium text-sm text-gray-700 mb-2">Description:</label>
           <div class="question mb-4">
-              <label for="q${roundCount}_1" class="block text-sm font-semibold text-gray-700 mb-1">Question 1:</label>
-              <textarea id="q${roundCount}_1" name="q${roundCount}_1" rows="4" cols="50" placeholder="Describe the question and your approach." required
-                        class="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-indigo-300"></textarea>
+              <textarea id="q${roundCount}_1" name="q${roundCount}_1" rows="10" cols="50" placeholder="Describe the question and your approach." required class="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-indigo-300"></textarea>
           </div>
       </div>
-      <span class="add-question inline-block px-3 py-1.5 text-sm font-medium text-indigo-700 bg-indigo-100 hover:bg-indigo-200 rounded-md cursor-pointer transition-colors" onclick="addQuestion(${roundCount})">+ Add Question </span>
       <span class="remove-round inline-block px-3 py-1.5 text-sm font-medium text-red-600 border border-red-300 hover:bg-red-50 rounded-md cursor-pointer transition-colors ml-3" onclick="removeRound(${roundCount})"> 🗑 Remove Round </span>
     `;
     document.getElementById('roundsContainer').appendChild(newRound);
@@ -264,43 +285,14 @@
 
   function removeRound(roundNumber) {
     const round = document.getElementById(`round${roundNumber}`);
-    round.remove();
-
+    if (round){
+      round.remove();
+      roundCount--;
+     }
     const rounds = document.querySelectorAll('.round-section');
-    roundCount = rounds.length;
-
     rounds.forEach((round, index) => {
-      const newIndex = index + 1;
-      round.querySelector('.round-header').textContent = `Round ${newIndex}`;
-      round.id = `round${newIndex}`;
-
-      const select = round.querySelector('select');
-      select.id = `roundType${newIndex}`;
-      select.name = `roundType${newIndex}`;
-      select.setAttribute('onchange', `toggleRoundTypeInput(${newIndex})`);
-
-      const roundTypeDiv = round.querySelector('.input-box');
-      roundTypeDiv.id = `roundTypeInputDiv${newIndex}`;
-      const input = roundTypeDiv.querySelector('input');
-      input.id = `otherRoundType${newIndex}`;
-      input.name = `otherRoundType${newIndex}`;
-
-      const questionSection = round.querySelector('.question-section');
-      questionSection.id = `questions${newIndex}`;
-      const questions = questionSection.querySelectorAll('.question');
-
-      questions.forEach((q, qIndex) => {
-        const textarea = q.querySelector('textarea');
-        textarea.id = `q${newIndex}_${qIndex + 1}`;
-        textarea.name = `q${newIndex}_${qIndex + 1}`;
-
-        const label = q.querySelector('label');
-        if (label) label.textContent = `Question ${qIndex + 1}:`;
-        label.classList.add('block', 'text-sm', 'font-semibold', 'text-gray-700', 'mb-1');
-      });
-
-      round.querySelector('.add-question').setAttribute('onclick', `addQuestion(${newIndex})`);
-      round.querySelector('.remove-round').setAttribute('onclick', `removeRound(${newIndex})`);
+      const header = round.querySelector('.round-header');
+      if (header) header.textContent = `Round ${index + 1}`;
     });
   }
 
@@ -311,8 +303,5 @@
     addRound();
   };
 </script>
-
-
-
 </body>
 </html>

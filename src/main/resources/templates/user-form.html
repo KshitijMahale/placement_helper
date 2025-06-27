@@ -1,24 +1,39 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>IntervuLog | User Profile Form</title>
-    <link rel="icon" href="icon.png" type="image/png">
+    <link rel="icon" th:href="@{/icon.png}" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap');
+        body {
+            font-family: 'DM Sans', sans-serif;
+        }
+    </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
-<!-- Header -->
-<header class="bg-white shadow-md py-4 px-6 flex justify-between items-center">
-    <a href="/dashboard" class="text-2xl font-bold text-indigo-700">🗂️ IntervuLog</a>
-    <a href="/logout" class="text-sm text-red-600 font-semibold hover:underline">Logout</a>
+<header class="sticky top-0 z-50 bg-white shadow px-6 py-4">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <a href="/dashboard" class="text-2xl font-bold text-indigo-700 flex items-center gap-2">
+            🗂️<span>IntervuLog</span>
+        </a>
+        <nav class="flex flex-wrap sm:flex-nowrap justify-start sm:justify-end gap-4 sm:gap-6 text-[15px] sm:text-[16px] font-medium text-gray-700">
+            <a href="/dashboard" class="hover:text-indigo-700 transition">Dashboard</a>
+            <a href="/exp-form" class="hover:text-indigo-700 transition">Submit Experience</a>
+            <a href="/experience-browser" class="hover:text-indigo-700 transition">Browse</a>
+            <a href="/userForm" class="hover:text-indigo-700 transition">Profile</a>
+            <a href="/logout" class="text-red-600 font-semibold hover:underline transition">Logout</a>
+        </nav>
+    </div>
 </header>
 
-<!-- Main Content -->
+
 <main class="flex-grow flex items-center justify-center p-6">
     <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-xl">
         <h2 class="text-2xl font-bold text-indigo-700 mb-2">
-            Welcome, <span th:text="${firstName}">User</span> 👋
+            Hello, <span th:text="${firstName}">User</span> 👋
         </h2>
-        <p class="text-gray-600 mb-6">Fill out your details below</p>
+        <p class="text-gray-600 mb-6">Please fill out your details below</p>
 
         <form action="#" th:action="@{/saveUser}" th:object="${user}" method="post" class="space-y-5">
 
@@ -35,9 +50,12 @@
                 <label for="department" class="block font-medium mb-1">Department</label>
                 <select id="department" th:field="*{department}"
                         class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <option value="CS">Computer Science</option>
-                    <option value="CSE">Computer Science Engineering</option>
+                    <option value="COMP">Comp</option>
                     <option value="EXTC">EXTC</option>
+                    <option value="DS">CSE - DS</option>
+                    <option value="AIML">CSE - AIML</option>
+                    <option value="MCA">MCA</option>
+                    <option value="Mtech">Mtech</option>
                 </select>
             </div>
 
@@ -66,7 +84,7 @@
                 <label for="passoutYear" class="block font-medium mb-1">Passout Year</label>
                 <select id="passoutYear" th:field="*{passoutYear}"
                         class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <option th:each="year : ${#numbers.sequence(2000, 2050)}"
+                    <option th:each="year : ${#numbers.sequence(2010, 2050)}"
                             th:value="${year}" th:text="${year}"></option>
                 </select>
             </div>

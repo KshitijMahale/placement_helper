@@ -174,6 +174,7 @@ public class HomeController {
         List<InternshipExperience> experiences = internshipExperienceRepository.findBySubmittedBy(user);
 
         List<Company> companies = companyRepo.findAll();
+        companies.sort(Comparator.comparing(Company::getName));
         model.addAttribute("companies", companies);
 
         List<Location> locations = locationRepo.findAll();

@@ -1,5 +1,6 @@
 package com.kshitij.IntervuLog.security;
 
+import com.kshitij.IntervuLog.enums.UserRole;
 import com.kshitij.IntervuLog.model.User;
 import com.kshitij.IntervuLog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +65,12 @@ public class SecurityConfig {
             }
 
             User user = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new OAuth2AuthenticationException("User not found"));
+                    .orElseGet(() -> {
+                        User newUser = new User();
+                        newUser.setEmail(email);
+                        newUser.setUserRole(UserRole.STUDENT); // default role
+                        return userRepository.save(newUser);
+                    });
 
             // Add role as authority
             String role = "ROLE_" + user.getUserRole().name();

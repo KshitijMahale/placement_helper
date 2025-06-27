@@ -73,7 +73,9 @@ public class SuperadminController {
     @GetMapping("/add-experience")
     public String showExperienceForm(Model model) {
         model.addAttribute("experience", new InternshipExperience());
-        model.addAttribute("companies", companyRepo.findAll());
+        List<Company> companies = companyRepo.findAll();
+        companies.sort(Comparator.comparing(Company::getName));
+        model.addAttribute("companies", companies);
         model.addAttribute("locations", locationRepo.findAll());
         return "superadmin/add-experience";
     }

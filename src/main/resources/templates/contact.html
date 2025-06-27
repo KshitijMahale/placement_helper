@@ -2,12 +2,29 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Contact & Support</title>
+    <link rel="icon" th:href="@{/icon.png}" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap');
+        body {
+            font-family: 'DM Sans', sans-serif;
+        }
+    </style>
 </head>
 <body class="bg-gray-50 text-slate-800">
-<header class="bg-white shadow-md py-4 px-6 flex justify-between items-center">
-    <a href="/dashboard" class="text-2xl font-bold text-indigo-700">🗂️ IntervuLog</a>
-    <a href="/logout" class="text-sm text-red-600 font-semibold hover:underline">Logout</a>
+<header class="sticky top-0 z-50 bg-white shadow px-6 py-4">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <a href="/dashboard" class="text-2xl font-bold text-indigo-700 flex items-center gap-2">
+            🗂️<span>IntervuLog</span>
+        </a>
+        <nav class="flex flex-wrap sm:flex-nowrap justify-start sm:justify-end gap-4 sm:gap-6 text-[15px] sm:text-[16px] font-medium text-gray-700">
+            <a href="/dashboard" class="hover:text-indigo-700 transition">Dashboard</a>
+            <a href="/exp-form" class="hover:text-indigo-700 transition">Submit Experience</a>
+            <a href="/experience-browser" class="hover:text-indigo-700 transition">Browse</a>
+            <a href="/userForm" class="hover:text-indigo-700 transition">Profile</a>
+            <a href="/logout" class="text-red-600 font-semibold hover:underline transition">Logout</a>
+        </nav>
+    </div>
 </header>
 
 <div class="max-w-2xl mx-auto py-12 px-6">
