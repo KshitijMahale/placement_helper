@@ -283,7 +283,10 @@
                 }
 
                 panel.innerHTML = `
-                    <h3 class="text-xl font-bold text-indigo-800 mb-4">${data.company?.name || "N/A"} – ${data.jobProfile || "N/A"}</h3>
+                    <h3 class="text-xl font-bold text-indigo-800 mb-4">
+                      ${(data.company?.name === 'Other' ? data.otherCompany : data.company?.name) || "N/A"} –
+                      ${(data.jobProfile === 'Other' ? data.otherJobProfile : data.jobProfile) || "N/A"}
+                    </h3>
 
                     <div class="space-y-2 text-slate-700">
                         <p><strong>Name:</strong> ${data.fullName || "N/A"}</p>
