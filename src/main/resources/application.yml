@@ -7,6 +7,12 @@ spring:
 #    url: jdbc:postgresql://localhost:5432/placement_helper
 #    username: postgres
 #    password: Kshitij
+    hikari:
+      data-source-properties:
+        prepareThreshold: 0
+      maximum-pool-size: 10
+      connection-timeout: 5000
+      idle-timeout: 30000
   jpa:
     hibernate:
       ddl-auto: update

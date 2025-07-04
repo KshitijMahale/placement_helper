@@ -51,12 +51,12 @@ public class ExperiencePageController {
             @RequestParam(required = false) Integer stipendMin,
             @RequestParam(required = false) Integer stipendMax,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "7") int size,
+            @RequestParam(defaultValue = "8") int size,
             Model model) {
 
         // Set curr year as default if not provided
         if (year == null) {
-            year = Year.now().getValue();
+            year = Year.now().getValue() -1;
         }
 
         final int selectedYear = year;

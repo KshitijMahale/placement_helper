@@ -1,18 +1,16 @@
 <!-- fragments/admin-header.html -->
-<div th:fragment="adminHeader">
-    <header class="sticky top-0 z-50 bg-white shadow px-6 py-4">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <a href="/dashboard" class="text-2xl font-bold text-indigo-700 flex items-center gap-2">
-                🗂️<span>IntervuLog<span class="text-sm font-medium text-gray-500 ml-1">– Admin</span></span>
-            </a>
-            <nav class="flex flex-wrap sm:flex-nowrap justify-start sm:justify-end gap-4 sm:gap-6 text-[15px] sm:text-[16px] font-medium text-gray-700">
-                <a href="/dashboard" class="hover:text-indigo-700 transition">Dashboard</a>
-                <a href="/admin/experiences/pending" class="hover:text-indigo-700 transition">Approvals</a>
-                <a href="/exp-form" class="hover:text-indigo-700 transition">Submit Experience</a>
-                <a href="/experience-browser" class="hover:text-indigo-700 transition">Browse Experiences</a>
-                <a href="/userForm" class="hover:text-indigo-700 transition">Profile</a>
-                <a href="/logout" class="text-red-600 font-semibold hover:underline transition">Logout</a>
-            </nav>
-        </div>
-    </header>
-</div>
+<header th:fragment="adminHeader" class="sticky top-0 z-50 bg-white shadow px-6 py-4">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <a href="/dashboard" class="text-2xl font-bold text-indigo-700 flex items-center gap-2">
+            🗂️<span>IntervuLog<span class="text-sm font-medium text-gray-500 ml-1">– Admin</span></span>
+        </a>
+        <nav class="flex flex-wrap sm:flex-nowrap justify-start sm:justify-end gap-4 sm:gap-6 text-[15px] sm:text-[16px] font-medium text-gray-700">
+            <a href="/dashboard" class="hover:text-indigo-700 transition">Dashboard</a>
+            <a href="/admin/experiences/pending" class="hover:text-indigo-700 transition">Approvals</a>
+            <a href="/exp-form" class="hover:text-indigo-700 transition">Submit Experience</a>
+            <a href="/experience-browser" class="hover:text-indigo-700 transition">Browse Experiences</a>
+            <a href="/userForm" class="hover:text-indigo-700 transition">Profile</a>
+            <a href="/logout" class="text-red-600 font-semibold hover:underline transition">Logout</a>
+        </nav>
+    </div>
+</header>
