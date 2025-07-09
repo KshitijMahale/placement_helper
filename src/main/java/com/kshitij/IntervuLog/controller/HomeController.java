@@ -170,11 +170,12 @@ public class HomeController {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-//        List<InternshipExperience> experienceOpt = experienceRepository.findBySubmittedBy(user);
         List<InternshipExperience> experiences = internshipExperienceRepository.findBySubmittedBy(user);
 
         List<Company> companies = companyRepo.findAll();
-        companies.sort(Comparator.comparing(Company::getName));
+        companies.sort(Comparator.comparing(
+                (Company c) -> c.getName().equalsIgnoreCase("Other") ? 1 : 0
+        ).thenComparing(Company::getName));
         model.addAttribute("companies", companies);
 
         List<Location> locations = locationRepo.findAll();

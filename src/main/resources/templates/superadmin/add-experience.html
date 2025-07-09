@@ -37,6 +37,7 @@
             <option value="EXTC">EXTC</option>
             <option value="DS">CSE - DS</option>
             <option value="AIML">CSE - AIML</option>
+            <option value="IT">IT</option>
             <option value="MCA">MCA</option>
             <option value="Mtech">Mtech</option>
           </select>
@@ -51,7 +52,7 @@
           <label for="company" class="block text-sm font-medium">Company</label>
           <select id="company" name="company" onchange="toggleCompanyInput()" required class="w-full border rounded-md px-3 py-2 shadow-sm">
             <option th:each="company : ${companies}" th:value="${company.name}" th:text="${company.name}"></option>
-            <option value="Other">Other</option>
+<!--            <option value="Other">Other</option>-->
           </select>
           <div id="companyInputDiv" class="mt-3 hidden">
             <label for="otherCompany" class="block text-sm font-medium">Specify Company Name</label>
