@@ -7,11 +7,13 @@ import com.kshitij.IntervuLog.model.Location;
 import com.kshitij.IntervuLog.repository.CompanyRepository;
 import com.kshitij.IntervuLog.repository.InternshipExperienceRepository;
 import com.kshitij.IntervuLog.repository.LocationRepository;
+import com.kshitij.IntervuLog.spec.ExperienceSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -54,66 +56,21 @@ public class ExperiencePageController {
             @RequestParam(defaultValue = "8") int size,
             Model model) {
 
-        // Set curr year as default if not provided
         if (year == null) {
-            year = Year.now().getValue() -1;
+            year = Year.now().getValue() - 1;
         }
+        Specification<InternshipExperience> spec = ExperienceSpecification.filterBy(
+                year, name, company, role, type, ctcMin, ctcMax, stipendMin, stipendMax
+        );
 
-        final int selectedYear = year;
+        Pageable pageable = PageRequest.of(page, size, Sort.by("company.name").ascending());
+        Page<InternshipExperience> pageResult = experienceRepository.findAll(spec, pageable);
 
-        List<InternshipExperience> experiences = experienceRepository.findAll().stream()
-                .filter(exp -> exp.getStatus() == ExperienceStatus.APPROVED) // display approved experiences only
-
-                .filter(exp -> exp.getProcessDate() != null && exp.getProcessDate().getYear() == selectedYear)
-
-                .filter(exp -> (name == null || name.isEmpty() ||
-                        (exp.getFullName() != null && exp.getFullName().toLowerCase().contains(name.toLowerCase()))))
-
-                .filter(exp -> {
-                    if (company == null || company.isEmpty()) return true;
-                    if (exp.getCompany() == null || exp.getCompany().getName() == null) return false;
-                    return company.stream()
-                            .map(String::toLowerCase)
-                            .anyMatch(c -> exp.getCompany().getName().toLowerCase().contains(c));
-                })
-
-                .filter(exp -> (role == null || role.isEmpty() ||
-                        (exp.getJobProfile() != null && role.stream()
-                                .anyMatch(r -> exp.getJobProfile().equalsIgnoreCase(r)))))
-
-                .filter(exp -> (type == null || type.isEmpty() ||
-                        (exp.getOfferType() != null && type.stream()
-                                .anyMatch(t -> exp.getOfferType().equalsIgnoreCase(t)))))
-
-                .filter(exp -> {
-                    if (ctcMin == null && ctcMax == null) return true;
-                    if (exp.getCtc() == null) return false;
-                    if (ctcMin != null && exp.getCtc() < ctcMin) return false;
-                    if (ctcMax != null && exp.getCtc() > ctcMax) return false;
-                    return true;
-                })
-
-                .filter(exp -> {
-                    if (stipendMin == null && stipendMax == null) return true;
-                    if (exp.getInternshipStipend() == null) return false;
-                    if (stipendMin != null && exp.getInternshipStipend() < stipendMin) return false;
-                    if (stipendMax != null && exp.getInternshipStipend() > stipendMax) return false;
-                    return true;
-                })
-
-                .sorted(Comparator.comparing(exp ->
-                        exp.getCompany() != null && exp.getCompany().getName() != null ? exp.getCompany().getName().toLowerCase() : ""))
-                .collect(Collectors.toList());
-
-        // Pagination logic
-        int start = Math.min(page * size, experiences.size());
-        int end = Math.min((page + 1) * size, experiences.size());
-        List<InternshipExperience> pagedExperiences = experiences.subList(start, end);
-
-        model.addAttribute("experiences", pagedExperiences);
+        model.addAttribute("experiences", pageResult.getContent());
         model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", (int) Math.ceil((double) experiences.size() / size));
+        model.addAttribute("totalPages", pageResult.getTotalPages());
         model.addAttribute("size", size);
+
         List<Company> companies = companyRepo.findAll();
         companies.sort(Comparator.comparing(Company::getName));
         model.addAttribute("companies", companies);

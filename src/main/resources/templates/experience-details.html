@@ -58,10 +58,10 @@
                 <legend class="text-sm font-bold mb-1">Select Role(s):</legend>
                 <div class="flex flex-wrap gap-x-6">
                     <label class="flex items-center gap-1">
-                        <input type="checkbox" name="role" value="AI Engineer" th:checked="${selectedRole != null and selectedRole.contains('AI Engineer')}"> AI Eng
+                        <input type="checkbox" name="role" value="AI Engineer" th:checked="${selectedRole != null and selectedRole.contains('AI Engineer')}"> AI Engineer
                     </label>
                     <label class="flex items-center gap-1">
-                        <input type="checkbox" name="role" value="App Developer" th:checked="${selectedRole != null and selectedRole.contains('App Developer')}"> App Dev
+                        <input type="checkbox" name="role" value="App Engineer" th:checked="${selectedRole != null and selectedRole.contains('App Engineer')}"> App Engineer
                     </label>
                     <label class="flex items-center gap-1">
                         <input type="checkbox" name="role" value="Associate Manager" th:checked="${selectedRole != null and selectedRole.contains('Associate Manager')}"> Assoc. Manager
@@ -70,7 +70,16 @@
                         <input type="checkbox" name="role" value="Business Analyst" th:checked="${selectedRole != null and selectedRole.contains('Business Analyst')}"> Business Analyst
                     </label>
                     <label class="flex items-center gap-1">
-                        <input type="checkbox" name="role" value="CDO" th:checked="${selectedRole != null and selectedRole.contains('CDO')}"> CDO (Chief Data Office)
+                        <input type="checkbox" name="role" value="CDO" th:checked="${selectedRole != null and selectedRole.contains('CDO')}"> CDO
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="checkbox" name="role" value="CIB Fintech" th:checked="${selectedRole != null and selectedRole.contains('CIB Fintech')}"> CIB Fintech
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="checkbox" name="role" value="CIB Research and Analytics" th:checked="${selectedRole != null and selectedRole.contains('CIB Research and Analytics')}"> CIB Banking
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="checkbox" name="role" value="Corporate Risk" th:checked="${selectedRole != null and selectedRole.contains('Corporate Risk')}"> Corporate Risk
                     </label>
                     <label class="flex items-center gap-1">
                         <input type="checkbox" name="role" value="Data Analyst" th:checked="${selectedRole != null and selectedRole.contains('Data Analyst')}"> Data Analyst
@@ -103,7 +112,7 @@
                         <input type="checkbox" name="role" value="Software Engineer" th:checked="${selectedRole != null and selectedRole.contains('Software Engineer')}"> Software Engineer
                     </label>
                     <label class="flex items-center gap-1">
-                        <input type="checkbox" name="role" value="SQL Developer" th:checked="${selectedRole != null and selectedRole.contains('SQL Developer')}"> SQL Developer
+                        <input type="checkbox" name="role" value="SQL Developer" th:checked="${selectedRole != null and selectedRole.contains('SQL Developer')}"> SQL Dev
                     </label>
                     <label class="flex items-center gap-1">
                         <input type="checkbox" name="role" value="Technology Analyst" th:checked="${selectedRole != null and selectedRole.contains('Technology Analyst')}"> Technology Analyst
@@ -203,8 +212,8 @@
             </div>
             <!-- Pagination -->
             <div class="flex justify-center items-center mt-4 gap-2">
-                <a th:if="${currentPage > 0}"
-                   th:href="@{/experience-browser(page=${currentPage - 1}, size=${size}, year=${selectedYear})}"
+                <a th:href="@{/experience-browser(page=${currentPage - 1}, size=${size}, year=${selectedYear}, name=${selectedName}, company=${selectedCompany},
+                role=${selectedRole}, type=${selectedType}, ctcMin=${selectedCtcMin}, ctcMax=${selectedCtcMax}, stipendMin=${selectedStipendMin}, stipendMax=${selectedStipendMax})}"
                    class="px-4 py-2 bg-indigo-200 hover:bg-indigo-300 text-sm rounded-full">Previous</a>
 
                 <span class="px-4 py-2 text-sm text-slate-600">

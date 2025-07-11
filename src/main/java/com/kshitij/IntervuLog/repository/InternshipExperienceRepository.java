@@ -4,17 +4,15 @@ import com.kshitij.IntervuLog.enums.ExperienceStatus;
 import com.kshitij.IntervuLog.model.InternshipExperience;
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.kshitij.IntervuLog.model.User;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface InternshipExperienceRepository extends JpaRepository<InternshipExperience, Long> {
+public interface InternshipExperienceRepository extends JpaRepository<InternshipExperience, Long>, JpaSpecificationExecutor<InternshipExperience> {
     List<InternshipExperience> findByStatus(ExperienceStatus status);
     List<InternshipExperience> findBySubmittedBy(User submittedBy);
-    @Query("SELECT COUNT(e) FROM InternshipExperience e")
-    long countAllExperiences();
-
-//    @Query("SELECT SUM(e.viewCount) FROM InternshipExperience e")
-//    long sumViews();
+//    @Query("SELECT COUNT(e) FROM InternshipExperience e")
+//    long countAllExperiences();
 
 }
