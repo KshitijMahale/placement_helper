@@ -36,19 +36,19 @@
 
             <div>
                 <label for="year" class="block font-bold text-sm">Select Year <span class="text-red-600">*</span>:</label>
-                <select id="year" name="year" required class="w-full mt-1 p-2 border border-slate-300 rounded-xl">
+                <select id="year" name="year" required class="w-full mt-1 p-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400">
                     <option th:each="yr : ${years}" th:value="${yr}" th:text="${yr}" th:selected="${selectedYear == null ? yr == 2025 : selectedYear == yr}"></option>
                 </select>
             </div>
 
             <div>
                 <label for="name" class="block font-bold text-sm">Search by Student Name:</label>
-                <input type="text" id="name" name="name" placeholder="Enter student name" th:value="${selectedName}" class="w-full mt-1 p-2 border border-slate-300 rounded-xl">
+                <input type="text" id="name" name="name" placeholder="Enter student name" th:value="${selectedName}" class="w-full mt-1 p-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400">
             </div>
 
             <div>
                 <label for="company" class="block font-bold text-sm">Company:</label>
-                <select id="company" name="company" class="w-full mt-1 p-2 border border-slate-300 rounded-xl">
+                <select id="company" name="company" class="w-full mt-1 p-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400">
                     <option value="">Select Company</option>
                     <option th:each="company : ${companies}" th:value="${company.name}" th:text="${company.name}" th:selected="${selectedCompany != null and selectedCompany.contains(company.name)}">Company Name</option>
                 </select>
@@ -130,7 +130,7 @@
                     <input type="checkbox" name="type" value="PlacementOnly" th:checked="${selectedType != null and selectedType.contains('PlacementOnly')}"> Placement Only
                 </label><br>
                 <label>
-                    <input type="checkbox" name="type" value="Internship(performance-based offer)" th:checked="${selectedType != null and selectedType.contains('Internship(performance-based offer)')}"> Internship (performance-based offer)
+                    <input type="checkbox" name="type" value="Internship(performance-based offer)" th:checked="${selectedType != null and selectedType.contains('Internship(performance-based offer)')}"> Internship (+Performance based PPO)
                 </label><br>
                 <label>
                     <input type="checkbox" name="type" value="InternshipPlacement" th:checked="${selectedType != null and selectedType.contains('InternshipPlacement')}"> Internship + Placement
@@ -140,13 +140,13 @@
             <div>
                 <div>
                     <label class="block font-bold text-sm">CTC Minimum (₹):</label>
-                    <input type="number" name="ctcMin" id="ctcMin" placeholder="Min" th:value="${selectedCtcMin}" class="w-full mt-1 p-2 border border-slate-300 rounded-xl" onchange="updateCtcMaxRadios()">
+                    <input type="number" name="ctcMin" id="ctcMin" placeholder="Min" th:value="${selectedCtcMin}" class="w-full mt-1 p-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400" onchange="updateCtcMaxRadios()">
                 </div>
 
                 <label class="block font-bold text-sm mt-1 mb-1">CTC Maximum (based on Min):</label>
                 <div class="flex flex-wrap gap-4">
                     <label class="flex items-center">
-                        <input type="radio" name="ctcMaxOption" value="2" th:checked="${selectedCtcMax != null && selectedCtcMin != null && selectedCtcMax - selectedCtcMin == 200000}" class="mr-1">+2L
+                        <input type="radio" name="ctcMaxOption" value="2" th:checked="${selectedCtcMax != null && selectedCtcMin != null && selectedCtcMax - selectedCtcMin == 200000}" class="mr-1 ">+2L
                     </label><br>
 
                     <label class="flex items-center">
@@ -168,7 +168,7 @@
             <div>
                 <div>
                     <label class="block font-bold text-sm">Stipend Minimum (₹):</label>
-                    <input type="number" id="stipendMin" name="stipendMin" placeholder="Min" th:value="${selectedStipendMin}" class="w-full p-2 border border-slate-300 rounded-xl">
+                    <input type="number" id="stipendMin" name="stipendMin" placeholder="Min" th:value="${selectedStipendMin}" class="w-full p-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400">
                 </div>
 
                 <label class="block font-bold text-sm mb-1">Stipend Maximum (based on Min):</label>
@@ -199,8 +199,19 @@
         <!-- Experience List -->
         <div class="w-2/5 bg-white p-6 rounded-3xl shadow-2xl overflow-y-auto h-full">
         <h2 class="text-xl font-semibold mb-4 text-slate-800">Experiences</h2>
+<!--            <div th:each="experience : ${experiences}"-->
+<!--                 class="bg-indigo-50 hover:bg-indigo-100 p-4 rounded-xl shadow-sm mb-3 cursor-pointer transition duration-200 ease-in-out h-14 overflow-hidden"-->
+<!--                 th:attr="data-id=${experience.id}"-->
+<!--                 onclick="loadExperienceDetails(this)">-->
+<!--                <div class="truncate w-full">-->
+<!--                    <strong th:text="${experience.fullName}" class="text-indigo-900 mr-2"></strong>-->
+<!--                    <span th:text="${experience.course}" class="text-slate-600 mr-2"></span> - -->
+<!--                    <span th:text="${experience.company != null && experience.company.name == 'Other' ? experience.otherCompany : (experience.company != null ? experience.company.name : 'N/A')}" class="text-slate-600 mr-2"></span> - -->
+<!--                    <span th:text="${experience.jobProfile == 'Other' ? experience.otherJobProfile : experience.jobProfile}" class="text-slate-600"></span>-->
+<!--                </div>-->
+<!--            </div>-->
             <div th:each="experience : ${experiences}"
-                 class="bg-indigo-50 hover:bg-indigo-100 p-4 rounded-xl shadow-sm mb-3 cursor-pointer transition duration-200 ease-in-out h-14 overflow-hidden"
+                 class="experience-card bg-indigo-50 hover:bg-indigo-200 p-4 rounded-xl shadow-sm mb-3 cursor-pointer transition duration-200 ease-in-out h-14 overflow-hidden"
                  th:attr="data-id=${experience.id}"
                  onclick="loadExperienceDetails(this)">
                 <div class="truncate w-full">
@@ -212,15 +223,17 @@
             </div>
             <!-- Pagination -->
             <div class="flex justify-center items-center mt-4 gap-2">
-                <a th:href="@{/experience-browser(page=${currentPage - 1}, size=${size}, year=${selectedYear}, name=${selectedName}, company=${selectedCompany},
+                <a th:if="${currentPage > 0}"
+                   th:href="@{/experience-browser(page=${currentPage - 1}, size=${size}, year=${selectedYear}, name=${selectedName}, company=${selectedCompany},
                 role=${selectedRole}, type=${selectedType}, ctcMin=${selectedCtcMin}, ctcMax=${selectedCtcMax}, stipendMin=${selectedStipendMin}, stipendMax=${selectedStipendMax})}"
                    class="px-4 py-2 bg-indigo-200 hover:bg-indigo-300 text-sm rounded-full">Previous</a>
 
                 <span class="px-4 py-2 text-sm text-slate-600">
-                Page <span th:text="${currentPage + 1}"></span> of <span th:text="${totalPages}"></span>
-            </span>
+                    Page <span th:text="${currentPage + 1}"></span> of <span th:text="${totalPages}"></span>
+                </span>
                 <a th:if="${currentPage + 1 < totalPages}"
-                   th:href="@{/experience-browser(page=${currentPage + 1}, size=${size}, year=${selectedYear})}"
+                   th:href="@{/experience-browser(page=${currentPage + 1}, size=${size}, year=${selectedYear}, name=${selectedName}, company=${selectedCompany},
+                role=${selectedRole}, type=${selectedType}, ctcMin=${selectedCtcMin}, ctcMax=${selectedCtcMax}, stipendMin=${selectedStipendMin}, stipendMax=${selectedStipendMax})}"
                    class="px-4 py-2 bg-indigo-200 hover:bg-indigo-300 text-sm rounded-full">Next</a>
             </div>
         </div>
@@ -306,6 +319,13 @@
     }
 
     function loadExperienceDetails(element) {
+        document.querySelectorAll('.experience-card').forEach(card => {
+            card.classList.remove('bg-indigo-200', 'text-white');
+            card.classList.add('bg-indigo-50');
+        });
+        element.classList.remove('bg-indigo-50');
+        element.classList.add('bg-indigo-200');
+
         const id = element.getAttribute("data-id");
         fetch(`experience-browser/${id}`)
             .then(response => response.json())

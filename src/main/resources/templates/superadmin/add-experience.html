@@ -28,11 +28,11 @@
       <div class="space-y-4">
         <div>
           <label for="fullName" class="block text-sm font-medium">Full Name</label>
-          <input type="text" id="fullName" name="fullName" placeholder="Kshitij Mahale" required class="w-full border rounded-md px-3 py-2 shadow-sm"/>
+          <input type="text" id="fullName" name="fullName" placeholder="Kshitij Mahale" required class="w-full rounded-md px-3 py-2 shadow-sm border focus:outline-none focus:ring-2 focus:ring-indigo-400"/>
         </div>
         <div>
           <label for="course" class="block text-sm font-medium">Course/Branch</label>
-          <select id="course" name="course" required class="w-full border rounded-md px-3 py-2 shadow-sm">
+          <select id="course" name="course" required class="w-full rounded-md px-3 py-2 shadow-sm border focus:outline-none focus:ring-2 focus:ring-indigo-400">
             <option value="COMP">Comp</option>
             <option value="EXTC">EXTC</option>
             <option value="DS">CSE - DS</option>
@@ -50,19 +50,19 @@
       <div class="space-y-4">
         <div>
           <label for="company" class="block text-sm font-medium">Company</label>
-          <select id="company" name="company" onchange="toggleCompanyInput()" required class="w-full border rounded-md px-3 py-2 shadow-sm">
+          <select id="company" name="company" onchange="toggleCompanyInput()" required class="w-full rounded-md px-3 py-2 shadow-sm border focus:outline-none focus:ring-2 focus:ring-indigo-400">
             <option th:each="company : ${companies}" th:value="${company.name}" th:text="${company.name}"></option>
 <!--            <option value="Other">Other</option>-->
           </select>
           <div id="companyInputDiv" class="mt-3 hidden">
             <label for="otherCompany" class="block text-sm font-medium">Specify Company Name</label>
-            <input type="text" id="otherCompany" name="otherCompany" placeholder="Enter company name" class="w-full border rounded-md px-3 py-2 shadow-sm"/>
+            <input type="text" id="otherCompany" name="otherCompany" placeholder="Enter company name" class="w-full rounded-md px-3 py-2 shadow-sm border focus:outline-none focus:ring-2 focus:ring-indigo-400"/>
           </div>
         </div>
 
         <div>
           <label for="jobProfile" class="block font-medium">Job Profile:</label>
-          <select id="jobProfile" name="jobProfile" onchange="toggleJobProfileInput()" required class="w-full border rounded p-2 mt-1">
+          <select id="jobProfile" name="jobProfile" onchange="toggleJobProfileInput()" required class="w-full rounded p-2 mt-1 border focus:outline-none focus:ring-2 focus:ring-indigo-400">
             <option value="" disabled selected>Select a job profile</option>
             <option value="AI Engineer">AI Engineer</option>
             <option value="App Engineer">Application Engineer</option>
@@ -88,14 +88,14 @@
           </select>
           <div id="jobProfileInputDiv" class="mt-3 hidden">
             <label for="otherJobProfile" class="block text-sm font-medium">Specify Job Profile</label>
-            <input type="text" id="otherJobProfile" name="otherJobProfile" placeholder="Enter job profile" class="w-full border rounded-md px-3 py-2 shadow-sm"/>
+            <input type="text" id="otherJobProfile" name="otherJobProfile" placeholder="Enter job profile" class="w-full rounded-md px-3 py-2 shadow-sm border focus:outline-none focus:ring-2 focus:ring-indigo-400"/>
           </div>
         </div>
 
         <div>
           <label for="offerType" class="block text-sm font-medium">Offer Type</label>
-          <select id="offerType" name="offerType" onchange="toggleOfferFields()" required class="w-full border rounded-md px-3 py-2 shadow-sm">
-            <option value="Internship(performance-based offer)">Internship (performance-based offer)</option>
+          <select id="offerType" name="offerType" onchange="toggleOfferFields()" required class="w-full rounded-md px-3 py-2 shadow-sm border focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            <option value="Internship(performance-based offer)">Internship (+Performance based PPO)</option>
             <option value="InternshipOnly">Internship only</option>
             <option value="PlacementOnly">Placement only</option>
             <option value="InternshipPlacement">Internship + Placement</option>
@@ -104,17 +104,17 @@
 
         <div id="stipendDiv">
           <label for="internshipStipend" class="block text-sm font-medium">Internship Stipend</label>
-          <input type="text" id="internshipStipend" name="internshipStipend" placeholder="20000" class="w-full border rounded-md px-3 py-2 shadow-sm"/>
+          <input type="text" id="internshipStipend" name="internshipStipend" placeholder="20000" class="w-full rounded-md px-3 py-2 shadow-sm border focus:outline-none focus:ring-2 focus:ring-indigo-400"/>
         </div>
 
         <div id="ctcDiv">
           <label for="ctc" class="block text-sm font-medium">CTC (in LPA)</label>
-          <input type="text" id="ctc" name="ctc" placeholder="For 8LPA -> 800000" class="w-full border rounded-md px-3 py-2 shadow-sm"/>
+          <input type="text" id="ctc" name="ctc" placeholder="For 8LPA -> 800000" class="w-full rounded-md px-3 py-2 shadow-sm border focus:outline-none focus:ring-2 focus:ring-indigo-400"/>
         </div>
 
         <div>
           <label for="location" class="block text-sm font-medium">Location</label>
-          <select id="location" name="location" required class="w-full border rounded-md px-3 py-2 shadow-sm">
+          <select id="location" name="location" required class="w-full rounded-md px-3 py-2 shadow-sm border focus:outline-none focus:ring-2 focus:ring-indigo-400">
             <option value="" disabled selected>Select a location</option>
             <option th:each="loc : ${locations}" th:value="${loc.name}" th:text="${loc.name}"></option>
           </select>
@@ -122,7 +122,7 @@
 
         <div>
           <label for="processDate" class="block text-sm font-medium">Process Date</label>
-          <input type="date" id="processDate" name="processDate" required class="w-full border rounded-md px-3 py-2 shadow-sm"/>
+          <input type="date" id="processDate" name="processDate" required class="w-full rounded-md px-3 py-2 shadow-sm border focus:outline-none focus:ring-2 focus:ring-indigo-400"/>
         </div>
       </div>
     </section>
@@ -140,11 +140,11 @@
       <div class="space-y-4">
         <div>
           <label for="linkedin" class="block text-sm font-medium">LinkedIn Profile (optional)</label>
-          <input type="url" id="linkedin" name="linkedin" class="w-full border rounded-md px-3 py-2 shadow-sm" />
+          <input type="url" id="linkedin" name="linkedin" class="w-full rounded-md px-3 py-2 shadow-sm border focus:outline-none focus:ring-2 focus:ring-indigo-400" />
         </div>
         <div>
           <label for="comments" class="block text-sm font-medium">Additional Comments or Advice</label>
-          <textarea id="comments" name="comments" rows="5" class="w-full border rounded-md px-3 py-2 shadow-sm"
+          <textarea id="comments" name="comments" rows="15" class="w-full rounded-md px-3 py-2 shadow-sm border focus:outline-none focus:ring-2 focus:ring-indigo-400"
                     placeholder="You can paste helpful links too, like YouTube, Whimsical, etc.&#10;Example:&#10;For OOPS: https://whimsical.com/oops-link"></textarea>
         </div>
       </div>
@@ -221,7 +221,7 @@
       <div class="question-section" id="questions${roundCount}">
           <label class="block font-medium text-sm text-gray-700 mb-2">Description:</label>
           <div class="question mb-4">
-              <textarea id="q${roundCount}_1" name="q${roundCount}_1" rows="10" cols="50" placeholder="Describe the round, number of students who appeared, number selected, and any relevant details or approach." required class="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-indigo-300"></textarea>
+              <textarea id="q${roundCount}_1" name="q${roundCount}_1" rows="10" cols="50" placeholder="Describe the round, number of students who appeared, number selected, and any relevant details or approach." required class="w-full p-2 border focus:outline-none focus:ring-2 focus:ring-indigo-400"></textarea>
           </div>
       </div>
       <span class="remove-round inline-block px-3 py-1.5 text-sm font-medium text-red-600 border border-red-300 hover:bg-red-50 rounded-md cursor-pointer transition-colors ml-3" onclick="removeRound(${roundCount})"> 🗑 Remove Round </span>
