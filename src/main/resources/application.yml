@@ -44,5 +44,10 @@ server:
   port: ${PORT:8080}
 #logging:
 #  level:
-#    org.springframework: DEBUG
-#    com.kshitij.IntervuLog: DEBUG
+#    org:
+#      springframework:
+#        security:
+#          web:
+#            authentication:
+#              rememberme: DEBUG
+#              logout: DEBUG

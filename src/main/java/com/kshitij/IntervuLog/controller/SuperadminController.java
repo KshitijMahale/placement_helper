@@ -22,6 +22,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -43,21 +44,34 @@ public class SuperadminController {
     private InternshipExperienceRepository internshipExperienceRepository;
 
     @GetMapping("/dashboard")
-    public String dashboard() {
+    public String dashboard(Model model) {
+        long totalCompanies = companyRepo.count();
+        long totalExperiences = internshipExperienceRepository.count();
+        long totalUsers = userRepository.count();
+
+        model.addAttribute("totalCompanies", totalCompanies);
+        model.addAttribute("totalExperiences", totalExperiences);
+        model.addAttribute("totalUsers", totalUsers);
         return "superadmin/dashboard";
     }
 
     @GetMapping("/users")
     public String manageUsers(@RequestParam(defaultValue = "0") int page,
                               @RequestParam(defaultValue = "7") int size,
+                              @RequestParam(required = false) String search,
                               Model model) {
         Pageable pageable = PageRequest.of(page, size);
         Page<User> userPage = userRepository.findAll(pageable);
+        if (search != null && !search.trim().isEmpty()) {
+            userPage = userRepository.findByEmailContainingIgnoreCaseOrFirstNameContainingIgnoreCase(search, search, pageable);
+        } else {
+            userPage = userRepository.findAll(pageable);
+        }
 
         model.addAttribute("users", userPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", userPage.getTotalPages());
-
+        model.addAttribute("search", search);
         return "superadmin/manage-users";
     }
 
@@ -67,6 +81,13 @@ public class SuperadminController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         user.setUserRole(UserRole.valueOf(newRole.toUpperCase()));
         userRepository.save(user);
+        return "redirect:/superadmin/users";
+    }
+
+    @PostMapping("/users/delete/{id}")
+    public String deleteUser(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        userRepository.deleteById(id);
+        redirectAttributes.addFlashAttribute("message", "User deleted successfully.");
         return "redirect:/superadmin/users";
     }
 

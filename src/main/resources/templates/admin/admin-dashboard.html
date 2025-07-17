@@ -36,21 +36,6 @@
       <p class="text-sm text-gray-600">Review and approve new submissions by users.</p>
     </a>
 
-    <a href="#" class="group block bg-white border-l-4 border-green-500 shadow hover:shadow-lg transition rounded-xl p-5 opacity-50 cursor-not-allowed">
-      <h3 class="text-lg font-semibold text-green-700 mb-1 group-hover:underline">👥 Manage Users</h3>
-      <p class="text-sm text-gray-600">View and control user access, status, and roles.</p>
-    </a>
-
-    <a href="#" class="group block bg-white border-l-4 border-blue-500 shadow hover:shadow-lg transition rounded-xl p-5 opacity-50 cursor-not-allowed">
-      <h3 class="text-lg font-semibold text-blue-700 mb-1 group-hover:underline">📊 Platform Stats</h3>
-      <p class="text-sm text-gray-600">Get insights on engagement, growth, and usage.</p>
-    </a>
-
-    <a href="/userForm" class="group block bg-white border-l-4 border-yellow-400 shadow hover:shadow-lg transition rounded-xl p-5">
-      <h3 class="text-lg font-semibold text-indigo-700 mb-1 group-hover:underline">🧑‍💻 Edit Profile</h3>
-      <p class="text-sm text-gray-600">Update your account details as admin.</p>
-    </a>
-
     <a href="/exp-form" class="group block bg-white border-l-4 border-yellow-400 shadow hover:shadow-lg transition rounded-xl p-5">
       <h3 class="text-lg font-semibold text-indigo-700 mb-1 group-hover:underline">➕ Add Experience</h3>
       <p class="text-sm text-gray-600">Post verified content directly to the platform.</p>
@@ -61,18 +46,25 @@
       <p class="text-sm text-gray-600">Explore submitted experiences for moderation.</p>
     </a>
 
-  </div>
+    <a href="/userForm" class="group block bg-white border-l-4 border-yellow-400 shadow hover:shadow-lg transition rounded-xl p-5">
+      <h3 class="text-lg font-semibold text-indigo-700 mb-1 group-hover:underline">🧑‍💻 Edit Profile</h3>
+      <p class="text-sm text-gray-600">Update your account details as admin.</p>
+    </a>
 
-  <footer class="text-xs text-center text-slate-400 pt-4">
-    For students, by the students —
-    <a href="https://www.linkedin.com/in/kshitij-mahale-6555ba221/" target="_blank" class="font-semibold text-slate-500 hover:underline">
-      Kshitij Mahale
-    </a>,
-    <a href="https://www.linkedin.com/in/theadityareddy/" target="_blank" class="font-semibold text-slate-500 hover:underline">
-      Aditya Reddy
-    </a>• MCA'26
-  </footer>
+    <a href="#" class="group block bg-white border-l-4 border-green-500 shadow hover:shadow-lg transition rounded-xl p-5 opacity-50 cursor-not-allowed">
+      <h3 class="text-lg font-semibold text-green-700 mb-1 group-hover:underline">👥 Manage Users</h3>
+      <p class="text-sm text-gray-600">View and control user access, status, and roles.</p>
+    </a>
+
+    <a href="/contact" class="group block bg-white border-l-4 border-blue-500 shadow hover:shadow-lg transition rounded-xl p-5">
+      <h3 class="text-lg font-semibold text-blue-700 mb-1 group-hover:underline">📬 Contact</h3>
+      <p class="text-sm text-gray-600">Need Help?</p>
+    </a>
+  </div>
 </main>
+<section th:replace="~{fragments/Stats :: Stats}"></section>
+<br>
+<footer th:replace="~{fragments/footer :: Footer}"></footer>
 
 </body>
 </html>

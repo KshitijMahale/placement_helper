@@ -8,12 +8,11 @@ import com.kshitij.IntervuLog.repository.CompanyRepository;
 import com.kshitij.IntervuLog.repository.InternshipExperienceRepository;
 import com.kshitij.IntervuLog.repository.LocationRepository;
 import com.kshitij.IntervuLog.repository.UserRepository;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +40,11 @@ public class HomeController {
 
     @GetMapping("/")
     public String home() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() &&
+                !(authentication.getPrincipal() instanceof String && "anonymousUser".equals(authentication.getPrincipal()))) {
+            return "redirect:/dashboard";
+        }
         return "login";
     }
 
@@ -97,23 +101,12 @@ public class HomeController {
         }
     }
 
-    @Controller
-    public class LogoutController {
-
-        @GetMapping("/logout")
-        public String logout(HttpServletRequest request, HttpServletResponse response) {
-            // Perform logout (Spring Security does this automatically but you can customize it)
-            SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
-            logoutHandler.logout(request, response, null);
-
-            return "redirect:/login?logout";
-        }
-    }
-
     @GetMapping("/userForm")
-    public String showUserForm(Model model, OAuth2AuthenticationToken authentication) {
-        OAuth2User oauthUser = authentication.getPrincipal();
-        String email = oauthUser.getAttribute("email"); // e.g., kshitij.mahale24@spit.ac.in
+    public String showUserForm(Model model, Principal principal) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
+        String email = getUserEmail(principal);
 
         // Extract first part before dot or @
         String firstNameRaw = email.split("[.@]")[0]; // "kshitij"
@@ -131,7 +124,6 @@ public class HomeController {
 
         model.addAttribute("user", user);
         model.addAttribute("firstName", firstName); // Pass to view
-
 
         return "user-form";
     }
@@ -165,8 +157,13 @@ public class HomeController {
     }
 
     @GetMapping("/exp-form")
-    public String viewUserExperience(Model model, OAuth2AuthenticationToken auth) {
-        String email = auth.getPrincipal().getAttribute("email");
+    public String viewUserExperience(Model model, Principal principal) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
+
+        String email = getUserEmail(principal);
+
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -206,6 +203,26 @@ public class HomeController {
     @GetMapping("/contact")
     public String contactPage() {
         return "contact";
+    }
+
+    private String getUserEmail(Principal principal) {
+        if (principal == null) {
+            // This case should ideally not happen if Spring Security's .anyRequest().authenticated() is working
+            // but it's good to handle defensively, perhaps throw an exception or return null based on context.
+            // For now, consistent with your existing logic, we'll assume a non-null principal for email extraction.
+            return null; // Or throw new IllegalArgumentException("Principal cannot be null");
+        }
+
+        String email;
+        if (principal instanceof OAuth2AuthenticationToken) {
+            OAuth2User oauth2User = (OAuth2User) ((OAuth2AuthenticationToken) principal).getPrincipal();
+            email = oauth2User.getAttribute("email");
+        } else if (principal instanceof org.springframework.security.core.userdetails.User) {
+            email = principal.getName();
+        } else {
+            email = principal.getName();
+        }
+        return email;
     }
 
 }

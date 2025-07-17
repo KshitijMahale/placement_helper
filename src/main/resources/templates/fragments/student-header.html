@@ -9,7 +9,11 @@
       <a href="/exp-form" class="hover:text-indigo-700 transition">Submit Experience</a>
       <a href="/experience-browser" class="hover:text-indigo-700 transition">Browse Experiences</a>
       <a href="/userForm" class="hover:text-indigo-700 transition">Profile</a>
-      <a href="/logout" class="text-red-600 font-semibold hover:underline transition">Logout</a>
+      <form th:action="@{/logout}" method="post" style="display:inline;">
+        <button type="submit" class="text-red-600 font-semibold hover:underline transition bg-transparent border-none cursor-pointer p-0 m-0">
+          Logout
+        </button>
+      </form>
     </nav>
   </div>
 </header>
