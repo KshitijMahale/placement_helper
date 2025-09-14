@@ -18,11 +18,11 @@ import java.util.List;
 public class AdminExperienceController {
 
     @Autowired
-    private InternshipExperienceRepository experienceRepository;
+    private InternshipExperienceRepository internshipExperienceRepository;
 
     @GetMapping("/pending")
     public String showPendingExperiences(Model model) {
-        List<InternshipExperience> pendingExps = experienceRepository.findByStatus(ExperienceStatus.PENDING);
+        List<InternshipExperience> pendingExps = internshipExperienceRepository.findByStatus(ExperienceStatus.PENDING);
         model.addAttribute("pendingExps", pendingExps);
         return "admin/pending_experiences";
     }
@@ -30,23 +30,23 @@ public class AdminExperienceController {
     @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity<InternshipExperience> getExperienceDetails(@PathVariable Long id) {
-        return experienceRepository.findById(id)
+        return internshipExperienceRepository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/{id}/approve")
     public String approveExperience(@PathVariable Long id) {
-        experienceRepository.findById(id).ifPresent(exp -> {
+        internshipExperienceRepository.findById(id).ifPresent(exp -> {
             exp.setStatus(ExperienceStatus.APPROVED);
-            experienceRepository.save(exp);
+            internshipExperienceRepository.save(exp);
         });
         return "redirect:/admin/experiences/pending";
     }
 
     @PostMapping("/{id}/delete")
     public String deleteExperience(@PathVariable Long id) {
-        experienceRepository.deleteById(id);
+        internshipExperienceRepository.deleteById(id);
         return "redirect:/admin/experiences/pending";
     }
 }

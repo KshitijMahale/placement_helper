@@ -7,6 +7,7 @@ import com.kshitij.IntervuLog.model.Location;
 import com.kshitij.IntervuLog.repository.CompanyRepository;
 import com.kshitij.IntervuLog.repository.InternshipExperienceRepository;
 import com.kshitij.IntervuLog.repository.LocationRepository;
+import com.kshitij.IntervuLog.repository.UserRepository;
 import com.kshitij.IntervuLog.spec.ExperienceSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,13 +34,15 @@ import java.util.stream.IntStream;
 public class ExperiencePageController {
 
     @Autowired
-    private InternshipExperienceRepository experienceRepository;
+    private InternshipExperienceRepository internshipExperienceRepository;
 
     @Autowired
-    private CompanyRepository companyRepo;
+    private CompanyRepository companyRepository;
 
     @Autowired
-    private LocationRepository locationRepo;
+    private LocationRepository locationRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/experience-browser")
     public String showExperiencePage(
@@ -63,18 +66,18 @@ public class ExperiencePageController {
                 year, name, company, role, type, ctcMin, ctcMax, stipendMin, stipendMax
         );
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by("company.name").ascending());
-        Page<InternshipExperience> pageResult = experienceRepository.findAll(spec, pageable);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("company.name").ascending().and(Sort.by("fullName").ascending()));
+        Page<InternshipExperience> pageResult = internshipExperienceRepository.findAll(spec, pageable);
 
         model.addAttribute("experiences", pageResult.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", pageResult.getTotalPages());
         model.addAttribute("size", size);
 
-        List<Company> companies = companyRepo.findAll();
+        List<Company> companies = companyRepository.findAll();
         companies.sort(Comparator.comparing(Company::getName));
         model.addAttribute("companies", companies);
-        model.addAttribute("locations", locationRepo.findAll());
+        model.addAttribute("locations", locationRepository.findAll());
 
         List<Integer> years = IntStream.rangeClosed(2020, 2030).boxed().collect(Collectors.toList());
         model.addAttribute("years", years);
@@ -95,7 +98,7 @@ public class ExperiencePageController {
     @GetMapping("/experience-browser/{id}")
     @ResponseBody
     public InternshipExperience getExperienceById(@PathVariable Long id) {
-        return experienceRepository.findById(id)
+        return internshipExperienceRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Experience not found"));
     }

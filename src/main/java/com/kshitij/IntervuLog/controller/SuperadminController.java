@@ -35,17 +35,17 @@ public class SuperadminController {
     private UserRepository userRepository;
 
     @Autowired
-    private CompanyRepository companyRepo;
+    private CompanyRepository companyRepository;
 
     @Autowired
-    private LocationRepository locationRepo;
+    private LocationRepository locationRepository;
 
     @Autowired
     private InternshipExperienceRepository internshipExperienceRepository;
 
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
-        long totalCompanies = companyRepo.count();
+        long totalCompanies = companyRepository.count();
         long totalExperiences = internshipExperienceRepository.count();
         long totalUsers = userRepository.count();
 
@@ -57,7 +57,7 @@ public class SuperadminController {
 
     @GetMapping("/users")
     public String manageUsers(@RequestParam(defaultValue = "0") int page,
-                              @RequestParam(defaultValue = "7") int size,
+                              @RequestParam(defaultValue = "10") int size,
                               @RequestParam(required = false) String search,
                               Model model) {
         Pageable pageable = PageRequest.of(page, size);
@@ -94,10 +94,10 @@ public class SuperadminController {
     @GetMapping("/add-experience")
     public String showExperienceForm(Model model) {
         model.addAttribute("experience", new InternshipExperience());
-        List<Company> companies = companyRepo.findAll();
+        List<Company> companies = companyRepository.findAll();
         companies.sort(Comparator.comparing(Company::getName));
         model.addAttribute("companies", companies);
-        model.addAttribute("locations", locationRepo.findAll());
+        model.addAttribute("locations", locationRepository.findAll());
         return "superadmin/add-experience";
     }
 
@@ -121,11 +121,11 @@ public class SuperadminController {
         experience.setFullName(requestParams.get("fullName"));
         experience.setCourse(requestParams.get("course"));
         String companyName = requestParams.get("company");
-        Company company = companyRepo.findByName(companyName);
+        Company company = companyRepository.findByName(companyName);
         if (company == null) {
             company = new Company();
             company.setName(companyName);
-            company = companyRepo.save(company);
+            company = companyRepository.save(company);
         }
         experience.setCompany(company);
 
@@ -143,12 +143,12 @@ public class SuperadminController {
             experience.setCtc(Integer.valueOf(ctc));
 
         String locationName = requestParams.get("location");
-        Location location = locationRepo.findByName(locationName);
+        Location location = locationRepository.findByName(locationName);
         if (location == null) {
             // create the location if it doesn't exist
             location = new Location();
             location.setName(locationName);
-            location = locationRepo.save(location);
+            location = locationRepository.save(location);
         }
         experience.setLocation(location);
 

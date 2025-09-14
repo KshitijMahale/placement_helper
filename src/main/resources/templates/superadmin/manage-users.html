@@ -112,18 +112,36 @@
 <!--      });-->
 <!--    });-->
 
-    // Enable update button only if role is changed
+<!--    // Enable update button only if role is changed-->
+<!--    function checkChange(form) {-->
+<!--      const select = form.querySelector('select');-->
+<!--      const current = select.dataset.current;-->
+<!--      const button = form.querySelector('button');-->
+<!--      button.disabled = (select.value === current);-->
+<!--    }-->
+
+<!--    // Attach change listener to all select elements-->
+<!--    document.querySelectorAll('form').forEach(form => {-->
+<!--      checkChange(form); // initialize-->
+<!--      form.querySelector('select').addEventListener('change', () => checkChange(form));-->
+<!--    });-->
+
     function checkChange(form) {
       const select = form.querySelector('select');
-      const current = select.dataset.current;
+      const current = select?.dataset?.current;
       const button = form.querySelector('button');
-      button.disabled = (select.value === current);
+      if (select && current && button) {
+        button.disabled = (select.value === current);
+      }
     }
 
-    // Attach change listener to all select elements
+    // Only target forms that contain a role <select>
     document.querySelectorAll('form').forEach(form => {
-      checkChange(form); // initialize
-      form.querySelector('select').addEventListener('change', () => checkChange(form));
+      const select = form.querySelector('select');
+      if (select) {
+        checkChange(form); // Initialize
+        select.addEventListener('change', () => checkChange(form));
+      }
     });
   });
 </script>

@@ -18,14 +18,14 @@ public class AdminController {
     private UserRepository userRepository;
 
     @Autowired
-    private CompanyRepository companyRepo;
+    private CompanyRepository companyRepository;
 
     @Autowired
     private InternshipExperienceRepository internshipExperienceRepository;
 
     @GetMapping("/dashboard")
     public String showAdminDashboard(Model model) {
-        long totalCompanies = companyRepo.count();
+        long totalCompanies = companyRepository.count();
         long totalExperiences = internshipExperienceRepository.count();
         long totalUsers = userRepository.count();
 

@@ -18,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.security.Principal;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -26,13 +25,13 @@ import java.util.*;
 public class InternshipSubmissionController {
 
     @Autowired
-    private InternshipExperienceRepository experienceRepository;
+    private InternshipExperienceRepository internshipExperienceRepository;
 
     @Autowired
-    private CompanyRepository companyRepo;
+    private CompanyRepository companyRepository;
 
     @Autowired
-    private LocationRepository locationRepo;
+    private LocationRepository locationRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -59,11 +58,11 @@ public class InternshipSubmissionController {
         experience.setCourse(requestParams.get("course"));
 //        experience.setCompany(requestParams.get("company"));
         String companyName = requestParams.get("company");
-        Company company = companyRepo.findByName(companyName);
+        Company company = companyRepository.findByName(companyName);
         if (company == null) {
             company = new Company();
             company.setName(companyName);
-            company = companyRepo.save(company);
+            company = companyRepository.save(company);
         }
         experience.setCompany(company);
 
@@ -82,12 +81,12 @@ public class InternshipSubmissionController {
 
 //        experience.setLocation(requestParams.get("location"));
         String locationName = requestParams.get("location");
-        Location location = locationRepo.findByName(locationName);
+        Location location = locationRepository.findByName(locationName);
         if (location == null) {
             // create the location if it doesn't exist
             location = new Location();
             location.setName(locationName);
-            location = locationRepo.save(location);
+            location = locationRepository.save(location);
         }
         experience.setLocation(location);
 
@@ -102,7 +101,7 @@ public class InternshipSubmissionController {
         String roundsJson = extractRoundsJson(requestParams);
         experience.setRounds(roundsJson);
 
-        experienceRepository.save(experience);
+        internshipExperienceRepository.save(experience);
         return "redirect:/dashboard";
     }
 

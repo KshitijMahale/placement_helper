@@ -30,10 +30,10 @@ public class HomeController {
     private UserRepository userRepository;
 
     @Autowired
-    private CompanyRepository companyRepo;
+    private CompanyRepository companyRepository;
 
     @Autowired
-    private LocationRepository locationRepo;
+    private LocationRepository locationRepository;
 
     @Autowired
     private InternshipExperienceRepository internshipExperienceRepository;
@@ -67,7 +67,7 @@ public class HomeController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         // Fetch data for community impact
-        long totalCompanies = companyRepo.count();
+        long totalCompanies = companyRepository.count();
         long totalExperiences = internshipExperienceRepository.count();
         long totalUsers = userRepository.count();
 
@@ -169,13 +169,13 @@ public class HomeController {
 
         List<InternshipExperience> experiences = internshipExperienceRepository.findBySubmittedBy(user);
 
-        List<Company> companies = companyRepo.findAll();
+        List<Company> companies = companyRepository.findAll();
         companies.sort(Comparator.comparing(
                 (Company c) -> c.getName().equalsIgnoreCase("Other") ? 1 : 0
         ).thenComparing(Company::getName));
         model.addAttribute("companies", companies);
 
-        List<Location> locations = locationRepo.findAll();
+        List<Location> locations = locationRepository.findAll();
         model.addAttribute("locations", locations);
 
         if (!experiences.isEmpty()) {
@@ -207,10 +207,7 @@ public class HomeController {
 
     private String getUserEmail(Principal principal) {
         if (principal == null) {
-            // This case should ideally not happen if Spring Security's .anyRequest().authenticated() is working
-            // but it's good to handle defensively, perhaps throw an exception or return null based on context.
-            // For now, consistent with your existing logic, we'll assume a non-null principal for email extraction.
-            return null; // Or throw new IllegalArgumentException("Principal cannot be null");
+            return null;
         }
 
         String email;

@@ -353,6 +353,8 @@
                                 : (data.jobProfile || "N/A")
                         }</p>
                         <p><strong>Offer Type:</strong> ${data.offerType || "N/A"}</p>
+                        <p><strong>CTC:</strong> ${formatToLPA(data.ctc)}</p>
+                        <p><strong>Stipend:</strong> ${formatToK(data.internshipStipend)}</p>
                         <p><strong>Location:</strong> ${data.location?.name || "N/A"}</p>
                         <p><strong>Process Date:</strong> ${data.processDate || "N/A"}</p>
                     </div>
@@ -378,6 +380,23 @@
             .catch(error => {
                 console.error("Error fetching details:", error);
             });
+    }
+
+    function formatToLPA(value) {
+        if (!value || isNaN(value)) return "N/A";
+        const lpa = value / 100000;
+        if (Number.isInteger(lpa)) {
+            return lpa + " LPA";
+        }
+        return lpa.toFixed(1) + " LPA";
+    }
+
+    function formatToK(value) {
+        if (!value || isNaN(value)) return "N/A";
+        if (value >= 1000) {
+            return Math.round(value / 1000) + "K";
+        }
+        return value + "₹";
     }
 
     function setupCtcRangeRadios() {

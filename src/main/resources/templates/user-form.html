@@ -83,7 +83,7 @@
                 <label for="passoutYear" class="block font-medium mb-1">Passout Year</label>
                 <select id="passoutYear" th:field="*{passoutYear}"
                         class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <option th:each="year : ${#numbers.sequence(2010, 2050)}"
+                    <option th:each="year : ${#numbers.sequence(2020, 2050)}"
                             th:value="${year}" th:text="${year}"></option>
                 </select>
             </div>
@@ -98,7 +98,7 @@
         </form>
     </div>
 </main>
-<footer th:replace="fragments/footer :: Footer"></footer>
+<footer th:replace="~{fragments/footer :: Footer}"></footer>
 
 </body>
 </html>
