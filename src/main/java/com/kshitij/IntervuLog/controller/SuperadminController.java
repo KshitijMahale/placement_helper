@@ -184,7 +184,9 @@ public class SuperadminController {
             List<String> questions = new ArrayList<>();
             int questionIndex = 1;
             while (params.containsKey("q" + roundIndex + "_" + questionIndex)) {
-                questions.add(params.get("q" + roundIndex + "_" + questionIndex));
+                String question = params.get("q" + roundIndex + "_" + questionIndex);
+                question = question.replaceAll("(\r\n|\r|\n)", "<br/>");
+                questions.add(question);
                 questionIndex++;
             }
 
